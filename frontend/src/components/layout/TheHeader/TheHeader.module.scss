@@ -1,0 +1,32 @@
+.TheHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  display: flex;
+  padding: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--col-body);
+
+  z-index: 30;
+
+  box-shadow: 0 0.125rem 0.25rem var(--col-shadow-light);
+
+  @media (min-width: 2000px) {
+    padding: 1rem 25vw;
+  }
+}
+
+.LogoImg {
+  max-height: 3rem;
+  width: auto;
+}
+
+.Search {
+  max-width: 75%;
+  display: flex;
+  flex-direction: row !important;
+}

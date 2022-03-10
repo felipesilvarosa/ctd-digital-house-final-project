@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": "Chalés",
+    "description": "Enim cillum tempor veniam do laboris excepteur laborum fugiat aute magna cillum.",
+    "image": "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+    "entries": 54329
+  },
+  {
+    "id": "2",
+    "title": "Apartamentos",
+    "description": "Enim cillum tempor veniam do laboris excepteur laborum fugiat aute magna cillum.",
+    "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+    "entries": 87262
+  },
+  {
+    "id": "3",
+    "title": "Hotéis",
+    "description": "Enim cillum tempor veniam do laboris excepteur laborum fugiat aute magna cillum.",
+    "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+    "entries": 102963
+  },
+  {
+    "id": "4",
+    "title": "Hostels",
+    "description": "Enim cillum tempor veniam do laboris excepteur laborum fugiat aute magna cillum.",
+    "image": "https://images.unsplash.com/photo-1596276020587-8044fe049813?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=939&q=80",
+    "entries": 12593
+  }
+]

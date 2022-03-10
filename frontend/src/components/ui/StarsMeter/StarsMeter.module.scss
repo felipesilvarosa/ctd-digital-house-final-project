@@ -1,0 +1,29 @@
+.Stars {
+  position: relative;
+  background: #e3e3e3;
+  width: 4.375rem;
+  height: 0.875rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    background-image: url("../../../assets/star.png");
+    background-repeat: repeat-x;
+    background-size: 0.875rem;
+    z-index: 2;
+  }
+
+  .Filling {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    height: calc(100% - 2px);
+
+    background: #ffc445;
+  }
+}

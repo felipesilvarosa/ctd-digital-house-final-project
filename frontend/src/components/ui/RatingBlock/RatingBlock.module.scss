@@ -1,0 +1,46 @@
+.RatingBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+
+  > *:first-child {
+    position: relative;
+    isolation: isolate;
+    color: var(--col-body);
+    padding: 0.25rem 1.5rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+    text-align: center;
+
+    &::before, &::after {
+      content: "";
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+
+      border-radius: 0.125rem;
+
+      background-color: var(--col-secondary-highlight);
+
+      z-index: -1;
+    }
+
+    &::before {
+      transform: skew(20deg);
+    }
+
+    &::after {
+      transform: skew(-20deg);
+    }
+  }
+
+  > *:last-child {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 800;
+  }
+}

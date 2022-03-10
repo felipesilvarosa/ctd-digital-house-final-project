@@ -1,0 +1,36 @@
+.BaseWrapper {
+  display: flex;
+}
+
+.BaseWrapper[data-row="true"] {
+  flex-direction: row;
+}
+
+.BaseWrapper[data-column="true"] {
+  flex-direction: column;
+}
+
+.BaseWrapper[data-wrap="true"] {
+  flex-wrap: wrap;
+}
+
+.BaseWrapper[data-justify="start"] {
+  justify-content: flex-start;
+}
+
+.BaseWrapper[data-justify="center"] {
+  justify-content: center;
+}
+
+.BaseWrapper[data-align="center"] {
+  align-items: center;
+}
+
+.BaseWrapper[data-center="true"] {
+  justify-content: center;
+  align-items: center;
+}
+
+.BaseWrapper[data-relative="true"] {
+  position: relative;
+}

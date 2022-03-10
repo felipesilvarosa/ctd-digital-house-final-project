@@ -1,0 +1,28 @@
+# crie um arquivo .env com essas configurações
+# baixe o plugin EnvFile no intelij
+# Do lado do botão de rodar o projeto, clica e vai em edit configurations, depois vai em EnvFile
+# Marca o enable EnvFile, aperte o +, e adicione a sua .env
+# prod ou dev
+ENVIRONMENT=dev
+
+###############################
+####### BANCO DE DADOS ########
+###############################
+
+# Host ou endereço de IP do banco de dados
+DATABASE_HOST=localhost
+
+# Porta de conexão do banco de dados
+DATABASE_PORT=3306
+
+# Nome do banco de dados
+DATABASE_NAME=db_prod
+
+# Nome do Schema do banco de dados
+DATABASE_SCHEMA=digitalbooking
+
+# Nome de usuário do banco de dados
+DATABASE_USERNAME=USUARIO
+
+# Senha do banco de dados
+DATABASE_PASSWORD=SENHA

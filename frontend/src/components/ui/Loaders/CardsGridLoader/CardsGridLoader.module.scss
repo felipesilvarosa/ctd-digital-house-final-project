@@ -1,0 +1,20 @@
+.Grid {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+
+  div {
+    width: 100%;
+    height: 20rem;
+  }
+}
+
+.Categories {
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
+.Recomendations {
+  @media (min-width: 800px) {
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr))
+  }
+}

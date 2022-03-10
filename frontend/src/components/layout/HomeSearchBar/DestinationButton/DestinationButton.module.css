@@ -1,0 +1,28 @@
+.DestinationButton {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 10fr;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  text-align: left;
+  width: 100%;
+  background: transparent;
+  border: none;
+}
+
+.DestinationButton > img {
+  max-width: 2rem;
+  height: auto;
+  grid-row: span 2;
+}
+
+.DestinationButton > h4 {
+  margin: 0;
+  padding: 0;
+}
+
+.DestinationButton > p {
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 0;
+}

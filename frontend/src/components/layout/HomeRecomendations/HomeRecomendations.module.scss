@@ -1,0 +1,68 @@
+.Title {
+  a {
+    color: var(--col-main-highlight);
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    font-size: 0.85em;
+  }
+}
+
+.Grid {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+
+  @media (min-width: 34rem) {
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  }
+}
+
+.Header {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  gap: 1rem;
+
+  .HeaderCategory {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+.HotelInfos {
+  display: grid;
+  padding: 2rem;
+  color: var(--col-secondary-highlight);
+}
+
+.Utilities {
+  font-size: 0.85rem;
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  span {
+    transform: scale(0.85);
+  }
+}
+
+.Description {
+  a {
+    color: var(--col-main-highlight);
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
+.Section {
+  background: var(--col-main-lower-contrast);
+}
+
+@media (max-width: 600px) {
+  .Link {
+    grid-template-columns: auto;
+    
+  }
+}

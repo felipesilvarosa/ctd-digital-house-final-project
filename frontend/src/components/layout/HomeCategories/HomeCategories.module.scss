@@ -1,0 +1,26 @@
+.CategoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  justify-items: center;
+  gap: 1.5rem;
+}
+
+.CategoryTitle {
+  font-size: larger;
+  font-weight: bold;
+  letter-spacing: -0.5px;
+  text-transform: capitalize;
+  margin-bottom: 0 !important;
+}
+
+.CategoryText {
+  margin-top: 0 !important;
+  letter-spacing: -0.5px;
+  font-weight: 500;
+  text-transform: lowercase;
+  color: var(--col-main-medium-contrast);
+
+  span {
+    font-weight: 600;
+  }
+}

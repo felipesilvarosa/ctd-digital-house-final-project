@@ -1,0 +1,35 @@
+.TheFooter {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: var(--col-main-highlight);
+  color: var(--col-body);
+
+  > ul {
+    display: flex;
+    
+    li {
+      margin: 0.5rem;
+    }
+  }
+
+  > * {
+    margin: 0.75rem;
+  }
+
+  img {
+    max-width: 2rem;
+    height: auto;
+  }
+
+  @media (max-width: 400px) {
+    flex-flow: column;
+    place-content: center;
+  }
+
+  @media (min-width: 2000px) {
+    padding: 0 25vw;
+  }
+}

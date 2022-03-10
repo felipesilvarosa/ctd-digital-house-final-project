@@ -1,0 +1,27 @@
+.Loader {
+  > div {
+    background: grey;
+    display: grid;
+    border-radius: 0.75rem;
+
+    animation-duration: 600ms;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: cubic-bezier(0,.99,.34,.99);
+  
+    background: var(--col-loading-darker);
+    background: linear-gradient(to right, var(--col-loading-darker) 8%, var(--col-loading-lighter) 30%, var(--col-loading-darker) 75%);
+    background-size: 100% 1rem;
+  }
+}
+
+@keyframes placeHolderShimmer{
+  0% {
+    background-position: 0 0
+  }
+
+  100% {
+    background-position: 45rem 0
+  }
+}

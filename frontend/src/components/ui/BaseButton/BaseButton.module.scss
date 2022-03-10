@@ -1,0 +1,65 @@
+.Button {
+  --button-theme: var(--col-main-highlight);
+  --button-contrast: var(--col-body);
+  --button-border: transparent;
+
+  display: flex;
+
+  background-color: var(--button-theme);
+  color: var(--button-contrast);
+  border: 0.125rem solid var(--button-border);
+
+  padding: 0.585rem 1rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75rem;
+
+  transition: 200ms ease-in-out;
+  transition-property: filter, box-shadow;
+
+  height: max-content;
+
+  justify-content: center;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0.75rem -0.125rem var(--button-theme);
+  }
+}
+
+
+.Blue {
+  --button-theme: var(--col-variant-blue);
+}
+
+.Red {
+  --button-theme: var(--col-variant-red);
+}
+
+.Highlight {
+  --button-theme: var(--col-main-highlight);
+}
+
+.Black {
+  --button-theme: var(--col-variant-black);
+}
+
+.Outline {
+  background-color: transparent;
+  --button-border: var(--button-theme);
+  --button-contrast: var(--button-theme); 
+}
+
+.Link {
+  background-color: transparent;
+  --button-contrast: var(--button-theme);
+  --button-border: transparent;
+  
+  padding-left: 0;
+  padding-right: 0;
+}

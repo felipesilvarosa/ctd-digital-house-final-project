@@ -1,0 +1,60 @@
+.Card {
+  background: var(--col-body);
+  width: 100%;
+  display: grid;
+  border-radius: 0.75rem;
+  -webkit-box-shadow: 0 0.25rem 0.5rem var(--col-shadow-light);
+  box-shadow: 0 0.25rem 0.75rem var(--col-shadow-light);
+  text-decoration: none;
+  color: inherit;
+
+  grid-template-rows: min-content 1fr;
+  
+  transition: 200ms ease-in-out;
+  transition-property: box-shadow, transform;
+
+  &.Horizontal {
+    grid-template-columns: 5fr 6fr;
+    grid-template-rows: unset;
+
+    > *:first-child {
+      border-radius: 0.75rem;
+    }
+
+    > *:last-child {
+      border-radius: 0 0.75rem 0.75rem 0;
+    }
+  }
+
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: 
+      0 0.75rem 1.25rem var(--col-shadow-light),
+  }
+
+  > *:first-child {
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+
+  > *:last-child {
+    border-radius: 0 0 0.75rem 0.75rem;
+  }
+
+  .Image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 10 / 9;
+    object-fit: cover;
+  }
+
+  .Info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    > * + * {
+      margin-top: 0.75rem;
+    }
+  }
+}

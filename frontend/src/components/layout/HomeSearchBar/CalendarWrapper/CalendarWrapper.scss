@@ -1,0 +1,167 @@
+.rdrCalendarWrapper,
+.rdrDateDisplayWrapper,
+.rdrDateRangeWrapper {
+  font-family: "Quicksand", sans-serif;
+  border-radius: 0.25rem !important;
+  z-index: 7;
+}
+
+.rdrDateDisplayWrapper {
+  background-color: var(--col-body) !important;
+}
+
+.rdrCalendarWrapper {
+  position: absolute;
+  width: 100%;
+  height: 2.75rem;
+  box-shadow: 0 0.25rem 0.5rem var(--col-shadow-light);
+  background-color: white;
+}
+
+.rdrDateDisplay {
+  margin: 0.2rem;
+  padding-left: 2.5rem;
+
+  > * {
+    color: var(--col-main-contrast);
+
+    @media (max-width: 499px) {
+      height: 4rem;
+
+      &::before {
+        left: 50% !important;
+        top: 0.5rem !important;
+        transform: translateX(-50%) !important;
+        padding: 0 !important;
+      }
+    }
+    
+    &::before {
+      position: absolute;
+      left: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      padding-left: 0.5rem;
+      place-self: center;
+      pointer-events: none;
+    }
+  }
+
+  > *:first-child::before {
+    content: "Check-in: ";
+  }
+
+  > *:last-child::before {
+    content: "Check-out: ";
+  }
+
+  input {
+    width: 100% !important;
+    text-align: right;
+    padding-right: 0.5rem;
+
+    @media (max-width: 499px) {
+      height: 4rem;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-end !important;
+      align-items: center !important;
+      text-align: center;
+      padding: 2.25rem 0.25rem 0.25rem;
+    }
+  }
+}
+
+.rdrDateDisplayItemActive {
+  border-color: var(--col-main-highlight) !important;
+}
+
+.rdrDateInput {
+  width: 10rem;
+}
+
+.rdrSelected, .rdrInRange, .rdrStartEdge, .rdrEndEdge {
+  background-color: var(--col-main-highlight) !important;
+}
+
+.rdrMonths {
+  justify-content: center;
+  align-items: center;
+}
+
+.rdrDays,
+.rdrWeekDays,
+.rdrMonthName,
+.rdrMonthAndYearWrapper {
+  @media (max-width: 499px) {
+    max-width: 100vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+[data-expanded="false"] .rdrMonthAndYearWrapper,
+[data-expanded="false"] .rdrMonths {
+  display: none;
+}
+
+[data-expanded="true"] .rdrMonthAndYearWrapper,
+[data-expanded="true"] .rdrMonths {
+  display: flex;
+  animation: top-down 200ms ease-in-out forwards;
+  background: var(--col-body);
+  box-shadow: 0 0.25rem 0.5rem var(--col-shadow-light);
+}
+
+[data-expanded="true"] .rdrDateDisplay {
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+[data-expanded="true"] .rdrMonths {
+  border-radius: 0;
+}
+
+[data-expanded="true"] .rdrMonths {
+  border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.rdrDateInput {
+  border: 1px solid transparent !important;
+  box-shadow: 0 1px 2px 0 var(--col-shadow-light);
+}
+
+.rdrDateDisplayItemActive {
+  border: 1px solid transparent !important;
+
+  &:focus-within {
+    outline: 1px solid var(--col-main-highlight);
+  }
+}
+
+[data-theme="dark"] {
+  .rdrCalendarWrapper {
+    background: var(--col-body) !important;
+    color: var(--col-main-contrast) !important;
+    
+    * {
+      background: var(--col-body) !important;
+      color: var(--col-main-contrast) !important;
+    }
+  }
+
+  .rdrDayDisabled {
+    background: var(--col-main-low-contrast) !important;
+  }
+}
+
+@keyframes top-down {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

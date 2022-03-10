@@ -1,0 +1,83 @@
+.Menu {
+  ul {
+    display: flex;
+
+    li {
+      margin: 0.25rem 0.5rem;
+
+      a {
+        --radius: 0.25rem;
+        display: block;
+        padding: 0.5em 2em;
+        
+        border: 0.125rem solid var(--col-main-highlight);
+
+        color: var(--col-main-highlight);
+        font-weight: 800;
+        text-decoration: none;
+        
+        border-radius: var(--radius);
+
+        transition: 200ms ease-in-out;
+        transition-property: background-color, color, box-shadow;
+      
+        &:hover {
+          background: var(--col-main-highlight);
+          color: var(--col-body);
+        }
+      
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0.75rem -0.125rem var(--col-main-highlight);
+        }
+      }
+    }
+  }
+
+  .UserInfo {
+    display: flex;
+    align-items: center;
+
+    .Greet {
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      align-items: center;
+      
+      .Avatar {
+        width: 2.25rem;
+        height: 2.25rem;
+  
+        background: var(--col-secondary-highlight);
+        color: var(--col-body);
+        
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        grid-row: span 2;
+  
+        border-radius: 50%;
+  
+        margin-right: 0.5rem;
+      }
+  
+      p {
+        letter-spacing: -0.5px;
+        font-weight: 500;
+  
+        &:last-of-type {
+          color: var(--col-main-highlight);
+          font-weight: 600;
+        }
+      }
+    }
+
+    > button {
+      background: transparent;
+      display: flex;
+      align-items: center;
+      border: none;
+      margin-left: 3rem;
+      transform: scale(0.95);
+    }
+  }
+}

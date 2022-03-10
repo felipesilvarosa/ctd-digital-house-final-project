@@ -1,0 +1,39 @@
+.Base {
+  --bg-color: var(--col-main-low-contrast);
+  --line-color: var(--col-main-medium-contrast);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--line-color);
+  color: var(--line-color);
+  background: var(--bg-color);
+  margin: 0 0 1.5rem;
+  animation: into 300ms ease-in-out forwards;
+  width: 100%;
+}
+
+.Error {
+  --bg-color: var(--col-variant-red-lighter);
+  --line-color: var(--col-variant-red);
+
+  &::before {
+    content: "!";
+    
+    width: 1rem;
+    padding: 0 0.5rem;
+    margin-right: 0.75rem;
+    font-weight: 600;
+    background: var(--col-variant-red);
+    color: var(--col-variant-red-lighter);
+    border-radius: 50%;
+  }
+}
+
+@keyframes into {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

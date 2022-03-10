@@ -1,0 +1,137 @@
+.BaseWrapper {
+  width: 100%;
+
+  > button {
+    justify-content: center;
+    align-items: center;
+    margin: 0.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    > button {
+      height: 2.75rem;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    flex-direction: column !important;
+
+    > button {
+      margin-top: 3rem;
+    }
+  }
+
+  @media (max-width: 499px) {
+    > button {
+      margin-top: 4.75rem;
+    }
+  }
+}
+
+.InputOuterWrapper {
+  flex-grow: 1;
+}
+
+.InputWrapper {
+  position: relative;
+  padding: 0;
+  flex-grow: 1;
+
+  > img {
+    position: absolute;
+    left: 0.5rem;
+    top: 0.45rem;
+    max-height: 1.75rem;
+    width: auto;
+    pointer-events: none;
+    z-index: 8;
+  }
+
+  > input {
+    border-radius: 0.25rem;
+    padding: 0.585rem 0.25rem 0.585rem 2.75rem;
+    border: none;
+    background: var(--col-body);
+    height: 2.75rem;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      box-shadow: 
+        0 0 0 0.125rem var(--col-secondary-highlight),
+        0 0 0 0.25rem var(--col-main-highlight);
+    }
+  }
+}
+
+.Destination {
+  flex-grow: 1;
+  margin: 0.25rem;
+}
+
+.Dates {
+  flex-grow: 4;
+  max-width: 52rem;
+  margin: 0.25rem;
+}
+
+.PinDropDown {
+  color: var(--col-main-contrast);
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.PinDropDown > li + li {
+  border-top: 0.0675rem solid var(--col-shadow-light);
+}
+
+@media (max-width: 499px) {
+  .PinDropDown {
+    padding-top: 4rem !important;
+    z-index: 100 !important;
+  }
+
+  .InputWrapper:focus-within {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: calc(100vw - 2rem);
+    z-index: 110;
+  }
+
+  .InputWrapper[data-expanded="true"] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    max-width: 100vw;
+    max-height: 100vh;
+
+    background-color: var(--col-body);
+    z-index: 110;
+  }
+
+  .PinDropDown button {
+    color: var(--col-body);
+    padding: 1.5rem;
+  }
+
+  .PinDropDown img {
+    filter: invert(1);
+  }
+}
+
+@keyframes top-down {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
