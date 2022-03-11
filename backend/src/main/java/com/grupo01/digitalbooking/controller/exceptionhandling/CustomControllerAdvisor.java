@@ -24,7 +24,7 @@ public class CustomControllerAdvisor{
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<DefaultResponseDTO> handleBadRequestException(ConflictException ex){
+    public ResponseEntity<DefaultResponseDTO> handleConflictException(ConflictException ex){
         return ResponseEntity.status(409).body(new DefaultResponseDTO(FAILED,ex.getMessage()));
     }
 
