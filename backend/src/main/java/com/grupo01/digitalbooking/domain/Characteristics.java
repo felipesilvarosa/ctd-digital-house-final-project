@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,10 +23,13 @@ public class Characteristics {
     private String name;
     private String icon;
 
+    @ManyToMany(mappedBy = "characteristics")
+    private List<Products> products;
 
     public Characteristics(CharacteristicsDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.icon = dto.getIcon();
+        this.products = dto.getProducts();
     }
 }

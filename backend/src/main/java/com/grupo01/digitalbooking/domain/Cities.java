@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,9 +23,13 @@ public class Cities {
     private String name;
     private String country;
 
+    @OneToMany(mappedBy = "cities")
+    private List<Products> products;
+
     public Cities(CitiesDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
         this.country = dto.getCountry();
+        this.products = dto.getProducts();
     }
 }

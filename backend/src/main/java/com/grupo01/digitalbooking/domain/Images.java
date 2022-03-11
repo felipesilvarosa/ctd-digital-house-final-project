@@ -22,9 +22,14 @@ public class Images {
     private String title;
     private String url;
 
+    @ManyToOne
+    @JoinColumn(name = "products_id")
+    private Products products;
+
     public Images(ImagesDTO dto){
         this.id = dto.getId();
         this.title = dto.getTitle();
         this.url = dto.getUrl();
+        this.products = dto.getProducts();
     }
 }

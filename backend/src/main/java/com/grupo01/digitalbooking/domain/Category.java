@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,20 +19,18 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotEmpty
     private String title;
-
-    @NotEmpty
     private String description;
-
-    @NotEmpty
     private String imageUrl;
+
+    @OneToMany(mappedBy = "category")
+    private List<Products> products;
 
     public Category(CategoryDTO dto) {
         this.id = dto.getId();
         this.title = dto.getTitle();
         this.description = dto.getDescription();
         this.imageUrl = dto.getImageUrl();
+        this.products = dto.getProducts();
     }
 }
