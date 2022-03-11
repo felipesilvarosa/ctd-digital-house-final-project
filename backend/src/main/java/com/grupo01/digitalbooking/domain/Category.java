@@ -3,10 +3,7 @@ package com.grupo01.digitalbooking.domain;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -14,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "tb_category")
 public class Category {
 
     @Id
