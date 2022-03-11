@@ -15,9 +15,9 @@ public class CharacteristicsDTO {
     private String name;
     private String icon;
 
-    public CharacteristicsDTO(Characteristics characteristics){
-        this.id = characteristics.getId();
-        this.name = characteristics.getName();
-        this.icon = characteristics.getIcon();
+    public CharacteristicsDTO(Characteristics entity){
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.icon = entity.getIcon();
     }
 }
