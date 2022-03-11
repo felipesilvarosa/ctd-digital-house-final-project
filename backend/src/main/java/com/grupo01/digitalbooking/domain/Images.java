@@ -1,32 +1,30 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.CharacteristicsDTO;
+import com.grupo01.digitalbooking.dto.ImagesDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_characteristics")
-public class Characteristics {
+@Table(name = "tb_images")
+public class Images {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String icon;
+    private String title;
+    private String url;
 
-
-    public Characteristics(CharacteristicsDTO dto) {
+    public Images(ImagesDTO dto){
         this.id = dto.getId();
-        this.name = dto.getName();
-        this.icon = dto.getIcon();
+        this.title = dto.getTitle();
+        this.url = dto.getUrl();
     }
 }
