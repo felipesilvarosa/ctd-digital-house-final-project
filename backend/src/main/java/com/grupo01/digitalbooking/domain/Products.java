@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.CharacteristicsDTO;
+import com.grupo01.digitalbooking.dto.ProductsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,19 +13,19 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_characteristics")
-public class Characteristics {
+@Table(name = "tb_products")
+public class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String icon;
+    private String description;
 
-
-    public Characteristics(CharacteristicsDTO dto) {
+    public Products (ProductsDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
-        this.icon = dto.getIcon();
+        this.description = dto.getDescription();
     }
+
 }
