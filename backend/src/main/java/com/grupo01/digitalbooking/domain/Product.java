@@ -23,7 +23,7 @@ public class Product {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "products")
+    @OneToMany(mappedBy = "product")
     private List<Image> images;
 
     @ManyToOne
@@ -31,7 +31,7 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "cities_id")
+    @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToMany

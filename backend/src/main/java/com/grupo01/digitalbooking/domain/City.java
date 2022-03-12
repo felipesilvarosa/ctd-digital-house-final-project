@@ -23,7 +23,7 @@ public class City {
     private String name;
     private String country;
 
-    @OneToMany(mappedBy = "cities")
+    @OneToMany(mappedBy = "city")
     private List<Product> products;
 
     public City(CityDTO dto){
