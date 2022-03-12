@@ -33,7 +33,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getProductsByCategory(String category){
-        List<Product> response = repository.findByCity(category);
+        List<Product> response = repository.findByCategory(category);
         if (response==null||response.isEmpty())throw new NotFoundException("No product with provided category was found");
         return response.stream().map(ProductDTO::new).toList();
     }
