@@ -24,7 +24,7 @@ public class UserDTO{
         this.firstName = entity.getFirstName();
         this.lastName = entity.getLastName();
         this.email = entity.getEmail();
-        this.role = entity.getRole().name();
+        this.role = entity.getRole().toString();
     }
 
 
