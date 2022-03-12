@@ -2,10 +2,7 @@ package com.grupo01.digitalbooking.dto;
 
 import com.grupo01.digitalbooking.domain.Cities;
 import com.grupo01.digitalbooking.domain.Products;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CitiesDTO {
     private Long id;
     private String name;

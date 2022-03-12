@@ -4,6 +4,7 @@ import com.grupo01.digitalbooking.domain.Category;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
+import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,10 +44,10 @@ class CategoryServiceTest {
 
         when(categoryRepository.findCategoryByTitle(categoryDTO.getTitle())).thenReturn(category);
 
-        BadRequestException e = assertThrows(BadRequestException.class,
+        ConflictException e = assertThrows(ConflictException.class,
                 ()-> categoryService.createCategory(categoryDTO));
 
-        assertTrue(e.getMessage().contains("Category " + categoryDTO.getTitle() + " already exists"));
+        assertTrue(e.getMessage().contains("Categoria " + categoryDTO.getTitle() + " já cadastrada"));
     }
 
     @Test
