@@ -1,7 +1,7 @@
 package com.grupo01.digitalbooking.dto;
 
 import com.grupo01.digitalbooking.domain.Category;
-import com.grupo01.digitalbooking.domain.Products;
+import com.grupo01.digitalbooking.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class CategoryDTO {
     private String title;
     private String description;
     private String imageUrl;
-    private List<Products> products;
+    private List<Product> products;
 
     public CategoryDTO(Category entity) {
         this.id = entity.getId();

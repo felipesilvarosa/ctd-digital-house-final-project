@@ -1,13 +1,12 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.ProductsDTO;
+import com.grupo01.digitalbooking.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_products")
-public class Products {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +24,7 @@ public class Products {
     private String description;
 
     @OneToMany(mappedBy = "products")
-    private List<Images> images;
+    private List<Image> images;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -33,17 +32,17 @@ public class Products {
 
     @ManyToOne
     @JoinColumn(name = "cities_id")
-    private Cities cities;
+    private City city;
 
     @ManyToMany
-    private List<Characteristics> characteristics;
+    private List<Characteristic> characteristics;
 
-    public Products (ProductsDTO dto){
+    public Product(ProductDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();
         this.category = dto.getCategory();
-        this.cities = dto.getCities();
+        this.city = dto.getCity();
         this.characteristics = dto.getCharacteristics();
     }
 

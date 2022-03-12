@@ -1,7 +1,7 @@
 package com.grupo01.digitalbooking.dto;
 
-import com.grupo01.digitalbooking.domain.Images;
-import com.grupo01.digitalbooking.domain.Products;
+import com.grupo01.digitalbooking.domain.Image;
+import com.grupo01.digitalbooking.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,16 +11,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ImagesDTO {
+public class ImageDTO {
     private Long id;
     private String title;
     private String url;
-    private Products products;
+    private Product product;
 
-    private ImagesDTO(Images entity){
+    private ImageDTO(Image entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.url = entity.getUrl();
-        this.products = entity.getProducts();
+        this.product = entity.getProduct();
     }
 }

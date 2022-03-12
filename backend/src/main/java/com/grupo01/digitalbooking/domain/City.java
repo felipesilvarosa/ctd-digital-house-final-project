@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.CitiesDTO;
+import com.grupo01.digitalbooking.dto.CityDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_cities")
-public class Cities {
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class Cities {
     private String country;
 
     @OneToMany(mappedBy = "cities")
-    private List<Products> products;
+    private List<Product> products;
 
-    public Cities(CitiesDTO dto){
+    public City(CityDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
         this.country = dto.getCountry();

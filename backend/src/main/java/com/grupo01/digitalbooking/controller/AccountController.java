@@ -23,8 +23,8 @@ public class AccountController {
 
     private final SignupService service;
 
-    @PostMapping()
-    public ResponseEntity<DefaultResponseDTO> investorSignup(@RequestBody NewUserDTO newUser){
+    @PostMapping
+    public ResponseEntity<DefaultResponseDTO> createNewUser(@RequestBody NewUserDTO newUser){
         UserDTO result = service.createNewUser(newUser);
         Map<String,UserDTO> data = Map.of("user",result);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"User created successfully"));

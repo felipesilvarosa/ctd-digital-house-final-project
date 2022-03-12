@@ -1,7 +1,7 @@
 package com.grupo01.digitalbooking.dto;
 
-import com.grupo01.digitalbooking.domain.Cities;
-import com.grupo01.digitalbooking.domain.Products;
+import com.grupo01.digitalbooking.domain.Characteristic;
+import com.grupo01.digitalbooking.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,16 +13,16 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CitiesDTO {
+public class CharacteristicDTO {
     private Long id;
     private String name;
-    private String country;
-    private List<Products> products;
+    private String icon;
+    private List<Product> products;
 
-    public CitiesDTO(Cities entity){
+    public CharacteristicDTO(Characteristic entity){
         this.id = entity.getId();
         this.name = entity.getName();
-        this.country = entity.getCountry();
+        this.icon = entity.getIcon();
         this.products = entity.getProducts();
     }
 }

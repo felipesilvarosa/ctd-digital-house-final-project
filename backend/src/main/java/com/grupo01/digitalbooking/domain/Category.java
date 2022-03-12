@@ -4,8 +4,6 @@ import com.grupo01.digitalbooking.dto.CategoryDTO;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +22,7 @@ public class Category {
     private String imageUrl;
 
     @OneToMany(mappedBy = "category")
-    private List<Products> products;
+    private List<Product> products;
 
     public Category(CategoryDTO dto) {
         this.id = dto.getId();
