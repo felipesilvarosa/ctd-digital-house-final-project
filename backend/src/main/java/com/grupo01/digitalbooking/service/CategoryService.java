@@ -5,11 +5,13 @@ import com.grupo01.digitalbooking.domain.Category;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
+import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,8 +34,8 @@ public class CategoryService {
         Category category = new Category(categoryDTO);
         Category categoryFound = (categoryRepository.findCategoryByTitle(categoryDTO.getTitle().toLowerCase()));
 
-        if(categoryFound != null){
-            throw new BadRequestException("Category " + categoryDTO.getTitle() + " already exists");
+        if(Objects.nonNull(categoryFound)){
+            throw new ConflictException("Categoria " + categoryDTO.getTitle() + " já cadastrada");
         }
 
         categoryRepository.save(category);
