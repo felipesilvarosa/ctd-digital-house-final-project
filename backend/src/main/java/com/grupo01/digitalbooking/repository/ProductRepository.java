@@ -7,12 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product,Long>,CustomProductRepository {
 
-    @Query("SELECT p FROM Product p WHERE p.category.title = :category")
-    List<Product> findByCategory(@Param("category") String category);
+    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
+    List<Product> findByCategory(@Param("categoryId") Long categoryId);
 
-    @Query("SELECT p FROM Product p WHERE p.category.title = :city")
-    List<Product> findByCity(@Param("city") String city);
+    @Query("SELECT p FROM Product p WHERE p.category.id = :cityId")
+    List<Product> findByCity(@Param("cityId") Long cityId);
 
 }

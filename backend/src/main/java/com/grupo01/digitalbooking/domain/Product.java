@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,7 @@ public class Product {
     private Long id;
     private String name;
     private String description;
+    private LocalDate availableDate;
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;
