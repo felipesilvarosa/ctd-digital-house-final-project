@@ -15,12 +15,12 @@ public class ImageDTO {
     private Long id;
     private String title;
     private String url;
-    private Product product;
+    private ProductDTO product;
 
     private ImageDTO(Image entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.url = entity.getUrl();
-        this.product = entity.getProduct();
+        this.product = new ProductDTO(entity.getProduct());
     }
 }

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,12 +19,17 @@ public class CharacteristicDTO {
     private Long id;
     private String name;
     private String icon;
-    private List<Product> products;
+    private List<Map<String,String>> products;
 
     public CharacteristicDTO(Characteristic entity){
         this.id = entity.getId();
         this.name = entity.getName();
         this.icon = entity.getIcon();
-        this.products = entity.getProducts();
+        this.products = entity.getProducts().stream()
+                .map(product -> Map.of(
+                        "name", product.getName(),
+                        "contry",product.getCity().getCountry(),
+                        "city",product.getCity().getName()))
+                .collect(Collectors.toList());
     }
 }

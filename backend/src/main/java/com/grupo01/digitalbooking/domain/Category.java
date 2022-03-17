@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -29,6 +30,6 @@ public class Category {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
         this.imageUrl = dto.getImageUrl();
-        this.products = dto.getProducts();
+        this.products = dto.getProducts().stream().map(Product::new).collect(Collectors.toList());
     }
 }
