@@ -1,8 +1,11 @@
 package com.grupo01.digitalbooking.dto;
 
-import com.grupo01.digitalbooking.domain.Cities;
-import com.grupo01.digitalbooking.domain.Products;
-import lombok.*;
+import com.grupo01.digitalbooking.domain.City;
+import com.grupo01.digitalbooking.domain.Product;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -10,14 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class CitiesDTO {
+public class CityDTO {
     private Long id;
     private String name;
     private String country;
-    private List<Products> products;
+    private List<Product> products;
 
-    public CitiesDTO(Cities entity){
+    public CityDTO(City entity){
         this.id = entity.getId();
         this.name = entity.getName();
         this.country = entity.getCountry();

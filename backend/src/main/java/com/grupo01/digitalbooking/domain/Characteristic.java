@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.CharacteristicsDTO;
+import com.grupo01.digitalbooking.dto.CharacteristicDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_characteristics")
-public class Characteristics {
+public class Characteristic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class Characteristics {
     private String icon;
 
     @ManyToMany(mappedBy = "characteristics")
-    private List<Products> products;
+    private List<Product> products;
 
-    public Characteristics(CharacteristicsDTO dto) {
+    public Characteristic(CharacteristicDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.icon = dto.getIcon();

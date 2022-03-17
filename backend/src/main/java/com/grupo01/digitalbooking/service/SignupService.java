@@ -1,5 +1,6 @@
 package com.grupo01.digitalbooking.service;
 
+import com.grupo01.digitalbooking.domain.Role;
 import com.grupo01.digitalbooking.domain.User;
 import com.grupo01.digitalbooking.dto.NewUserDTO;
 import com.grupo01.digitalbooking.dto.UserDTO;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.grupo01.digitalbooking.enums.Role.USER;
 
 @Service
 @Slf4j
@@ -34,10 +34,10 @@ public class SignupService {
         }
         Util.validatePassword(newUser.getPassword());
         User entity = new User(newUser);
-        entity.setRole(USER);
+        entity.setRole(new Role(1L));
         setDefaultUserInfo(entity);
         entity = userRepository.save(entity);
-        log.info("New investor created successfully");
+        log.info("New user created successfully");
         return new UserDTO(entity);
     }
 

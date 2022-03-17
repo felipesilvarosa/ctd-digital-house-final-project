@@ -1,0 +1,21 @@
+###############################
+####### BANCO DE DADOS ########
+###############################
+
+# Host ou endereço de IP do banco de dados
+DATABASE_HOST=t2g1-db.cgy0y1fgfsud.us-east-1.rds.amazonaws.com
+
+# Porta de conexão do banco de dados
+DATABASE_PORT=3306
+
+# Nome do banco de dados
+DATABASE_NAME=t2g1-db
+
+# Nome do Schema do banco de dados
+DATABASE_SCHEMA=digitalbooking
+
+# Nome de usuário do banco de dados
+DATABASE_USERNAME=admin
+
+# Senha do banco de dados
+DATABASE_PASSWORD=R4nd0m!2E
