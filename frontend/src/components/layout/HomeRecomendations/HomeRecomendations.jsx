@@ -4,7 +4,7 @@ import { useProducts, useWindowSize } from "hooks";
 import { useEffect, useState } from "react";
 import styles from "./HomeRecomendations.module.scss";
 
-export const HomeRecomendations = ({category}) => {
+export const HomeRecomendations = ({category, destination}) => {
   const { setProducts, products, loading } = useProducts();
   const size = useWindowSize()
 
@@ -17,12 +17,13 @@ export const HomeRecomendations = ({category}) => {
 
   useEffect(() => {
     if(category) {
-      console.log(category)
       setFilteredProducts(products.filter(product => product.category === category))
+    } else if(destination) {
+      setFilteredProducts(products.filter(product => product.location === destination))
     } else {
       setFilteredProducts(products)
     }
-  }, [category, products])
+  }, [category, products, destination])
 
   return (
     <HomeSection className={styles.Section}>
