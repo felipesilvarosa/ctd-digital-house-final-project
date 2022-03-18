@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -43,9 +44,16 @@ public class Product {
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();
-        this.category = dto.getCategory();
-        this.city = dto.getCity();
-        this.characteristics = dto.getCharacteristics();
+        this.category = new Category(dto.getCategoryId());
+        this.city = new City(dto.getCityId());
+        this.availableDate = dto.getAvailableDate()==null?null:LocalDate.parse(dto.getAvailableDate());
+        this.characteristics = dto.getCharacteristicsId()==null?null:dto.getCharacteristicsId()
+                .stream()
+                .map(Characteristic::new)
+                .collect(Collectors.toList());
     }
 
+    public Product(Long id) {
+        this.id = id;
+    }
 }

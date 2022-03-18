@@ -19,17 +19,14 @@ public class CharacteristicDTO {
     private Long id;
     private String name;
     private String icon;
-    private List<Map<String,String>> products;
+    private List<Long> productsId;
 
     public CharacteristicDTO(Characteristic entity){
         this.id = entity.getId();
         this.name = entity.getName();
         this.icon = entity.getIcon();
-        this.products = entity.getProducts().stream()
-                .map(product -> Map.of(
-                        "name", product.getName(),
-                        "contry",product.getCity().getCountry(),
-                        "city",product.getCity().getName()))
+        this.productsId = entity.getProducts().stream()
+                .map(Product::getId)
                 .collect(Collectors.toList());
     }
 }

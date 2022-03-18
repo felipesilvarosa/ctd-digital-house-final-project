@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +40,12 @@ public class ProductController {
                                                              @RequestParam(required = false) Long categoryId,
                                                              @RequestParam(required = false) String startDate,
                                                              @RequestParam(required = false) String endDate){
-        List<ProductDTO> result = service.searchProducts(
-                Map.of("city",cityId,
-                        "category",categoryId,
-                        "startDate",startDate,
-                        "endDate",endDate)
-        );
+        Map<String, Object> params = new HashMap<>();
+        params.put("cityId",cityId);
+        params.put("categoryId",categoryId);
+        params.put("startDate",startDate);
+        params.put("endDate",endDate);
+        List<ProductDTO> result = service.searchProducts(params);
         Map<String,List<ProductDTO>> data = Map.of("products",result);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Products retrieved successfully"));
     }

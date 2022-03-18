@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -23,13 +24,20 @@ public class City {
     private String name;
     private String country;
 
-    @OneToMany(mappedBy = "city")
+    @OneToMany(mappedBy = "city",fetch = FetchType.LAZY)
     private List<Product> products;
 
     public City(CityDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
         this.country = dto.getCountry();
-        this.products = dto.getProducts();
+        this.products = dto.getProducts()==null?null:dto.getProducts()
+                .stream()
+                .map(Product::new)
+                .collect(Collectors.toList());
+    }
+
+    public City(Long id) {
+        this.id = id;
     }
 }

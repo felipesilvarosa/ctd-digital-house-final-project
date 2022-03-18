@@ -22,7 +22,7 @@ public class Category {
     private String description;
     private String imageUrl;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> products;
 
     public Category(CategoryDTO dto) {
@@ -30,6 +30,14 @@ public class Category {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
         this.imageUrl = dto.getImageUrl();
-        this.products = dto.getProducts().stream().map(Product::new).collect(Collectors.toList());
+        this.products = dto.getProducts()==null?null:dto.getProducts()
+                .stream()
+                .map(Product::new)
+                .collect(Collectors.toList());
     }
+
+    public Category(Long id) {
+        this.id = id;
+    }
+
 }

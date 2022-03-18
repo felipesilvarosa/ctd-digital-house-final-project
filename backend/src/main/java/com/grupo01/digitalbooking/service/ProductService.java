@@ -50,23 +50,23 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductDTO> searchProducts(Map<String, Object> searchCriteria) {
 
-        StringBuilder query = new StringBuilder("SELECT p from Product p WHERE ");
-
-        if(!(searchCriteria.get("cityId")==null||searchCriteria.get("categoryId")==null||
-            searchCriteria.get("startDate")==null||searchCriteria.get("endDate")==null)){
+        if(searchCriteria.get("cityId")==null&&searchCriteria.get("categoryId")==null&&
+                searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
             throw new BadRequestException("No acceptable search criteria");
         }
 
-        if(searchCriteria.containsKey("cityId"))
-            query.append("p.city.id = ").append(searchCriteria.get("cityId")).append(" AND");
-        if(searchCriteria.containsKey("categoryId"))
-            query.append("p.category.id = ").append(searchCriteria.get("categoryId")).append(" AND");
-        if(searchCriteria.containsKey("startDate"))
-            query.append("p.availableDate >= ").append(searchCriteria.get("startDate")).append(" AND");
-        if(searchCriteria.containsKey("cityId"))
-            query.append("p.availableDate <= ").append(searchCriteria.get("endDate")).append(" AND");
+        StringBuilder query = new StringBuilder("SELECT p from Product p WHERE ");
 
-        query.replace(query.length()-3, query.length(),"");
+        if(searchCriteria.get("cityId")!=null)
+            query.append("p.city.id = ").append(searchCriteria.get("cityId")).append(" AND ");
+        if(searchCriteria.get("categoryId")!=null)
+            query.append("p.category.id = ").append(searchCriteria.get("categoryId")).append(" AND ");
+        if(searchCriteria.get("startDate")!=null)
+            query.append("p.availableDate >= ").append(searchCriteria.get("startDate")).append(" AND ");
+        if(searchCriteria.get("endDate")!=null)
+            query.append("p.availableDate <= ").append(searchCriteria.get("endDate")).append(" AND ");
+
+        query.replace(query.length()-4, query.length(),"");
 
         List<Product> response = repository.search(query.toString());
         if (response==null||response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
