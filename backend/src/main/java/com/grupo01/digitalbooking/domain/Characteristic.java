@@ -1,6 +1,7 @@
 package com.grupo01.digitalbooking.domain;
 
 import com.grupo01.digitalbooking.dto.CharacteristicDTO;
+import com.grupo01.digitalbooking.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -23,13 +25,20 @@ public class Characteristic {
     private String name;
     private String icon;
 
-    @ManyToMany(mappedBy = "characteristics")
+    @ManyToMany(mappedBy = "characteristics",fetch = FetchType.LAZY)
     private List<Product> products;
 
     public Characteristic(CharacteristicDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.icon = dto.getIcon();
-        this.products = dto.getProducts();
+        this.products = dto.getProductsId()==null?null:dto.getProductsId()
+                .stream()
+                .map(Product::new)
+                .collect(Collectors.toList());
+    }
+
+    public Characteristic(Long id) {
+        this.id = id;
     }
 }

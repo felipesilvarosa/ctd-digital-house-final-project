@@ -4,7 +4,6 @@ package com.grupo01.digitalbooking.service;
 import com.grupo01.digitalbooking.domain.Category;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
-import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class CategoryService {
 
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(CategoryDTO::new).toList();
+        return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
     public CategoryDTO getCategoryByTitle(String title) {

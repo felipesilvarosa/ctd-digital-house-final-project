@@ -1,9 +1,8 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.dto.CategoryDTO;
-import com.grupo01.digitalbooking.dto.CitiesDTO;
+import com.grupo01.digitalbooking.dto.CityDTO;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
-import com.grupo01.digitalbooking.service.CitiesService;
+import com.grupo01.digitalbooking.service.CityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,22 +15,22 @@ import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 @RestController
 @RequestMapping("cities")
 @RequiredArgsConstructor
-public class CitiesController {
+public class CityController {
 
-    private final CitiesService citiesService;
+    private final CityService cityService;
 
 
     @GetMapping()
     public ResponseEntity<DefaultResponseDTO> findAllCities() {
-        List<CitiesDTO> response = citiesService.getCities();
-        Map<String, List<CitiesDTO>> data = Map.of("cities", response);
+        List<CityDTO> response = cityService.getCity();
+        Map<String, List<CityDTO>> data = Map.of("cities", response);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Cities retrieved successfully"));
     }
 
     @PostMapping("/new")
-    public ResponseEntity<DefaultResponseDTO> createCategory(@RequestBody CitiesDTO citiesDTO) {
-        CitiesDTO response = citiesService.createCity(citiesDTO);
-        Map<String, CitiesDTO> data = Map.of("cities", response);
+    public ResponseEntity<DefaultResponseDTO> createCategory(@RequestBody CityDTO cityDTO) {
+        CityDTO response = cityService.createCity(cityDTO);
+        Map<String, CityDTO> data = Map.of("cities", response);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "City created successfully"));
     }
 

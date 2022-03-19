@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.ImageDTO;
+import com.grupo01.digitalbooking.dto.ReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,27 +9,25 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "tb_reservation")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_images")
-public class Image {
+public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String url;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @OneToOne
+    private Client client;
+    @OneToOne
     private Product product;
 
-    public Image(ImageDTO dto){
+    public Reservation(ReservationDTO dto){
         this.id = dto.getId();
-        this.title = dto.getTitle();
-        this.url = dto.getUrl();
+        this.client = new Client(dto.getClientId());
         this.product = new Product(dto.getProductId());
     }
+
 }

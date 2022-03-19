@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "tb_user")
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -38,6 +39,10 @@ public class User implements UserDetails {
         this.lastName = dto.getLastName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
+    }
+
+    public User(Long id){
+        this.id = id;
     }
 
 

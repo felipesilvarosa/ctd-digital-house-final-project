@@ -1,10 +1,8 @@
 package com.grupo01.digitalbooking.service;
 
-import com.grupo01.digitalbooking.domain.Category;
-import com.grupo01.digitalbooking.domain.Cities;
-import com.grupo01.digitalbooking.dto.CategoryDTO;
-import com.grupo01.digitalbooking.dto.CitiesDTO;
-import com.grupo01.digitalbooking.repository.CitiesRepository;
+import com.grupo01.digitalbooking.domain.City;
+import com.grupo01.digitalbooking.dto.CityDTO;
+import com.grupo01.digitalbooking.repository.CityRepository;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,40 +18,40 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CitiesServiceTest {
+class CityServiceTest {
 
     @InjectMocks
-    private CitiesService citiesService;
+    private CityService cityService;
     @Mock
-    private CitiesRepository citiesRepository;
+    private CityRepository cityRepository;
 
 
 
     @Test
     void createShouldCreateNewCity(){
-        CitiesDTO cityDTO = mockCityDTO();
-        citiesService.createCity(cityDTO);
-        verify(citiesRepository, Mockito.times(1)).save(any());
+        CityDTO cityDTO = mockCityDTO();
+        cityService.createCity(cityDTO);
+        verify(cityRepository, Mockito.times(1)).save(any());
 
     }
 
     @Test
     void createShouldFailWhenCityAlreadyExists(){
-        CitiesDTO cityDTO = mockCityDTO();
-        Cities city = new Cities(cityDTO);
+        CityDTO cityDTO = mockCityDTO();
+        City city = new City(cityDTO);
 
-        when(citiesRepository.findByName(cityDTO.getName().toLowerCase())).thenReturn(city);
+        when(cityRepository.findByName(cityDTO.getName().toLowerCase())).thenReturn(city);
 
         ConflictException e = assertThrows(ConflictException.class,
-                ()-> citiesService.createCity(cityDTO));
+                ()-> cityService.createCity(cityDTO));
 
         assertTrue(e.getMessage().contains("Cidade " + cityDTO.getName() + " já cadastrada"));
 
     }
 
 
-    public CitiesDTO mockCityDTO(){
-        return CitiesDTO.builder()
+    public CityDTO mockCityDTO(){
+        return CityDTO.builder()
                 .country("Brasil")
                 .name("São Paulo")
                 .build();

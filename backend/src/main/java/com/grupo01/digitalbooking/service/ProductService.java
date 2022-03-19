@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class ProductService {
     public List<ProductDTO> getProducts(){
         List<Product> response = repository.findAll();
         if (response.isEmpty())throw new NotFoundException("No product was found");
-        return response.stream().map(ProductDTO::new).toList();
+        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -32,17 +34,44 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCategory(String category){
-        List<Product> response = repository.findByCategory(category);
+    public List<ProductDTO> getProductsByCategory(Long categoryId){
+        List<Product> response = repository.findByCategory(categoryId);
         if (response==null||response.isEmpty())throw new NotFoundException("No product with provided category was found");
-        return response.stream().map(ProductDTO::new).toList();
+        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCity(String city){
-        List<Product> response = repository.findByCity(city);
+    public List<ProductDTO> getProductsByCity(Long cityId){
+        List<Product> response = repository.findByCity(cityId);
         if (response==null||response.isEmpty())throw new NotFoundException("No product with provided city was found");
-        return response.stream().map(ProductDTO::new).toList();
+        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductDTO> searchProducts(Map<String, Object> searchCriteria) {
+
+        if(searchCriteria.get("cityId")==null&&searchCriteria.get("categoryId")==null&&
+                searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
+            throw new BadRequestException("No acceptable search criteria");
+        }
+
+        StringBuilder query = new StringBuilder("SELECT p from Product p WHERE ");
+
+        if(searchCriteria.get("cityId")!=null)
+            query.append("p.city.id = ").append(searchCriteria.get("cityId")).append(" AND ");
+        if(searchCriteria.get("categoryId")!=null)
+            query.append("p.category.id = ").append(searchCriteria.get("categoryId")).append(" AND ");
+        if(searchCriteria.get("startDate")!=null)
+            query.append("p.availableDate >= ").append(searchCriteria.get("startDate")).append(" AND ");
+        if(searchCriteria.get("endDate")!=null)
+            query.append("p.availableDate <= ").append(searchCriteria.get("endDate")).append(" AND ");
+
+        query.replace(query.length()-4, query.length(),"");
+
+        List<Product> response = repository.search(query.toString());
+        if (response==null||response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
+        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
+
     }
 
     @Transactional

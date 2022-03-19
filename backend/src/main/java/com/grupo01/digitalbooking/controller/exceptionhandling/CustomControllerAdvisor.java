@@ -1,6 +1,7 @@
 package com.grupo01.digitalbooking.controller.exceptionhandling;
 
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
+import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.ForbiddenException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
@@ -12,6 +13,11 @@ import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.FAILED;
 
 @ControllerAdvice
 public class CustomControllerAdvisor{
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<DefaultResponseDTO> handleBadRequestException (BadRequestException ex){
+        return ResponseEntity.status(400).body(new DefaultResponseDTO(FAILED,ex.getMessage()));
+    }
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<DefaultResponseDTO> handleForbiddenException (ForbiddenException ex){

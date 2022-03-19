@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +35,17 @@ public class ProductController {
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Product retrieved successfully"));
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<DefaultResponseDTO> getProductsCategory(@PathVariable String category){
-        List<ProductDTO> result = service.getProductsByCategory(category);
-        Map<String,List<ProductDTO>> data = Map.of("products",result);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Products retrieved successfully"));
-    }
-
-    @GetMapping("/city/{city}")
-    public ResponseEntity<DefaultResponseDTO> getProductsByCity(@PathVariable String city){
-        List<ProductDTO> result = service.getProductsByCity(city);
+    @GetMapping("/search")
+    public ResponseEntity<DefaultResponseDTO> searchProducts(@RequestParam(required = false) Long cityId,
+                                                             @RequestParam(required = false) Long categoryId,
+                                                             @RequestParam(required = false) String startDate,
+                                                             @RequestParam(required = false) String endDate){
+        Map<String, Object> params = new HashMap<>();
+        params.put("cityId",cityId);
+        params.put("categoryId",categoryId);
+        params.put("startDate",startDate);
+        params.put("endDate",endDate);
+        List<ProductDTO> result = service.searchProducts(params);
         Map<String,List<ProductDTO>> data = Map.of("products",result);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Products retrieved successfully"));
     }

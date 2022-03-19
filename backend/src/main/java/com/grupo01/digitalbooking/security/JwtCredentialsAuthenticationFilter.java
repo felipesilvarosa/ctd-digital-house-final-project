@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,8 +20,8 @@ import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
-import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.FAILED;
 import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 
 public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -62,7 +60,7 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
         Algorithm algorithm = Algorithm.HMAC256(secret);
         String access_token = JWT.create()
                 .withSubject(authResult.getName())
-                .withClaim("roles",authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .withClaim("roles",authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .withIssuer("srot")
                 .withIssuedAt(Date.from(Instant.now()))
                 .withExpiresAt(Date.valueOf(LocalDate.now().plusDays(1)))
@@ -70,7 +68,7 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
 
         String refresh_token = JWT.create()
                 .withSubject(authResult.getName())
-                .withClaim("authorities",authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .withClaim("authorities",authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .withIssuer("srot")
                 .withIssuedAt(Date.from(Instant.now()))
                 .withExpiresAt(Date.valueOf(LocalDateTime.now().plusWeeks(2).toLocalDate()))

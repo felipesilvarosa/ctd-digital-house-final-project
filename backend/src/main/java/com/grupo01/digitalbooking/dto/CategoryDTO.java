@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,12 +20,13 @@ public class CategoryDTO {
     private String title;
     private String description;
     private String imageUrl;
-    private List<Product> products;
+    private List<ProductDTO> products;
 
     public CategoryDTO(Category entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.description = entity.getDescription();
         this.imageUrl = entity.getImageUrl();
+        this.products = entity.getProducts().stream().map(ProductDTO::new).collect(Collectors.toList());
     }
 }
