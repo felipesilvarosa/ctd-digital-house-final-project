@@ -23,7 +23,7 @@ public class ReservationController {
         List<ReservationDTO> response = reservationService.getReservations();
         Map<String, List<ReservationDTO>> data = Map.of("reservation", response);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Reservations retrieved successfully"));
-    }g
+    }
 
     @PostMapping("/new")
     public ResponseEntity<DefaultResponseDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {
