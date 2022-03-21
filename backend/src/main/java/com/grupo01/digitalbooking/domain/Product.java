@@ -48,13 +48,6 @@ public class Product {
         this.description = dto.getDescription();
         this.city = dto.getCity();
         this.availableDate = dto.getAvailableDate()==null?null:LocalDate.parse(dto.getAvailableDate());
-        this.characteristics = dto.getCharacteristicsId()==null?null:dto.getCharacteristicsId()
-                .stream()
-                .map(Characteristic::new)
-                .collect(Collectors.toList());
-    }
-
-    public Product(Long id) {
-        this.id = id;
+        this.characteristics = dto.getCharacteristics();
     }
 }

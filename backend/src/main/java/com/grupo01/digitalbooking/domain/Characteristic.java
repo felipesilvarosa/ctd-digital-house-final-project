@@ -1,5 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grupo01.digitalbooking.dto.CharacteristicDTO;
 import com.grupo01.digitalbooking.dto.ProductDTO;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class Characteristic {
     private String name;
     private String icon;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "characteristics",fetch = FetchType.LAZY)
     private List<Product> products;
 
@@ -32,13 +34,5 @@ public class Characteristic {
         this.id = dto.getId();
         this.name = dto.getName();
         this.icon = dto.getIcon();
-        this.products = dto.getProductsId()==null?null:dto.getProductsId()
-                .stream()
-                .map(Product::new)
-                .collect(Collectors.toList());
-    }
-
-    public Characteristic(Long id) {
-        this.id = id;
     }
 }

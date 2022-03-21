@@ -1,5 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grupo01.digitalbooking.dto.ImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Image {
     private String title;
     private String url;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
@@ -30,6 +32,6 @@ public class Image {
         this.id = dto.getId();
         this.title = dto.getTitle();
         this.url = dto.getUrl();
-        this.product = new Product(dto.getProductId());
+        this.product = dto.getProduct();
     }
 }
