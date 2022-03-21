@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final String ID_CANNOT_BE_NULL;
+    private final String ID_CANNOT_BE_NULL = "Id não pode ser nula";
 
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryRepository.findAll();

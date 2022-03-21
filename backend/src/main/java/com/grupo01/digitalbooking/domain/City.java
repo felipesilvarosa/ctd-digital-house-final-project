@@ -1,5 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grupo01.digitalbooking.dto.CityDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -24,6 +24,7 @@ public class City {
     private String name;
     private String country;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "city",fetch = FetchType.LAZY)
     private List<Product> products;
 
@@ -31,13 +32,5 @@ public class City {
         this.id = dto.getId();
         this.name = dto.getName();
         this.country = dto.getCountry();
-        this.products = dto.getProducts()==null?null:dto.getProducts()
-                .stream()
-                .map(Product::new)
-                .collect(Collectors.toList());
-    }
-
-    public City(Long id) {
-        this.id = id;
     }
 }

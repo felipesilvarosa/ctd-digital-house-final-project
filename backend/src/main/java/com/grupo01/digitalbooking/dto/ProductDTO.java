@@ -2,6 +2,7 @@ package com.grupo01.digitalbooking.dto;
 
 import com.grupo01.digitalbooking.domain.Category;
 import com.grupo01.digitalbooking.domain.Characteristic;
+import com.grupo01.digitalbooking.domain.City;
 import com.grupo01.digitalbooking.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class ProductDTO {
     private String name;
     private String description;
     private Category category;
-    private Long cityId;
+    private City city;
     private List<Long> characteristicsId;
     private String availableDate;
 
@@ -36,7 +37,7 @@ public class ProductDTO {
                 .stream()
                 .map(Characteristic::getId)
                 .collect(Collectors.toList());
-        this.cityId = entity.getCity().getId();
+        this.city = entity.getCity();
         this.availableDate = entity.getAvailableDate().toString();
     }
 }

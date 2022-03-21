@@ -20,14 +20,14 @@ public class CityController {
     @GetMapping()
     public ResponseEntity<List<CityDTO>> findAllCities() {
         List<CityDTO> response = cityService.getCity();
-        return new ResponseEntity<List<CityDTO>>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CityDTO> createCategory(@RequestBody CityDTO cityDTO) {
         CityDTO response = cityService.createCity(cityDTO);
-        return new ResponseEntity<CityDTO>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }

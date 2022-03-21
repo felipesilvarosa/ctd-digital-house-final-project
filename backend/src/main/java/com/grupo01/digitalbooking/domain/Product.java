@@ -46,7 +46,7 @@ public class Product {
         this.name = dto.getName();
         this.category = dto.getCategory();
         this.description = dto.getDescription();
-        this.city = new City(dto.getCityId());
+        this.city = dto.getCity();
         this.availableDate = dto.getAvailableDate()==null?null:LocalDate.parse(dto.getAvailableDate());
         this.characteristics = dto.getCharacteristicsId()==null?null:dto.getCharacteristicsId()
                 .stream()
