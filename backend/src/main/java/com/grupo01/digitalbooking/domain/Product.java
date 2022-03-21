@@ -1,5 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.grupo01.digitalbooking.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

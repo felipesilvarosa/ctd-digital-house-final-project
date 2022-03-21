@@ -1,5 +1,7 @@
 package com.grupo01.digitalbooking.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
 import lombok.*;
 
@@ -22,6 +24,7 @@ public class Category {
     private String description;
     private String imageUrl;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> products;
 
@@ -30,14 +33,5 @@ public class Category {
         this.title = dto.getTitle();
         this.description = dto.getDescription();
         this.imageUrl = dto.getImageUrl();
-        this.products = dto.getProducts()==null?null:dto.getProducts()
-                .stream()
-                .map(Product::new)
-                .collect(Collectors.toList());
     }
-
-    public Category(Long id) {
-        this.id = id;
-    }
-
 }
