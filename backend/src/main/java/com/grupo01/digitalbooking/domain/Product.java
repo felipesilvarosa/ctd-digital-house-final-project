@@ -30,7 +30,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -45,8 +44,8 @@ public class Product {
     public Product(ProductDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
+        this.category = dto.getCategory();
         this.description = dto.getDescription();
-        this.category = new Category(dto.getCategoryId());
         this.city = new City(dto.getCityId());
         this.availableDate = dto.getAvailableDate()==null?null:LocalDate.parse(dto.getAvailableDate());
         this.characteristics = dto.getCharacteristicsId()==null?null:dto.getCharacteristicsId()
