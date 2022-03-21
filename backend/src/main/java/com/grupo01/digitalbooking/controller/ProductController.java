@@ -4,6 +4,7 @@ import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.dto.ProductDTO;
 import com.grupo01.digitalbooking.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,21 +23,19 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public ResponseEntity<DefaultResponseDTO> getProducts(){
-        List<ProductDTO> result = service.getProducts();
-        Map<String,List<ProductDTO>> data = Map.of("products",result);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Products retrieved successfully"));
+    public ResponseEntity<List<ProductDTO>> getProducts(){
+        List<ProductDTO> response = service.getProducts();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DefaultResponseDTO> getProductsById(@PathVariable Long id){
-        ProductDTO result = service.getProductById(id);
-        Map<String,ProductDTO> data = Map.of("product",result);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Product retrieved successfully"));
+    public ResponseEntity<ProductDTO> getProductsById(@PathVariable Long id){
+        ProductDTO response = service.getProductById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<DefaultResponseDTO> searchProducts(@RequestParam(required = false) Long cityId,
+    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam(required = false) Long cityId,
                                                              @RequestParam(required = false) Long categoryId,
                                                              @RequestParam(required = false) String startDate,
                                                              @RequestParam(required = false) String endDate){
@@ -45,15 +44,14 @@ public class ProductController {
         params.put("categoryId",categoryId);
         params.put("startDate",startDate);
         params.put("endDate",endDate);
-        List<ProductDTO> result = service.searchProducts(params);
-        Map<String,List<ProductDTO>> data = Map.of("products",result);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Products retrieved successfully"));
+        List<ProductDTO> response = service.searchProducts(params);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<DefaultResponseDTO> createProduct(@RequestBody ProductDTO dto){
-        ProductDTO result = service.createProduct(dto);
-        Map<String, ProductDTO> data = Map.of("product",result);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"Product created successfully"));
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto){
+        ProductDTO response = service.createProduct(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

@@ -16,12 +16,10 @@ public class CityDTO {
     private Long id;
     private String name;
     private String country;
-    private List<ProductDTO> products;
 
     public CityDTO(City entity){
         this.id = entity.getId();
         this.name = entity.getName();
         this.country = entity.getCountry();
-        this.products = entity.getProducts().stream().map(ProductDTO::new).collect(Collectors.toList());
     }
 }

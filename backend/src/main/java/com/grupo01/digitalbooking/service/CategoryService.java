@@ -20,15 +20,27 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final String ID_CANNOT_BE_NULL = "Id não pode ser nula";
 
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
-    public CategoryDTO getCategoryByTitle(String title) {
-        Category category = categoryRepository.findCategoryByTitle(title);
-        return new CategoryDTO(category);
+    public CategoryDTO getCategoryById(Long id) {
+
+        if (Objects.isNull(id)){
+            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
+        }
+
+        Optional<Category> category = categoryRepository.findById(id);
+
+        if (category.isPresent()) {
+            return new CategoryDTO(category.get());
+        }
+
+        throw new NotFoundException("Categoria não encontrada");
+
     }
 
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
@@ -44,14 +56,13 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
+        if (Objects.isNull(id)){
+            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
+        }
         categoryRepository.deleteById(id);
     }
 
 
-    /**
-     * TODO: Verificar se necessita regras de negocios para a edição
-     *
-     * */
     public CategoryDTO editCategory(CategoryDTO categoryDTO) {
         Category category = new Category(categoryDTO);
         Optional<Category> categoryFound = categoryRepository.findById(category.getId());

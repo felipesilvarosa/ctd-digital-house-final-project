@@ -4,6 +4,7 @@ import com.grupo01.digitalbooking.dto.ReservationDTO;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,29 +20,28 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping()
-    public ResponseEntity<DefaultResponseDTO> findAllReservations() {
+    public ResponseEntity<List<ReservationDTO>> findAllReservations() {
         List<ReservationDTO> response = reservationService.getReservations();
-        Map<String, List<ReservationDTO>> data = Map.of("reservation", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Reservations retrieved successfully"));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/new")
-    public ResponseEntity<DefaultResponseDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {
         ReservationDTO response = reservationService.createReservation(reservationDTO);
-        Map<String, ReservationDTO> data = Map.of("reservation", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Reservation created successfully"));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<DefaultResponseDTO> deleteReservation(@PathVariable Long id) {
         reservationService.deleteReservation(id);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, "Reservation deleted successfully"));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<DefaultResponseDTO> editReservation(@RequestBody ReservationDTO reservationDTO) {
+    public ResponseEntity<ReservationDTO> editReservation(@RequestBody ReservationDTO reservationDTO) {
         ReservationDTO response = reservationService.editReservation(reservationDTO);
-        Map<String, ReservationDTO> data = Map.of("reservation", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Reservation edited successfully"));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

@@ -1,8 +1,8 @@
 package com.grupo01.digitalbooking.service;
 
-import com.grupo01.digitalbooking.domain.Product;
+import com.grupo01.digitalbooking.domain.*;
 import com.grupo01.digitalbooking.dto.ProductDTO;
-import com.grupo01.digitalbooking.repository.ProductRepository;
+import com.grupo01.digitalbooking.repository.*;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +19,10 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final CategoryRepository categoryRepository;
+    private final CityRepository cityRepository;
+    private final CharacteristicRepository characteristicRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getProducts(){
@@ -76,7 +81,25 @@ public class ProductService {
 
     @Transactional
     public ProductDTO createProduct(ProductDTO dto){
-        if(dto.getId()!=null)throw new BadRequestException("Do not send ID to create new product, weird shit might happen");
+
+        if (dto.getCharacteristics().isEmpty() || dto.getImages().isEmpty()){
+            throw new RuntimeException("Não pode fazer cadastro sem categorias ou imagens");
+        }
+
+        Optional<Category> categoryFound = categoryRepository.findById(dto.getCategory().getId());
+        Optional<City> cityFound= cityRepository.findById(dto.getCategory().getId());
+        Optional <List<Characteristic>> characteristicsFound = Optional.of(characteristicRepository.findAllById(dto.getCharacteristics().stream().map(Characteristic::getId).collect(Collectors.toList())));
+        Optional <List<Image>> imageFound = Optional.of(imageRepository.findAllById(dto.getImages().stream().map(Image::getId).collect(Collectors.toList())));
+
+        /**
+         * TODO         * Refatorar a logica *Imagem e characteristas podem ser novas ou já cadastradas
+         * */
+
+        categoryFound.ifPresent(dto::setCategory);
+        cityFound.ifPresent(dto::setCity);
+        characteristicsFound.ifPresent(dto::setCharacteristics);
+        imageFound.ifPresent(dto::setImages);
+
         return new ProductDTO(repository.save(new Product(dto)));
     }
 

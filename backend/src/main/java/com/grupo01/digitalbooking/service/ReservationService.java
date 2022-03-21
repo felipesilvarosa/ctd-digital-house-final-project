@@ -29,7 +29,7 @@ public class ReservationService {
     public ReservationDTO createReservation(ReservationDTO dto) {
 
         Reservation reservation = new Reservation(dto);
-        Optional<Reservation> reservationFound = reservationRepository.findByClient(new Client(dto.getClientId()));
+        Optional<Reservation> reservationFound = reservationRepository.findByClient(new Client(dto.getClient().getId()));
 
         if (reservationFound.isPresent())
             throw new ConflictException("There already is a reservation under this client's id");
