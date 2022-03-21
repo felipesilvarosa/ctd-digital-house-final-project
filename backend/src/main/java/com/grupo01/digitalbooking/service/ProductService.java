@@ -91,6 +91,10 @@ public class ProductService {
         Optional <List<Characteristic>> characteristicsFound = Optional.of(characteristicRepository.findAllById(dto.getCharacteristics().stream().map(Characteristic::getId).collect(Collectors.toList())));
         Optional <List<Image>> imageFound = Optional.of(imageRepository.findAllById(dto.getImages().stream().map(Image::getId).collect(Collectors.toList())));
 
+        /**
+         * TODO         * Refatorar a logica *Imagem e characteristas podem ser novas ou já cadastradas
+         * */
+
         categoryFound.ifPresent(dto::setCategory);
         cityFound.ifPresent(dto::setCity);
         characteristicsFound.ifPresent(dto::setCharacteristics);
