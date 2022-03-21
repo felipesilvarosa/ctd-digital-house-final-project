@@ -1,7 +1,6 @@
 package com.grupo01.digitalbooking.controller;
 
 import com.grupo01.digitalbooking.dto.CategoryDTO;
-import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,9 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-
-import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 
 @RestController
 @RequestMapping("categories")
@@ -26,9 +22,9 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{title}")
-    public ResponseEntity<CategoryDTO> getCategoryByTitle(@PathVariable String title) {
-        CategoryDTO response = categoryService.getCategoryByTitle(title);
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
+        CategoryDTO response = categoryService.getCategoryById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

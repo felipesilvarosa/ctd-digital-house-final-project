@@ -26,9 +26,16 @@ public class CategoryService {
         return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
-    public CategoryDTO getCategoryByTitle(String title) {
-        Category category = categoryRepository.findCategoryByTitle(title);
-        return new CategoryDTO(category);
+    public CategoryDTO getCategoryById(Long id) {
+
+        Optional<Category> category = categoryRepository.findById(id);
+
+        if (category.isPresent()) {
+            return new CategoryDTO(category.get());
+        }
+
+        throw new NotFoundException("Categoria não encontrada");
+
     }
 
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
