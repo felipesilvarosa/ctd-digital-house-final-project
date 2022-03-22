@@ -17,14 +17,13 @@ public class CityController {
     private final CityService cityService;
 
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<CityDTO>> findAllCities() {
         List<CityDTO> response = cityService.getCity();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/new")
-    @ResponseStatus(HttpStatus.OK)
+    @PostMapping
     public ResponseEntity<CityDTO> createCategory(@RequestBody CityDTO cityDTO) {
         CityDTO response = cityService.createCity(cityDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
