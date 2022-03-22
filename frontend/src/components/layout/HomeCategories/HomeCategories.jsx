@@ -1,5 +1,5 @@
-import { CardsGridLoader, HomeCard, HomeSection } from "components";
-import { useCategories } from "hooks";
+import { CardsGridLoader, HomeCard, HomeSection } from "src/components";
+import { useCategories } from "src/hooks";
 import styles from "./HomeCategories.module.scss";
 
 export const HomeCategories = () => {

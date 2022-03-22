@@ -1,6 +1,6 @@
-import styles from "./FlexWrapper.module.css"
+import styles from "./FlexWrapper.module.scss"
 
-export const FlexWrapper = ({children, gap, row, column, wrap, justify, align, center, relative, className, ...otherProps}) => {
+export const FlexWrapper = ({children, gap, row, column, wrap, justify, align, center, relative, className, container, ...otherProps}) => {
   return (
     <div 
       style={{gap: gap ? `${gap}rem` : 0}} 
@@ -11,6 +11,7 @@ export const FlexWrapper = ({children, gap, row, column, wrap, justify, align, c
       data-justify={justify}
       data-align={align}
       data-center={center}
+      data-container={container}
       className={className ? `${styles.BaseWrapper} ${className}` : styles.BaseWrapper}
       {...otherProps}
     >

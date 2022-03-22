@@ -1,6 +1,6 @@
-import { BaseButton, CardsGridLoader, HomeCard, HomeSection, RatingBlock, StarsMeter } from "components"
+import { BaseButton, CardsGridLoader, HomeCard, HomeSection, RatingBlock, StarsMeter } from "src/components"
 import { Link } from "react-router-dom"
-import { useProducts, useWindowSize } from "hooks";
+import { useProducts, useWindowSize } from "src/hooks";
 import { useEffect, useState } from "react";
 import styles from "./HomeRecomendations.module.scss";
 
@@ -41,8 +41,8 @@ export const HomeRecomendations = ({category, destination}) => {
                     <HomeCard 
                       horizontal={size.width >= 520 }
                       key={product.id}
-                      to="/"
-                      image={product.image}
+                      to={`/products/${product.id}`}
+                      image={product.images[0]}
                       title={product.title}
                     >
                       <div className={styles.Header}>
@@ -65,8 +65,8 @@ export const HomeRecomendations = ({category, destination}) => {
                         { product.utilities.wifi && <span className="material-icons">wifi</span> }
                         { product.utilities.swimming && <span className="material-icons">pool</span> }
                       </div>
-                      <p className={styles.Description}>{product.description.match(/^.{80}\w*/)}... <Link to="/">mais</Link></p>
-                      <BaseButton>Ver mais</BaseButton>
+                      <p className={styles.Description}>{product.description.match(/^.{80}\w*/)}... <Link to={`/products/${product.id}`}>mais</Link></p>
+                      <BaseButton type="link" to={`/products/${product.id}`}>Ver mais</BaseButton>
                     </HomeCard>
                   ))}
               </div>

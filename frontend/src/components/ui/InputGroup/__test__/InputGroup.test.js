@@ -1,6 +1,6 @@
 import { render, waitFor, act } from "@testing-library/react"
 import event from "@testing-library/user-event"
-import { InputGroup } from "components"
+import { InputGroup } from "src/components"
 import { Formik } from "formik"
 
 describe("InputGroup", () => {

@@ -1,4 +1,4 @@
-import { makeInitials } from "utils"
+import { makeInitials } from "src/utils"
 
 describe("makeInitials", () => {
   it("returns JS if input is João da Silva", () => {

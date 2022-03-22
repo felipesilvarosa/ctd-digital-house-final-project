@@ -76,6 +76,7 @@ export function makeServer({ environment = "development" } = {}) {
 
       this.get("/destinations");
       this.get("/products");
+      this.get("/products/:id");
       this.get("/categories");
       this.post("/login", (schema, request) => {
         const body = JSON.parse(request.requestBody)

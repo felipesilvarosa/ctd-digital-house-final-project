@@ -1,4 +1,4 @@
-import { InnerSearch } from "components"
+import { InnerSearch } from "src/components"
 import styles from "./HomeSearchBar.module.scss"
 
 export const HomeSearchBar = (props) => {

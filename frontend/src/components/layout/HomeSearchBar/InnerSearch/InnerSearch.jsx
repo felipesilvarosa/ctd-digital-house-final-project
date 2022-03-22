@@ -7,11 +7,11 @@ import {
   DropDownMenu,
   DestinationButton,
   CalendarWrapper,
-} from "components";
-import iconPin from "assets/icon-pin.png";
-import iconCal from "assets/icon-calendar.png";
+} from "src/components";
+import iconPin from "src/assets/icon-pin.png";
+import iconCal from "src/assets/icon-calendar.png";
 import axios from "axios";
-import { useWindowSize, useDestination } from "hooks";
+import { useWindowSize, useDestination } from "src/hooks";
 
 import styles from "./InnerSearch.module.scss";
 import { useNavigate } from "react-router-dom";

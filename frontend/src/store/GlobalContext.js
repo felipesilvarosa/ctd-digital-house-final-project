@@ -1,8 +1,8 @@
-import { AuthProvider } from "store/auth";
-import { CategoriesProvider } from "store/categories";
-import { ProductsProvider } from "store/products";
-import { ThemesProvider } from "store/themes";
-import { DestinationProvider } from "store/destinations";
+import { AuthProvider } from "src/store/auth";
+import { CategoriesProvider } from "src/store/categories";
+import { ProductsProvider } from "src/store/products";
+import { ThemesProvider } from "src/store/themes";
+import { DestinationProvider } from "src/store/destinations";
 
 export const GlobalProvider = ({ children }) => {
   return (

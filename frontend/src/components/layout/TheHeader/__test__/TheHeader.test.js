@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import { TheHeader } from "components"
+import { TheHeader } from "src/components"
 import { BrowserRouter as Router } from "react-router-dom"
 
 /* ====================================== */

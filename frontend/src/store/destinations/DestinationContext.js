@@ -1,6 +1,6 @@
 import axios from "axios"
 import { createContext, useReducer } from "react"
-import { destinationReducer, destinationState } from "store/destinations"
+import { destinationReducer, destinationState } from "src/store/destinations"
 
 export const DestinationContext = createContext(destinationState)
 

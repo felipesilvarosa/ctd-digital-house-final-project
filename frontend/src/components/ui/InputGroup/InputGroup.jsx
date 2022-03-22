@@ -1,6 +1,6 @@
 import { useState } from "react"
-import iconShow from "assets/icon-passwordshow.png"
-import iconHide from "assets/icon-passwordhide.png"
+import iconShow from "src/assets/icon-passwordshow.png"
+import iconHide from "src/assets/icon-passwordhide.png"
 import styles from "./InputGroup.module.scss"
 import { Field } from "formik"
 

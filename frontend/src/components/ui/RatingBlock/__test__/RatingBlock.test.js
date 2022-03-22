@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { RatingBlock } from "components"
+import { RatingBlock } from "src/components"
 
 describe("RatingBlock", () => {
   it("shows the correct rating and text value", () => {

@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from "react"
-import { TheHeader, TheFooter } from "components"
+import { TheHeader, TheFooter } from "src/components"
 import toast, { Toaster } from "react-hot-toast"
-import { useCategories, useAuth } from "hooks"
+import { useCategories, useAuth } from "src/hooks"
 
 export const TheScaffold = ({children}) => {
   const { setCategories } = useCategories()

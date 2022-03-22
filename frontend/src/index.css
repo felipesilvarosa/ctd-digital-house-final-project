@@ -7,6 +7,10 @@
   src: url(https://fonts.gstatic.com/s/materialicons/v125/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
 }
 
+:root {
+  --rc-ph: 1rem;
+}
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -76,6 +80,19 @@ button {
   grid-template-rows: 1fr max-content;
 }
 
-[data-menuopen="true"] {
+[data-menuopen="true"],
+[data-modalopen="true"] {
   overflow: hidden;
+}
+
+@media (min-width: 499px) {
+  :root {
+    --rc-ph: clamp(2rem, 15vw, 10rem)
+  }
+}
+
+@media (min-width: 2000px) {
+  :root {
+    --rc-ph: 25vw;
+  }
 }
