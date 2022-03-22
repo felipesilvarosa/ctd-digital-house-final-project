@@ -3,6 +3,8 @@ package com.grupo01.digitalbooking.controller;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.dto.ReservationDTO;
 import com.grupo01.digitalbooking.service.ReservationService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("reservations")
 @RequiredArgsConstructor
+@Api(value ="", tags = {"Reservas"})
+@Tag(name ="Reservas", description="End point para controle de reservas")
 public class ReservationController {
 
     private final ReservationService reservationService;
