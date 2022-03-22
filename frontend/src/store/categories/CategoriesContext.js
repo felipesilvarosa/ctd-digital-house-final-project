@@ -1,6 +1,6 @@
 import axios from "axios"
 import { createContext, useReducer } from "react"
-import { categoriesReducer, categoriesState } from "store/categories"
+import { categoriesReducer, categoriesState } from "src/store/categories"
 
 export const CategoriesContext = createContext(categoriesState)
 

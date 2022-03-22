@@ -1,18 +1,21 @@
-import { AuthProvider } from "store/auth"
-import { CategoriesProvider } from "store/categories"
-import { ProductsProvider } from "store/products"
-import { ThemesProvider } from "store/themes"
+import { AuthProvider } from "src/store/auth";
+import { CategoriesProvider } from "src/store/categories";
+import { ProductsProvider } from "src/store/products";
+import { ThemesProvider } from "src/store/themes";
+import { DestinationProvider } from "src/store/destinations";
 
-export const GlobalProvider = ({children}) => {
+export const GlobalProvider = ({ children }) => {
   return (
     <AuthProvider>
       <CategoriesProvider>
         <ProductsProvider>
           <ThemesProvider>
-          {children}
+            <DestinationProvider>
+              {children}
+            </DestinationProvider>
           </ThemesProvider>
         </ProductsProvider>
       </CategoriesProvider>
     </AuthProvider>
-  )
-}
+  );
+};

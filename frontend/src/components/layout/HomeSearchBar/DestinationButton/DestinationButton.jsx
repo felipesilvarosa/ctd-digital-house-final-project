@@ -1,5 +1,5 @@
 import styles from "./DestinationButton.module.css"
-import iconPin from "assets/icon-pin.png"
+import iconPin from "src/assets/icon-pin.png"
 
 export const DestinationButton = ({city, country, ...otherProps}) => {
   return (

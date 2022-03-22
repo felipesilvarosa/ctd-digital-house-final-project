@@ -3,8 +3,8 @@ import { Form, Formik } from "formik"
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 
-import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "components";
-import { useAuth } from "hooks"
+import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "src/components";
+import { useAuth } from "src/hooks"
 import style from "./LoginView.module.scss"
 
 export const LoginView = () => {

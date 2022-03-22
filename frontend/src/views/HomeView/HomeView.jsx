@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom"
-import { HomeSearchBar, HomeCategories, HomeRecomendations, SpacingShim } from "components"
+import { HomeSearchBar, HomeCategories, HomeRecomendations, SpacingShim } from "src/components"
 
 export const HomeView = () => {
   const [ query ] = useSearchParams()
@@ -9,7 +9,7 @@ export const HomeView = () => {
       <SpacingShim height="4.25rem" />
       <HomeSearchBar />
       { !query.get("category") && <HomeCategories /> }
-      <HomeRecomendations category={query.get("category")} />
+      <HomeRecomendations category={query.get("category")} destination={query.get("destination")} />
     </>
   )
 }

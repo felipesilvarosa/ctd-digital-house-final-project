@@ -3,6 +3,7 @@ package com.grupo01.digitalbooking.service;
 import com.grupo01.digitalbooking.domain.User;
 import com.grupo01.digitalbooking.dto.NewUserDTO;
 import com.grupo01.digitalbooking.dto.UserDTO;
+import com.grupo01.digitalbooking.repository.RoleRepository;
 import com.grupo01.digitalbooking.repository.UserRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.grupo01.digitalbooking.enums.Role.USER;
 
 @Service
 @Slf4j
@@ -21,6 +21,7 @@ import static com.grupo01.digitalbooking.enums.Role.USER;
 public class SignupService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -34,10 +35,10 @@ public class SignupService {
         }
         Util.validatePassword(newUser.getPassword());
         User entity = new User(newUser);
-        entity.setRole(USER);
+        entity.setRole(roleRepository.getById(1L));
         setDefaultUserInfo(entity);
         entity = userRepository.save(entity);
-        log.info("New investor created successfully");
+        log.info("New user created successfully");
         return new UserDTO(entity);
     }
 
@@ -52,8 +53,9 @@ public class SignupService {
     private void validateInitialInformation(NewUserDTO newUser) {
         if(newUser.getFirstName()==null || newUser.getFirstName().isBlank() ||
                 newUser.getLastName()==null || newUser.getLastName().isBlank() ||
-                newUser.getEmail()==null || newUser.getEmail().isBlank()){
-            throw new BadRequestException("First name, Last name or email is missing");
+                newUser.getEmail()==null || newUser.getEmail().isBlank()||
+                newUser.getPassword()==null || newUser.getPassword().isBlank()){
+            throw new BadRequestException("First name, Last name, email or password is missing");
         }
     }
 }

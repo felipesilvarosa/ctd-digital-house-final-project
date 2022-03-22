@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom"
 import { useLocation } from "react-router"
-import { useAuth } from "hooks"
+import { useAuth } from "src/hooks"
 import { useState, useEffect } from "react"
-import { makeInitials } from "utils"
+import { makeInitials } from "src/utils"
 
 import styles from "./MenuMobile.module.scss"
-import iconFB from "assets/icon-facebook.png"
-import iconIG from "assets/icon-instagram.png"
-import iconTW from "assets/icon-twitter.png"
-import iconLI from "assets/icon-linkedin.png"
+import iconFB from "src/assets/icon-facebook.png"
+import iconIG from "src/assets/icon-instagram.png"
+import iconTW from "src/assets/icon-twitter.png"
+import iconLI from "src/assets/icon-linkedin.png"
 
 export const MenuMobile = ({menuItems}) => {
   const { user, userLogout } = useAuth()

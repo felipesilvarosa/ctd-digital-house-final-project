@@ -1,55 +1,58 @@
 package com.grupo01.digitalbooking.controller;
 
 import com.grupo01.digitalbooking.dto.CategoryDTO;
-import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.service.CategoryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-
-import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 
 @RestController
 @RequestMapping("categories")
 @RequiredArgsConstructor
+@Api(value ="", tags = {"Categorias"})
+@Tag(name ="Categorias", description="End point para controle de categorias")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @ApiOperation("Busca todas as categorias cadastradas")
     @GetMapping()
-    public ResponseEntity<DefaultResponseDTO> findAllCategories() {
+    public ResponseEntity<List<CategoryDTO>> findAllCategories() {
         List<CategoryDTO> response = categoryService.getCategories();
-        Map<String, List<CategoryDTO>> data = Map.of("category", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Categories retrieved successfully"));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{title}")
-    public ResponseEntity<DefaultResponseDTO> getCategoryByTitle(@PathVariable String title) {
-        CategoryDTO response = categoryService.getCategoryByTitle(title);
-        Map<String, CategoryDTO> data = Map.of("category", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Category retrieved successfully"));
+    @ApiOperation("Busca uma categoria por id")
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
+        CategoryDTO response = categoryService.getCategoryById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @ApiOperation("Cria uma nova categoria")
     @PostMapping("/new")
-    public ResponseEntity<DefaultResponseDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryService.createCategory(categoryDTO);
-        Map<String, CategoryDTO> data = Map.of("category", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Category created successfully"));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @ApiOperation("Deleta uma categoria pela id")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<DefaultResponseDTO> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, "Category deleted successfully"));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    @ApiOperation("Edita uma categoria")
     @PutMapping("/edit")
-    public ResponseEntity<DefaultResponseDTO> editCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> editCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryService.editCategory(categoryDTO);
-        Map<String, CategoryDTO> data = Map.of("category", response);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS, data, "Category edited successfully"));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

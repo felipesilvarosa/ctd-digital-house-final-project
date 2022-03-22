@@ -1,10 +1,10 @@
-import { BaseButton, CardsGridLoader, HomeCard, HomeSection, RatingBlock, StarsMeter } from "components"
+import { BaseButton, CardsGridLoader, HomeCard, HomeSection, RatingBlock, StarsMeter } from "src/components"
 import { Link } from "react-router-dom"
-import { useProducts, useWindowSize } from "hooks";
+import { useProducts, useWindowSize } from "src/hooks";
 import { useEffect, useState } from "react";
 import styles from "./HomeRecomendations.module.scss";
 
-export const HomeRecomendations = ({category}) => {
+export const HomeRecomendations = ({category, destination}) => {
   const { setProducts, products, loading } = useProducts();
   const size = useWindowSize()
 
@@ -17,12 +17,13 @@ export const HomeRecomendations = ({category}) => {
 
   useEffect(() => {
     if(category) {
-      console.log(category)
       setFilteredProducts(products.filter(product => product.category === category))
+    } else if(destination) {
+      setFilteredProducts(products.filter(product => product.location === destination))
     } else {
       setFilteredProducts(products)
     }
-  }, [category, products])
+  }, [category, products, destination])
 
   return (
     <HomeSection className={styles.Section}>
@@ -40,8 +41,8 @@ export const HomeRecomendations = ({category}) => {
                     <HomeCard 
                       horizontal={size.width >= 520 }
                       key={product.id}
-                      to="/"
-                      image={product.image}
+                      to={`/products/${product.id}`}
+                      image={product.images[0]}
                       title={product.title}
                     >
                       <div className={styles.Header}>
@@ -64,8 +65,8 @@ export const HomeRecomendations = ({category}) => {
                         { product.utilities.wifi && <span className="material-icons">wifi</span> }
                         { product.utilities.swimming && <span className="material-icons">pool</span> }
                       </div>
-                      <p className={styles.Description}>{product.description.match(/^.{80}\w*/)}... <Link to="/">mais</Link></p>
-                      <BaseButton>Ver mais</BaseButton>
+                      <p className={styles.Description}>{product.description.match(/^.{80}\w*/)}... <Link to={`/products/${product.id}`}>mais</Link></p>
+                      <BaseButton type="link" to={`/products/${product.id}`}>Ver mais</BaseButton>
                     </HomeCard>
                   ))}
               </div>

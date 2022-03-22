@@ -2,7 +2,6 @@ package com.grupo01.digitalbooking.domain;
 
 import com.google.common.collect.Sets;
 import com.grupo01.digitalbooking.dto.NewUserDTO;
-import com.grupo01.digitalbooking.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +13,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "tb_user")
 @Getter
 @Setter
@@ -22,12 +22,12 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private Role role;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
@@ -41,10 +41,14 @@ public class User implements UserDetails {
         this.password = dto.getPassword();
     }
 
+    public User(Long id){
+        this.id = id;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Sets.newHashSet(new SimpleGrantedAuthority("ROLE_"+role.name()));
+        return Sets.newHashSet(new SimpleGrantedAuthority("ROLE_"+role));
     }
 
     @Override

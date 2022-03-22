@@ -1,4 +1,4 @@
-import { ConditionalWrapper } from "components"
+import { ConditionalWrapper } from "src/components"
 import { Link } from "react-router-dom"
 import styles from "./HomeCard.module.scss"
 

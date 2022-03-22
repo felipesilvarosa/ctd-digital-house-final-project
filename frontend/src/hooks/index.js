@@ -1,5 +1,6 @@
 export * from "./useWindowSize"
 export * from "./useAuth"
 export * from "./useCategories"
+export * from "./useDestination"
 export * from "./useProducts"
 export * from "./useThemes"

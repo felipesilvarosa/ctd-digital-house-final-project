@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -63,7 +64,7 @@ public class AuthenticationService implements UserDetailsService {
             User user = (User) loadUserByUsername(username);
             return JWT.create()
                     .withSubject(user.getEmail())
-                    .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                    .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                     .withIssuer("srot")
                     .withIssuedAt(new Date())
                     .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))

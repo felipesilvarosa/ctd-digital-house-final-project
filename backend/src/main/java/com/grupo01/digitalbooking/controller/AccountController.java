@@ -1,33 +1,33 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.domain.User;
-import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.dto.NewUserDTO;
 import com.grupo01.digitalbooking.dto.UserDTO;
 import com.grupo01.digitalbooking.service.SignupService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
-import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
-
 @RestController
-@RequestMapping("user")
+@RequestMapping("users")
 @RequiredArgsConstructor
+@Api(value ="", tags = {"Contas"})
+@Tag(name ="Contas", description="End point para controle de contas usuarios")
 public class AccountController {
 
     private final SignupService service;
 
-    @PostMapping()
-    public ResponseEntity<DefaultResponseDTO> investorSignup(@RequestBody NewUserDTO newUser){
+    @ApiOperation("Criação de nova conta de usuario")
+    @PostMapping
+    public ResponseEntity<UserDTO> createNewUser(@RequestBody NewUserDTO newUser){
         UserDTO result = service.createNewUser(newUser);
-        Map<String,UserDTO> data = Map.of("user",result);
-        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,data,"User created successfully"));
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
 }

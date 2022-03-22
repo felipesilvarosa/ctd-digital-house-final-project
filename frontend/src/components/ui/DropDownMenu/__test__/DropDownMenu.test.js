@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { DropDownMenu } from "components"
+import { DropDownMenu } from "src/components"
 
 describe("DropDownMenu", () => {
   it("renders", () => {

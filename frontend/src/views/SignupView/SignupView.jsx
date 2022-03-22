@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { Form, Formik } from "formik"
-import { useAuth } from "hooks";
-import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "components"
+import { useAuth } from "src/hooks";
+import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "src/components"
 import style from "./SignupView.module.scss"
 
 export const SignupView = () => {

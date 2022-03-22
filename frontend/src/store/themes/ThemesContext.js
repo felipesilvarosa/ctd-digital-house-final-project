@@ -1,5 +1,5 @@
 import { createContext, useReducer } from "react"
-import { themesReducer, themesState } from "store/themes"
+import { themesReducer, themesState } from "src/store/themes"
 
 export const ThemesContext = createContext(themesState)
 

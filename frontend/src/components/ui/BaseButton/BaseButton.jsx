@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom"
 import styles from "./BaseButton.module.scss"
-export const BaseButton = ({children, variants, ...otherProps}) => {
+export const BaseButton = ({children, variants, to, type, ...otherProps}) => {
 
   const buttonStyles = () => {
     let variantsString = ""
@@ -28,8 +29,8 @@ export const BaseButton = ({children, variants, ...otherProps}) => {
   }
 
   return (
-    <button className={buttonStyles()} {...otherProps}>
-      {children}
-    </button>
+    type === "link" ?
+      <Link className={buttonStyles()} to={to ?? "/"} {...otherProps}>{children}</Link>
+    : <button className={buttonStyles()} {...otherProps}>{children}</button>
   )
 }

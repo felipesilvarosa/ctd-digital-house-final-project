@@ -1,0 +1,52 @@
+.BaseWrapper {
+  display: flex;
+  
+  &[data-container="true"] {
+    margin-right: 1rem;
+    margin-left: 1rem;
+
+    @media (min-width: 500px) {
+      margin-left: clamp(1rem, 10vw, 10rem);
+      margin-right: clamp(1rem, 10vw, 10rem);
+    }
+
+    @media (min-width: 1024px) {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 60rem;
+    }
+  }
+  
+  &[data-row="true"] {
+    flex-direction: row;
+  }
+  
+  &[data-column="true"] {
+    flex-direction: column;
+  }
+  
+  &[data-wrap="true"] {
+    flex-wrap: wrap;
+  }
+  
+  &[data-justify="start"] {
+    justify-content: flex-start;
+  }
+  
+  &[data-justify="center"] {
+    justify-content: center;
+  }
+  
+  &[data-align="center"] {
+    align-items: center;
+  }
+  
+  &[data-center="true"] {
+    justify-content: center;
+    align-items: center;
+  }
+  
+  &[data-relative="true"] {
+    position: relative;
+  }
+}

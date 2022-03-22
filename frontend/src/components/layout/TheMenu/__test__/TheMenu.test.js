@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
-import { TheMenu } from "components"
+import { TheMenu } from "src/components"
 import { BrowserRouter as Router } from "react-router-dom"
-import { AuthContext } from "store/auth"
+import { AuthContext } from "src/store/auth"
 
 /* ====================================== */
 /* Context está retornando como undefined */

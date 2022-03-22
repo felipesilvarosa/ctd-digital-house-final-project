@@ -5,14 +5,87 @@
     "stars": null,
     "title": "Casa dos sonhos em Palermo",
     "location": "Palermo, Buenos Aires",
-    "description": "Nam sollicitudin urna ac tellus ultrices, at dignissim augue facilisis. Quisque ultrices varius convallis. Aliquam scelerisque nisl tellus, eget lacinia mi rhoncus id. Proin gravida turpis nunc, id mattis sem aliquam vel. Mauris sapien velit, commodo vitae dapibus vitae, venenatis a mauris. In sem risus, molestie eget ultricies ac, fringilla sed risus. Duis et urna leo. Nullam eu pellentesque lorem. Quisque quis dui vitae tellus pharetra porttitor. Donec vitae elit libero. Etiam malesuada lacus vel commodo suscipit. Phasellus eu suscipit urna. Cras euismod malesuada leo, eu pretium purus sollicitudin et. Aliquam erat volutpat. Quisque convallis ante non felis feugiat, at hendrerit nulla molestie.",
+    "longitude":  -58.424,
+    "latitude": -34.586,
+    "description": "Linda casa, bairro tranquilo com excelente infra estrutura. A 5 min centro Palermo. Quatro suites, todas equipadas com ar condicionado. Lareiras interna e externa, churrasqueira e fogão campeiro. Wi-Fi 50mega. Ótima estrutura para bebes/crianças, com berço, banheira e brinquedos! Todo conforto que sua familia merece. Excelente lugar para descansar e home office!",
     "utilities": {
       "distance": "A 940m do centro",
       "wifi": true,
       "swimming": false
     },
     "rating": 8,
-    "image": "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    },
+    "unavailable": [
+      "2022/03/24",
+      "2022/03/25",
+      "2022/03/26",
+      "2022/03/30",
+      "2022/04/02",
+      "2022/04/03",
+      "2022/04/05",
+      "2022/04/08",
+      "2022/04/09",
+      "2022/04/10",
+      "2022/05/02",
+      "2022/05/03",
+      "2022/05/04"
+    ]
   },
   {
     "id": "2",
@@ -20,6 +93,8 @@
     "stars": 5,
     "title": "Resort Guardian",
     "location": "Cancún, México",
+    "longitude":  -86.85105,
+    "latitude": 21.16179,
     "description": "Etiam in mi eget ante hendrerit maximus id pretium erat. Fusce tempor ligula at nisi accumsan molestie. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent ligula lacus, pellentesque et maximus non, ullamcorper vel tellus. Vivamus at nisi sagittis, tempus justo in, consectetur massa. Nulla at aliquet felis. Sed consectetur magna non nisl ultrices consequat. Nunc cursus mauris vel hendrerit convallis.",
     "utilities": {
       "distance": "A 940m do centro",
@@ -27,7 +102,63 @@
       "swimming": true
     },
     "rating": 9,
-    "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    "images": [ 
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   },
   {
     "id": "3",
@@ -35,6 +166,8 @@
     "stars": null,
     "title": "Hostel Cozy Home",
     "location": "Dublin, Irlanda",
+    "longitude":  -6.26027,
+    "latitude": 53.34976,
     "description": "Phasellus lacinia aliquet tellus, a pretium purus fermentum vitae. Quisque dignissim venenatis risus. Vestibulum eu lectus ultrices, blandit ligula a, tempor urna. Vestibulum molestie porta mi, congue fermentum nisi sollicitudin non. Fusce at leo diam. Nunc dolor leo, porta a ultrices quis, elementum eu quam. Aenean tempus congue sem vel pulvinar. Vivamus dapibus tristique justo, at venenatis risus varius a. Mauris porttitor ipsum orci, eget efficitur neque vehicula eget. Proin id convallis arcu. Mauris accumsan ligula ut tellus tincidunt, vel rhoncus nunc tristique. Aliquam blandit libero neque, sed egestas massa semper vel.",
     "utilities": {
       "distance": "A 940m do centro",
@@ -42,7 +175,63 @@
       "swimming": false
     },
     "rating": 7,
-    "image": "https://images.unsplash.com/photo-1623625434462-e5e42318ae49?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1623625434462-e5e42318ae49?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   },
   {
     "id": "4",
@@ -50,6 +239,8 @@
     "stars": null,
     "title": "Lar da Dona Joana",
     "location": "São Paulo, Brasil",
+    "longitude":  -46.63338,
+    "latitude": -23.55065,
     "description": "Curabitur ac bibendum nisl. Vivamus nisl libero, volutpat at laoreet at, tincidunt vel est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed aliquam scelerisque metus. Aenean aliquet, ex eu rutrum laoreet, nisi lectus ullamcorper risus, vel varius ligula nisl ac leo. Praesent tempor quam id metus ultricies vehicula. Integer porttitor sollicitudin bibendum. Ut euismod eu magna et lobortis. Donec faucibus lectus vel augue tincidunt feugiat. Aliquam eu massa leo. Nam efficitur mattis magna, ac tristique libero pharetra sed. In ullamcorper a nibh in cursus. Proin tincidunt nisi et sem iaculis, vel finibus dui cursus. Vestibulum pretium lorem erat, et finibus ante pharetra eu. Vivamus purus eros, sodales non urna vel, lacinia molestie erat. Phasellus quis ex rhoncus, aliquam enim ac, malesuada leo.",
     "utilities": {
       "distance": "A 940m do centro",
@@ -57,7 +248,63 @@
       "swimming": false
     },
     "rating": 7,
-    "image": "https://images.unsplash.com/photo-1622866306950-81d17097d458?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1622866306950-81d17097d458?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   },
   {
     "id": "5",
@@ -65,6 +312,8 @@
     "stars": 4,
     "title": "Hotel Langdon",
     "location": "Londres, Inglaterra",
+    "longitude":  -0.12765,
+    "latitude": 51.50732,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pulvinar, augue condimentum accumsan sollicitudin, urna odio congue libero, ut luctus nunc neque ut lorem. Aliquam at sagittis velit. Quisque tempor quam magna. Pellentesque consectetur at leo et porta. Maecenas imperdiet placerat magna nec rutrum. Donec in tristique metus. Morbi eu est ut mauris egestas lobortis et id tellus.",
     "utilities": {
       "distance": "A 400m do London Eye",
@@ -72,7 +321,63 @@
       "swimming": false
     },
     "rating": 7,
-    "image": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   },
   {
     "id": "6",
@@ -80,6 +385,8 @@
     "stars": 3,
     "title": "Hotel Showdown",
     "location": "Amsterdã, Holanda",
+    "longitude":  4.89360,
+    "latitude": 52.37276,
     "description": "Integer vel sapien porta, egestas lectus a, fermentum sem. Duis laoreet condimentum molestie. Quisque maximus, justo nec pellentesque tristique, urna tortor pharetra mi, a sollicitudin tortor dolor eu erat. Quisque rutrum, sapien eu pharetra accumsan, massa risus molestie tortor, id varius leo neque sed enim. Cras in libero lorem. Praesent semper augue leo, quis facilisis tellus vestibulum gravida. Vivamus bibendum ultrices malesuada. Ut vulputate ullamcorper libero, et vehicula dui congue a. Nam mauris leo, hendrerit eu egestas nec, aliquet quis diam.",
     "utilities": {
       "distance": "No centro da cidade",
@@ -87,7 +394,63 @@
       "swimming": false
     },
     "rating": 10,
-    "image": "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   },
   {
     "id": "7",
@@ -95,6 +458,8 @@
     "stars": null,
     "title": "Ap da Paulista",
     "location": "São Paulo, Brasil",
+    "longitude":  -46.63338,
+    "latitude": -23.55065,
     "description": "Curabitur consequat placerat sem. Maecenas mattis tellus orci. Mauris ut lorem non nunc placerat pharetra sit amet sit amet lorem. Curabitur et porta lorem, ac dictum mi. Aenean non placerat elit. Praesent malesuada volutpat metus, at condimentum ligula rhoncus nec. Nunc maximus sem tortor, ultricies cursus sem lobortis rutrum. Suspendisse dolor sapien, aliquet sit amet leo pretium, lacinia accumsan sem. Sed ac lectus sit amet quam pulvinar egestas ut eu lacus. Ut purus est, laoreet ac neque non, laoreet gravida mauris. Praesent euismod ultrices neque, id lobortis magna ullamcorper ac. Praesent eu velit orci. Cras convallis odio tellus, condimentum dictum lorem laoreet tempor. Praesent dolor leo, auctor vitae leo eu, ultricies euismod neque. Cras facilisis aliquam condimentum.",
     "utilities": {
       "distance": "Na Avenida Paulista",
@@ -102,7 +467,63 @@
       "swimming": true
     },
     "rating": 5,
-    "image": "https://images.unsplash.com/photo-1502672023488-70e25813eb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1502672023488-70e25813eb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   },
   {
     "id": "8",
@@ -110,6 +531,8 @@
     "stars": null,
     "title": "The Little Red House",
     "location": "The Peaks, Nova Zelândia",
+    "longitude":  172.58352,
+    "latitude": -42.83137,
     "description": "Praesent gravida nibh in laoreet varius. Aenean sed faucibus magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed augue enim, maximus ac est nec, suscipit egestas neque. Curabitur nibh risus, ullamcorper vel purus in, cursus semper arcu. Etiam eget porttitor augue. Curabitur ut quam quis metus commodo vulputate ultrices in nibh. Proin volutpat congue neque vitae luctus. In et accumsan tellus, sit amet cursus sem. Phasellus condimentum nulla et blandit volutpat. Maecenas maximus lectus sed tellus porttitor lobortis. Aliquam erat volutpat. Praesent vestibulum feugiat tortor quis malesuada. Praesent nec turpis quis ligula dapibus semper fermentum in magna.",
     "utilities": {
       "distance": "A 13 minutos da estrada",
@@ -117,6 +540,62 @@
       "swimming": true
     },
     "rating": 9,
-    "image": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80"
+    "images": [
+      "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "https://images.unsplash.com/photo-1593604340846-4fbe9763a8f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80",
+      "https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+    ],
+    "policies": {
+      "rules": {
+        "title": "Regras da casa",
+        "description": [
+          {
+            "icon": "schedule",
+            "description": "Check-in: Depois das 12:00"
+          },
+          {
+            "icon": "schedule",
+            "description": "Checkout: 11:00"
+          },
+          {
+            "icon": "meeting_room",
+            "description": "Self check-in com equipe do edifício"
+          },
+          {
+            "icon": "smoke_free",
+            "description": "Proibido fumar"
+          },
+          {
+            "icon": "pets",
+            "description": "Animais são permitidos"
+          }
+        ]
+      },
+      "safety": {
+        "title": "Saúde e segurança",
+        "description": [
+          {
+            "icon": "cleaning_services",
+            "description": "Comprometeu-se com o processo de higienização da DigitalBooking."
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de monóxido de carbono"
+          },
+          {
+            "icon": "error",
+            "description": "Não há alarme de fumaça"
+          }
+        ]
+      },
+      "canceling": {
+        "title": "Política de cancelamento",
+        "description": "Adicione as datas de viagem para obter as informações de cancelamento dessa reserva."
+      }
+    }
   }
 ]
