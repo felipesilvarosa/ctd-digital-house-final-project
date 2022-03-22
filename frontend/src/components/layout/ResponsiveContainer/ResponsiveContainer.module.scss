@@ -1,0 +1,7 @@
+.Container {
+  padding: 1rem var(--rc-ph) 2rem;
+
+  @media (min-width: 499px) {
+    padding: 2rem var(--rc-ph) 4rem;
+  }
+}

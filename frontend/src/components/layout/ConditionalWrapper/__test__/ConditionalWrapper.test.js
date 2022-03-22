@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { ConditionalWrapper } from "components"
+import { ConditionalWrapper } from "src/components"
 
 const TestWrapper = ({children}) => {
   return <div data-testid="wrapper">{children}</div>

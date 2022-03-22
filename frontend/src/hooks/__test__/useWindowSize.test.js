@@ -1,5 +1,5 @@
 import { render, fireEvent } from "@testing-library/react";
-import { useWindowSize } from "hooks";
+import { useWindowSize } from "src/hooks";
 
 const TestComponent = () => {
   const windowSize = useWindowSize();

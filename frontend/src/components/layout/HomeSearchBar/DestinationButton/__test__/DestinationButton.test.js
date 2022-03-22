@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { DestinationButton } from "components"
+import { DestinationButton } from "src/components"
 
 describe("DestinationButton", () => {
   it("renders", () => {

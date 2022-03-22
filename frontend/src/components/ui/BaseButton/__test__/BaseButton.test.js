@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { BaseButton } from "components"
+import { BaseButton } from "src/components"
 
 describe("BaseButton", () => {
   it("renders", () => {

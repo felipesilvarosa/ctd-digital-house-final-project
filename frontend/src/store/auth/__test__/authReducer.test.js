@@ -1,7 +1,7 @@
 import { render, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { useReducer } from "react"
-import { authReducer, authState } from "store/auth"
+import { authReducer, authState } from "src/store/auth"
 
 const TestComponent = () => {
   const [state, dispatch] = useReducer(authReducer, authState)

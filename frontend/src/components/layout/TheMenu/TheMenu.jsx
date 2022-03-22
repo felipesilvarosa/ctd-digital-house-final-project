@@ -1,6 +1,6 @@
-import { MenuMobile, MenuDesktop, ConditionalWrapper } from "components"
+import { MenuMobile, MenuDesktop, ConditionalWrapper } from "src/components"
 import { useEffect, useState } from "react"
-import { useWindowSize } from "hooks"
+import { useWindowSize } from "src/hooks"
 
 export const TheMenu = () => {
   const menuItems = [

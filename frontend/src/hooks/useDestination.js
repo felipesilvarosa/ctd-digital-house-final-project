@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { DestinationContext } from "store/destinations"
+import { DestinationContext } from "src/store/destinations"
 
 export const useDestination = () => {
   const context = useContext(DestinationContext)

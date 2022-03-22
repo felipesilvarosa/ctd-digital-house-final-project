@@ -1,4 +1,4 @@
-import { validateEmail } from "utils"
+import { validateEmail } from "src/utils"
 
 describe("validateEmail", () => {
   it("expects to be falsy if input is joaomariajose", () => {

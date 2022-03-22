@@ -1,5 +1,6 @@
 export const productsState = {
   products: [],
+  product: {},
   loading: false
 }
 
@@ -10,6 +11,11 @@ export const productsReducer = (state, action) => {
       return {
         ...state,
         products: payload
+      }
+    case "SET_PRODUCT":
+      return {
+        ...state,
+        product: payload
       }
     case "SET_PRODUCTS_LOADING":
       return {

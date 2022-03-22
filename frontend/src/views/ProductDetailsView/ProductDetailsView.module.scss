@@ -1,0 +1,23 @@
+.ProductDetails {
+  > h2 {
+    margin-bottom: 2rem;
+    color: var(--col-main-highlight);
+  }
+}
+
+.Rating {
+  margin: 5rem 0;
+  display: flex;
+
+  > div {
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  > p {
+    margin-left: 2rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    max-width: 75ch;
+  }
+}

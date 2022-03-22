@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import { UserAvatar } from "components"
+import { UserAvatar } from "src/components"
 
 describe("UserAvatar", () => {
   it("renders the correct initials", () => {

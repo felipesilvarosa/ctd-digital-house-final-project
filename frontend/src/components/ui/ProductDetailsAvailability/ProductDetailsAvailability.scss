@@ -1,0 +1,75 @@
+.ProductDetailsCalendar {
+  position: relative;
+  height: 42rem;
+
+  display: flex;
+
+  @media (min-width: 720px) {
+    height: 31rem;
+  }
+
+  @media (min-width: 1300px) {
+    height: 22rem;
+  }
+  
+  .rdrCalendarWrapper {
+    width: unset !important;
+    box-shadow: none !important;
+    font-size: clamp(0.75rem, 0.9vw, 1.25rem);
+    
+    transform-origin: left top;
+  }
+  
+  .rdrDateDisplay,
+  .rdrDateDisplay,
+  .rdrDateInput {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important
+  }
+
+  .rdrMonthsHorizontal {
+    align-items: flex-start;
+  }
+}
+
+.ProductDetailsReserve {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  bottom: 0;
+  width: 100%;
+  max-width: 21.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 0.5rem 0.5rem var(--col-shadow-lightest);
+  border-radius: 0.25rem;
+
+  @media (min-width: 720px) {
+    bottom: unset;
+    top: 0.75rem;
+    right: 0;
+    max-width: 10rem;
+  }
+
+  @media (min-width: 930px) {
+    bottom: 0;
+    top: unset;
+    right: unset;
+    max-width: 42rem;
+  }
+
+  @media (min-width: 1300px) {
+    bottom: unset;
+    top: 0.75rem;
+    right: 0;
+    max-width: 30%;
+  }
+
+  > p {
+    line-height: 1.25;
+  }
+
+  > button {
+    margin-top: 1rem;
+  }
+}
