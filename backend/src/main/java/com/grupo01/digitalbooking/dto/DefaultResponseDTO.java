@@ -15,12 +15,7 @@ import java.util.Map;
 public class DefaultResponseDTO {
 
     private Status status;
-    private Map data;
     private String message;
-
-    public DefaultResponseDTO(Status status, String message) {
-        this(status,new HashMap(),message);
-    }
 
     public enum Status{
         FAILED,

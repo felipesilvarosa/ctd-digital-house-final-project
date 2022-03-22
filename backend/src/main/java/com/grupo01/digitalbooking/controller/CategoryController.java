@@ -29,7 +29,6 @@ public class CategoryController {
     }
 
     @PostMapping("/new")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryService.createCategory(categoryDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -42,7 +41,6 @@ public class CategoryController {
     }
 
     @PutMapping("/edit")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CategoryDTO> editCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryService.editCategory(categoryDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

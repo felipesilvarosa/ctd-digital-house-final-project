@@ -1,6 +1,5 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.dto.ProductDTO;
 import com.grupo01.digitalbooking.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 
 @RestController
 @RequestMapping("products")
@@ -49,7 +45,6 @@ public class ProductController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto){
         ProductDTO response = service.createProduct(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
