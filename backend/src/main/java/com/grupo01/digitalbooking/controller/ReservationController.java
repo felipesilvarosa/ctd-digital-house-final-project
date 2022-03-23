@@ -29,13 +29,13 @@ public class ReservationController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<DefaultResponseDTO> deleteReservation(@PathVariable Long id) {
         reservationService.deleteReservation(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/edit")
+    @PutMapping
     public ResponseEntity<ReservationDTO> editReservation(@RequestBody ReservationDTO reservationDTO) {
         ReservationDTO response = reservationService.editReservation(reservationDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

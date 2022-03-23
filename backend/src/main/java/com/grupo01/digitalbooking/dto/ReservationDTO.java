@@ -15,12 +15,12 @@ import lombok.Setter;
 public class ReservationDTO {
 
     private Long id;
-    private Client client;
+    private Long clientId;
     private Product product;
 
     public ReservationDTO(Reservation entity){
         this.id = entity.getId();
-        this.client = entity.getClient();
+        this.clientId = entity.getClient().getId();
         this.product = entity.getProduct();
     }
 
