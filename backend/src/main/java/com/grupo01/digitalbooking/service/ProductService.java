@@ -39,20 +39,6 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCategory(Long categoryId){
-        List<Product> response = repository.findByCategory(categoryId);
-        if (response==null||response.isEmpty())throw new NotFoundException("No product with provided category was found");
-        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCity(Long cityId){
-        List<Product> response = repository.findByCity(cityId);
-        if (response==null||response.isEmpty())throw new NotFoundException("No product with provided city was found");
-        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
     public List<ProductDTO> searchProducts(Map<String, Object> searchCriteria) {
 
         if(searchCriteria.get("cityId")==null&&searchCriteria.get("categoryId")==null&&
@@ -88,8 +74,8 @@ public class ProductService {
 
         Optional<Category> categoryFound = categoryRepository.findById(dto.getCategory().getId());
         Optional<City> cityFound= cityRepository.findById(dto.getCategory().getId());
-        Optional <List<Characteristic>> characteristicsFound = Optional.of(characteristicRepository.findAllById(dto.getCharacteristics().stream().map(Characteristic::getId).collect(Collectors.toList())));
-        Optional <List<Image>> imageFound = Optional.of(imageRepository.findAllById(dto.getImages().stream().map(Image::getId).collect(Collectors.toList())));
+        Optional<List<Characteristic>> characteristicsFound = Optional.of(characteristicRepository.findAllById(dto.getCharacteristics().stream().map(Characteristic::getId).collect(Collectors.toList())));
+        Optional<List<Image>> imageFound = Optional.of(imageRepository.findAllById(dto.getImages().stream().map(Image::getId).collect(Collectors.toList())));
 
         /**
          * TODO         * Refatorar a logica *Imagem e characteristas podem ser novas ou já cadastradas

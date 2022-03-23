@@ -22,20 +22,19 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
 
     public List<ReservationDTO> getReservations() {
-        List<Reservation> categories = reservationRepository.findAll();
-        return categories.stream().map(ReservationDTO::new).collect(Collectors.toList());
+        List<Reservation> response = reservationRepository.findAll();
+        return response.stream().map(ReservationDTO::new).collect(Collectors.toList());
     }
 
     public ReservationDTO createReservation(ReservationDTO dto) {
 
-        Reservation reservation = new Reservation(dto);
-        Optional<Reservation> reservationFound = reservationRepository.findByClient(new Client(dto.getClient().getId()));
-
-        if (reservationFound.isPresent())
+        Optional<Reservation> reservationFound = reservationRepository.findByClient(new Client(dto.getClientId()));
+        reservationFound.ifPresent(ignored->{
             throw new ConflictException("There already is a reservation under this client's id");
-
-        reservationRepository.save(reservation);
-        return new ReservationDTO(reservation);
+        });
+        Reservation response = new Reservation(dto);
+        response = reservationRepository.save(response);
+        return new ReservationDTO(response);
 
     }
 
@@ -49,13 +48,11 @@ public class ReservationService {
      *
      * */
     public ReservationDTO editReservation(ReservationDTO dto) {
-        Reservation reservation = new Reservation(dto);
-        Optional<Reservation> reservationFound = reservationRepository.findById(reservation.getId());
-        if(reservationFound.isPresent()) {
-            reservationRepository.save(reservation);
-            return new ReservationDTO(reservation);
-        } else {
-            throw new NotFoundException("Reservation not found");
-        }
+        reservationRepository.findById(dto.getId())
+                .orElseThrow(()-> new NotFoundException("Reservation not found"));
+        Reservation response = new Reservation(dto);
+        reservationRepository.save(response);
+        return new ReservationDTO(response);
+
     }
 }

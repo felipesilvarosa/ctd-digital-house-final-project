@@ -26,7 +26,7 @@ public class Reservation {
 
     public Reservation(ReservationDTO dto){
         this.id = dto.getId();
-        this.client = dto.getClient();
+        this.client = new Client(dto.getClientId());
         this.product = dto.getProduct();
     }
 
