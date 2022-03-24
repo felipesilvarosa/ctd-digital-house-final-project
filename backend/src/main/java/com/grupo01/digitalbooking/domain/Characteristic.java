@@ -35,4 +35,8 @@ public class Characteristic {
         this.name = dto.getName();
         this.icon = dto.getIcon();
     }
+
+    public Characteristic(Long id) {
+        this.id = id;
+    }
 }
