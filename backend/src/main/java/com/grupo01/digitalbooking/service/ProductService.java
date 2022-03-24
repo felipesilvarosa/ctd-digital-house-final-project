@@ -76,7 +76,7 @@ public class ProductService {
                 new BadRequestException("No category with provided id was found"));
         cityRepository.findById(dto.getCategoryId()).orElseThrow(()->
                 new BadRequestException("No city with provided id was found"));
-        imageRepository.findById(dto.getCategoryId()).orElseThrow(()->
+        imageRepository.findAllById(dto.getImageIds()).stream().findAny().orElseThrow(()->
                 new BadRequestException("No image with provided id was found"));
 
         return new ProductDTO(repository.save(new Product(dto)));
