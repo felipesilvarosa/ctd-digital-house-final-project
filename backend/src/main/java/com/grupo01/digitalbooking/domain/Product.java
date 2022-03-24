@@ -25,7 +25,9 @@ public class Product {
     private Long id;
     private String name;
     private String description;
-    private LocalDate availableDate;
+
+    @ManyToMany
+    private List<AvailableDate> availableDates;
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;

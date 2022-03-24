@@ -34,4 +34,8 @@ public class Category {
         this.description = dto.getDescription();
         this.imageUrl = dto.getImageUrl();
     }
+
+    public Category(Long id) {
+        this.id = id;
+    }
 }

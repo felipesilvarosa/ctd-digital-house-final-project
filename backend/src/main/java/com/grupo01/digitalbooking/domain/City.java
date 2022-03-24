@@ -33,4 +33,8 @@ public class City {
         this.name = dto.getName();
         this.country = dto.getCountry();
     }
+
+    public City(Long id) {
+        this.id = id;
+    }
 }
