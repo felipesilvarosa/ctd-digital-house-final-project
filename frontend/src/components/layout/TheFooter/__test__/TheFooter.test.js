@@ -1,4 +1,4 @@
-import { TheFooter } from "components"
+import { TheFooter } from "src/components"
 import { render } from "@testing-library/react"
 
 describe("TheFooter", () => {

@@ -8,6 +8,7 @@ import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import springfox.documentation.annotations.ApiIgnore;
 
 import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.FAILED;
 

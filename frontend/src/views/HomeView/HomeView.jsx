@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom"
-import { HomeSearchBar, HomeCategories, HomeRecomendations, SpacingShim } from "components"
+import { HomeSearchBar, HomeCategories, HomeRecomendations, SpacingShim } from "src/components"
 
 export const HomeView = () => {
   const [ query ] = useSearchParams()

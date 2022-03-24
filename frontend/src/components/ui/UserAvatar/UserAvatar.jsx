@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { makeInitials } from "utils"
+import { makeInitials } from "src/utils"
 import styles from "./UserAvatar.module.css"
 export const UserAvatar = (props) => {
   

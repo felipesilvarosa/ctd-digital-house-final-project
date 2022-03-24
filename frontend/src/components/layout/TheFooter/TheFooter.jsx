@@ -1,8 +1,8 @@
 import styles from "./TheFooter.module.scss"
-import iconFb from "assets/icon-facebook.png"
-import iconIn from "assets/icon-linkedin.png"
-import iconTw from "assets/icon-twitter.png"
-import iconIg from "assets/icon-instagram.png"
+import iconFb from "src/assets/icon-facebook.png"
+import iconIn from "src/assets/icon-linkedin.png"
+import iconTw from "src/assets/icon-twitter.png"
+import iconIg from "src/assets/icon-instagram.png"
 
 export const TheFooter = () => {
   return (

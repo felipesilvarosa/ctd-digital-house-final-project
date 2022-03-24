@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react"
-import { FlexWrapper } from "components"
+import { FlexWrapper } from "src/components"
 
 describe("FlexWrapper", () => {
   it("renders", () => {

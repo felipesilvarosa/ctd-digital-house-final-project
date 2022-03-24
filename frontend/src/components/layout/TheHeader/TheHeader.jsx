@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import { TheMenu } from "components"
-import logoImage from "assets/logo-sm.png"
+import { TheMenu } from "src/components"
+import logoImage from "src/assets/logo-sm.png"
 import styles from "./TheHeader.module.scss"
 
 export const TheHeader = () => {

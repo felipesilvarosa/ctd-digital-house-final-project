@@ -1,4 +1,4 @@
-import { BaseLoader } from "components"
+import { BaseLoader } from "src/components"
 import styles from "./CardsGridLoader.module.scss"
 export const CardsGridLoader = ({ variant }) => {
   const classMap = new Map([

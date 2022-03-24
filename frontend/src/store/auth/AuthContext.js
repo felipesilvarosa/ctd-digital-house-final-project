@@ -1,6 +1,6 @@
 import { createContext, useReducer, useCallback } from "react";
-import { authReducer, authState } from "store/auth"
-import { validateEmail } from "utils";
+import { authReducer, authState } from "src/store/auth"
+import { validateEmail } from "src/utils";
 import axios from "axios";
 
 export const AuthContext = createContext(authState)

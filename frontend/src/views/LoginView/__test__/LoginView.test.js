@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react"
-import { LoginView } from "views"
+import { LoginView } from "src/views"
 import { BrowserRouter as Router } from "react-router-dom"
-import { GlobalProvider } from "store"
+import { GlobalProvider } from "src/store"
 
 describe("LoginView", () => {
   it("renders", () => {

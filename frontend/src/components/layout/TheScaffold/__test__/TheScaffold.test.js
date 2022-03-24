@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react"
 import { BrowserRouter as Router } from "react-router-dom"
-import { TheScaffold } from "components"
-import { GlobalProvider } from "store"
+import { TheScaffold } from "src/components"
+import { GlobalProvider } from "src/store"
 
 describe("TheScaffold", () => {
 

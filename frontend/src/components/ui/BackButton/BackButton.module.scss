@@ -1,0 +1,48 @@
+.BackButton {
+  display: flex;
+  position: relative;
+  text-decoration: none;
+  padding: 1rem 0.75rem 1rem 1rem;
+  text-transform: uppercase;
+  color: var(--col-main-contrast);
+  font-weight: 500;
+  max-width: max-content;
+  border-radius: 10rem;
+  box-shadow: 1.75rem 0 0 -2rem var(--col-main-highlight);
+  transition: 200ms ease-in;
+  transition-property: box-shadow, color;
+  
+  &:hover {
+    box-shadow: 1.7rem 0 0 -1.525rem var(--col-main-highlight);
+    color: var(--col-main-highlight);
+    transition-timing-function: ease-out;
+
+    &::before,
+    &::after {
+      background: var(--col-main-highlight);
+      transition-timing-function: ease-out;
+    }
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 0.125rem;
+    width: 0.5rem;
+    background: var(--col-tertiary-highlight);
+    transform-origin: left center;
+    border-radius: 1rem;
+    transition: background-color 200ms ease-in;
+  }
+
+  &::before {
+    transform: translateY(-45%) rotate(-45deg);
+  }
+
+  &::after {
+    transform: translateY(-55%) rotate(45deg);
+  }
+}
