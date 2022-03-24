@@ -34,4 +34,8 @@ public class Image {
         this.url = dto.getUrl();
         this.product = dto.getProduct();
     }
+
+    public Image(Long id){
+        this.id = id;
+    }
 }
