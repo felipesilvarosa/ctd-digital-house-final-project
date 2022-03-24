@@ -68,19 +68,16 @@ public class ProductService {
     @Transactional
     public ProductDTO createProduct(ProductDTO dto){
 
-        if (dto.getCharacteristics().isEmpty() || dto.getImages().isEmpty()){
+        if (dto.getCategoryId()==null || dto.getImageIds()==null){
             throw new RuntimeException("Não pode fazer cadastro sem categorias ou imagens");
         }
 
-        Optional<Category> categoryFound = categoryRepository.findById(dto.getCategory().getId());
-        Optional<City> cityFound= cityRepository.findById(dto.getCategory().getId());
-        Optional<List<Characteristic>> characteristicsFound = Optional.of(characteristicRepository.findAllById(dto.getCharacteristics().stream().map(Characteristic::getId).collect(Collectors.toList())));
-        Optional<List<Image>> imageFound = Optional.of(imageRepository.findAllById(dto.getImages().stream().map(Image::getId).collect(Collectors.toList())));
-
-        categoryFound.ifPresent(dto::setCategory);
-        cityFound.ifPresent(dto::setCity);
-        characteristicsFound.ifPresent(dto::setCharacteristics);
-        imageFound.ifPresent(dto::setImages);
+        categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+                new BadRequestException("No category with provided id was found"));
+        cityRepository.findById(dto.getCategoryId()).orElseThrow(()->
+                new BadRequestException("No city with provided id was found"));
+        imageRepository.findById(dto.getCategoryId()).orElseThrow(()->
+                new BadRequestException("No image with provided id was found"));
 
         return new ProductDTO(repository.save(new Product(dto)));
     }

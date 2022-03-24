@@ -18,21 +18,34 @@ public class ProductDTO {
     private Long id;
     private String name;
     private String description;
-    private Category category;
-    private City city;
-    private List<Characteristic> characteristics;
-    private List<Image> images;
-    private String availableDate;
+    private Long categoryId;
+    private Long cityId;
+    private Long userRatings;
+    private List<Long> characteristicIds;
+    private List<Long> imageIds;
+    private List<LocalDate> availableDates;
 
     public ProductDTO(Product entity){
 
         this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
-        this.category = entity.getCategory();
-        this.characteristics = entity.getCharacteristics();
-        this.city = entity.getCity();
-        this.availableDate = entity.getAvailableDate().toString();
-        this.images = entity.getImages();
+        this.categoryId = entity.getCategory().getId();
+        this.cityId = entity.getCity().getId();
+        this.availableDates = entity.getAvailableDates()
+                .stream()
+                .map(AvailableDate::getValue)
+                .collect(Collectors.toList());
+        this.imageIds = entity.getImages()
+                .stream()
+                .map(Image::getId)
+                .collect(Collectors.toList());
+        this.characteristicIds = entity.getCharacteristics()
+                .stream()
+                .map(Characteristic::getId)
+                .collect(Collectors.toList());
     }
+
+
+
 }

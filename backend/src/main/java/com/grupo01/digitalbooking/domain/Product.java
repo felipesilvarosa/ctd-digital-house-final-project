@@ -1,6 +1,5 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.grupo01.digitalbooking.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,13 +41,19 @@ public class Product {
     @ManyToMany
     private List<Characteristic> characteristics;
 
-    public Product(ProductDTO dto){
+    public Product(ProductDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
-        this.category = dto.getCategory();
+        this.category = new Category(dto.getCategoryId());
+        this.city = new City(dto.getCityId());
         this.description = dto.getDescription();
-        this.city = dto.getCity();
-        this.availableDate = dto.getAvailableDate()==null?null:LocalDate.parse(dto.getAvailableDate());
-        this.characteristics = dto.getCharacteristics();
+        this.availableDates = dto.getAvailableDates() == null ? null : dto.getAvailableDates()
+                .stream()
+                .map(AvailableDate::new)
+                .collect(Collectors.toList());
+        this.characteristics = dto.getCharacteristicIds()
+                .stream()
+                .map(Characteristic::new)
+                .collect(Collectors.toList());
     }
 }
