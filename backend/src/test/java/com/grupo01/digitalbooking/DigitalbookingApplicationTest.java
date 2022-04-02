@@ -9,11 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DigitalbookingApplicationTest {
 
-
-
-    @Test
-    void contextLoads(){}
-
     @Test
     void mainShouldNotThrowException(){
         assertDoesNotThrow(()->DigitalbookingApplication.main(new String[]{""}));
