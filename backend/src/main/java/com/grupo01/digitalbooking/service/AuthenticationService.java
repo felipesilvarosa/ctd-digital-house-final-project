@@ -43,7 +43,7 @@ public class AuthenticationService implements UserDetailsService {
                 .orElseThrow(()-> new NotFoundException("No user with provided information was found"));
     }
 
-    public String refreshAccessToken(HttpServletRequest request, HttpServletResponse response){
+    public String refreshAccessToken(HttpServletRequest request){
 
         Cookie[] cookies = request.getCookies();
         if(cookies==null) throw new ForbiddenException("Error refreshing access token: no cookies were found");
@@ -65,7 +65,7 @@ public class AuthenticationService implements UserDetailsService {
             return JWT.create()
                     .withSubject(user.getEmail())
                     .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                    .withIssuer("srot")
+                    .withIssuer("digitalbooking")
                     .withIssuedAt(new Date())
                     .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
                     .sign(algorithm);

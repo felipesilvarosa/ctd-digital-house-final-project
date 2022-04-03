@@ -4,6 +4,7 @@ package com.grupo01.digitalbooking.service;
 import com.grupo01.digitalbooking.domain.Category;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
+import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +30,12 @@ public class CategoryService {
 
     public CategoryDTO getCategoryById(Long id) {
 
-        if (Objects.isNull(id)){
-            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
-        }
+        if (id==null) throw new BadRequestException("Invalid id provided.");
 
-        Optional<Category> category = categoryRepository.findById(id);
+        Category category = categoryRepository.findById(id).orElseThrow(()->
+                new NotFoundException("Categoria não encontrada"));
 
-        if (category.isPresent()) {
-            return new CategoryDTO(category.get());
-        }
-
-        throw new NotFoundException("Categoria não encontrada");
+        return new CategoryDTO(category);
 
     }
 
@@ -56,12 +52,9 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
-        if (Objects.isNull(id)){
-            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
-        }
+        if(id==null) throw new BadRequestException("Id inválida");
         categoryRepository.deleteById(id);
     }
-
 
     public CategoryDTO editCategory(CategoryDTO categoryDTO) {
         Category category = new Category(categoryDTO);

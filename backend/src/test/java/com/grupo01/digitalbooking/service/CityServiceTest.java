@@ -11,8 +11,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,6 +48,14 @@ class CityServiceTest {
 
         assertTrue(e.getMessage().contains("Cidade " + cityDTO.getName() + " já cadastrada"));
 
+    }
+
+    @Test
+
+    void getCityShouldReturnListOfCityDTO(){
+        when(cityRepository.findAll()).thenReturn(List.of());
+        List<CityDTO> testOutput = cityService.getCity();
+        assertNotNull(testOutput);
     }
 
 

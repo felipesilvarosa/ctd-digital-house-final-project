@@ -13,12 +13,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
@@ -70,6 +70,34 @@ class CategoryServiceTest {
                 ()-> categoryService.editCategory(categoryDTO));
 
         assertTrue(e.getMessage().contains("Category not found"));
+    }
+
+    @Test
+    void getCategoriesShouldReturnListOfCategoryDTO(){
+        when(categoryRepository.findAll()).thenReturn(List.of());
+        List<CategoryDTO> testOutput = categoryService.getCategories();
+        assertNotNull(testOutput);
+    }
+
+    @Test
+    void getCategoryByIdShouldThrowExceptionWhenInvalidId(){
+        when(categoryRepository.findById(0L)).thenReturn(Optional.empty());
+        assertThrows(BadRequestException.class,()->categoryService.getCategoryById(null));
+        assertThrows(NotFoundException.class,()->categoryService.getCategoryById(0L));
+    }
+
+    @Test
+    void getCategoryByIdShouldReturnCategoryDTOWhenValidId(){
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(new Category(1L)));
+        CategoryDTO testOutput = categoryService.getCategoryById(1L);
+        assertNotNull(testOutput);
+    }
+
+    @Test
+    void deleteCategoryShouldCallDeleteByIdOnce(){
+        doNothing().when(categoryRepository).deleteById(1L);
+        categoryService.deleteCategory(1L);
+        verify(categoryRepository,times(1)).deleteById(1L);
     }
 
     private CategoryDTO mockCategoryDTO(){
