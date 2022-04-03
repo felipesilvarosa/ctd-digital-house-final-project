@@ -7,7 +7,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "./ProductDetailsAvailability.scss"
 
-export const ProductDetailsAvailability = ({unavailable}) => {
+export const ProductDetailsAvailability = ({unavailable, id}) => {
   const size = useWindowSize()
   const [ ranges, setRanges ] = useState({
     startDate: new Date(),
@@ -42,7 +42,7 @@ export const ProductDetailsAvailability = ({unavailable}) => {
 
         <div className="ProductDetailsReserve">
           <p>Escolha as datas desejadas e clique no botão abaixo para iniciar o processo de reserva</p>
-          <BaseButton>Reservar</BaseButton>
+          <BaseButton type="link" to={"/reserve/" + id}>Reservar</BaseButton>
         </div>
       </div>
     </section>

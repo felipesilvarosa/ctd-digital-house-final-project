@@ -28,7 +28,7 @@ export const ProductDetailsView = () => {
     <>
       <SpacingShim height="5rem" />
       <ResponsiveContainer className={styles.ProductDetails}>
-        <BackButton>Voltar</BackButton>
+        <BackButton to="/">Voltar</BackButton>
         {
           loading ?
             <h1>Carregando...</h1>
@@ -43,7 +43,7 @@ export const ProductDetailsView = () => {
               </div>
               <ProductDetailsUtilities utilities={product.utilities} />
               <ProductDetailsPolicies policies={product.policies} />
-              <ProductDetailsAvailability unavailable={product.unavailable} />
+              <ProductDetailsAvailability unavailable={product.unavailable} id={product.id} />
               <ProductDetailsMap lon={product.longitude} lat={product.latitude} />
             </>
         }
