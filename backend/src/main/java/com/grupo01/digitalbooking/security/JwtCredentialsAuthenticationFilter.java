@@ -74,7 +74,7 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
                 .withExpiresAt(Date.valueOf(LocalDateTime.now().plusWeeks(2).toLocalDate()))
                 .sign(algorithm);
 
-        Cookie accessTokenCookie = new Cookie("access_token",refresh_token);
+        Cookie accessTokenCookie = new Cookie("access_token",access_token);
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(true);
         accessTokenCookie.setPath("/");

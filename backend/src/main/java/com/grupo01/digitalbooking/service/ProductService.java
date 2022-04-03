@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.service;
 
-import com.grupo01.digitalbooking.domain.*;
+import com.grupo01.digitalbooking.domain.Product;
 import com.grupo01.digitalbooking.dto.ProductDTO;
 import com.grupo01.digitalbooking.repository.*;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,20 +38,6 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCategory(Long categoryId){
-        List<Product> response = repository.findByCategory(categoryId);
-        if (response==null||response.isEmpty())throw new NotFoundException("No product with provided category was found");
-        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCity(Long cityId){
-        List<Product> response = repository.findByCity(cityId);
-        if (response==null||response.isEmpty())throw new NotFoundException("No product with provided city was found");
-        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
     public List<ProductDTO> searchProducts(Map<String, Object> searchCriteria) {
 
         if(searchCriteria.get("cityId")==null&&searchCriteria.get("categoryId")==null&&
@@ -74,7 +59,7 @@ public class ProductService {
         query.replace(query.length()-4, query.length(),"");
 
         List<Product> response = repository.search(query.toString());
-        if (response==null||response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
+        if (response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
         return response.stream().map(ProductDTO::new).collect(Collectors.toList());
 
     }
@@ -82,25 +67,30 @@ public class ProductService {
     @Transactional
     public ProductDTO createProduct(ProductDTO dto){
 
-        if (dto.getCharacteristics().isEmpty() || dto.getImages().isEmpty()){
-            throw new RuntimeException("Não pode fazer cadastro sem categorias ou imagens");
+        if (dto.getCategoryId()==null || dto.getImageIds()==null){
+            throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
         }
 
-        Optional<Category> categoryFound = categoryRepository.findById(dto.getCategory().getId());
-        Optional<City> cityFound= cityRepository.findById(dto.getCategory().getId());
-        Optional <List<Characteristic>> characteristicsFound = Optional.of(characteristicRepository.findAllById(dto.getCharacteristics().stream().map(Characteristic::getId).collect(Collectors.toList())));
-        Optional <List<Image>> imageFound = Optional.of(imageRepository.findAllById(dto.getImages().stream().map(Image::getId).collect(Collectors.toList())));
-
-        /**
-         * TODO         * Refatorar a logica *Imagem e characteristas podem ser novas ou já cadastradas
-         * */
-
-        categoryFound.ifPresent(dto::setCategory);
-        cityFound.ifPresent(dto::setCity);
-        characteristicsFound.ifPresent(dto::setCharacteristics);
-        imageFound.ifPresent(dto::setImages);
+        categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+                new BadRequestException("No category with provided id was found"));
+        cityRepository.findById(dto.getCityId()).orElseThrow(()->
+                new BadRequestException("No city with provided id was found"));
+        imageRepository.findAllById(dto.getImageIds()).stream().findAny().orElseThrow(()->
+                new BadRequestException("No image with provided id was found"));
 
         return new ProductDTO(repository.save(new Product(dto)));
+    }
+
+    public ProductDTO editProduct(ProductDTO dto) {
+        repository.findById(dto.getId())
+                .orElseThrow(()-> new NotFoundException("Product not found"));
+        Product response = new Product(dto);
+        response = repository.save(response);
+        return new ProductDTO(response);
+    }
+
+    public void deleteProduct(Long id){
+        repository.deleteById(id);
     }
 
 }

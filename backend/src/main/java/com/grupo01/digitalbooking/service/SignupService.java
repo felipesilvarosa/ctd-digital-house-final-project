@@ -1,5 +1,6 @@
 package com.grupo01.digitalbooking.service;
 
+import com.grupo01.digitalbooking.domain.Role;
 import com.grupo01.digitalbooking.domain.User;
 import com.grupo01.digitalbooking.dto.NewUserDTO;
 import com.grupo01.digitalbooking.dto.UserDTO;
@@ -21,7 +22,6 @@ import java.util.Optional;
 public class SignupService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -35,7 +35,7 @@ public class SignupService {
         }
         Util.validatePassword(newUser.getPassword());
         User entity = new User(newUser);
-        entity.setRole(roleRepository.getById(1L));
+        entity.setRole(new Role(1L));
         setDefaultUserInfo(entity);
         entity = userRepository.save(entity);
         log.info("New user created successfully");
