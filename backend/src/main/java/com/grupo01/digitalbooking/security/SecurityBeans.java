@@ -15,7 +15,7 @@ public class SecurityBeans {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")g
+                registry.addMapping("/**")
                         .allowedOriginPatterns("*")
                         .allowedMethods("*")
                         .allowedHeaders("*")
