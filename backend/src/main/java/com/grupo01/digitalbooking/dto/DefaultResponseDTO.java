@@ -25,11 +25,6 @@ public class DefaultResponseDTO {
         this.data = Map.of();
         this.message = messsage;
     }
-    public DefaultResponseDTO(Status failed, Map data, String messsage) {
-        this.status = failed;
-        this.data = data;
-        this.message = messsage;
-    }
 
     public enum Status{
         FAILED,
