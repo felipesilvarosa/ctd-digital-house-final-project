@@ -31,7 +31,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         }
         log.error("Error : {}",accessDeniedException.getMessage());
         response.setStatus(403);
-        Map<String, AccessDeniedException> data = Map.of("exception: ", accessDeniedException);
+        Map<String, String> data = Map.of("exception: ", accessDeniedException.getMessage());
         new ObjectMapper().writeValue(response.getOutputStream(),
                 new DefaultResponseDTO(FAILED, data, "Access Denied"));
     }
