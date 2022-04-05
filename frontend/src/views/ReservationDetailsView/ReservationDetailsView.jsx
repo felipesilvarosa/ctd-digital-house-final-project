@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom"
 import { pt } from "date-fns/locale"
 import { DateRange } from "react-date-range";
+import Swal from "sweetalert2"
 
 import { 
   SpacingShim, 
@@ -20,6 +22,7 @@ import "./ReservationDetailsCalendar.scss"
 
 export const ReservationDetailsView = () => {
   const params = useParams()
+  const navigate = useNavigate()
 
   const [ ranges, setRanges ] = useState({
     startDate: new Date(),
@@ -29,6 +32,15 @@ export const ReservationDetailsView = () => {
 
   const handleSelect = (range) => {
     setRanges(range.selection)
+  }
+
+  const handleSubmit = () => {
+    Swal.fire(
+      'Reserva feita com sucesso!',
+      'Você reservou sua hospedagem com sucesso.',
+      "success"
+    )
+    navigate("/")
   }
 
   const size = useWindowSize()
@@ -116,7 +128,7 @@ export const ReservationDetailsView = () => {
                         <span>{ranges.endDate.toLocaleDateString("pt-BR")}</span>
                       </p>
                     </div>
-                    <BaseButton>Confirmar Reserva</BaseButton>
+                    <BaseButton onClick={handleSubmit}>Confirmar Reserva</BaseButton>
                   </div>
                 </section>
               </>
