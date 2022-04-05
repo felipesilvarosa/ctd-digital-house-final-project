@@ -16,6 +16,11 @@ export const reservationsReducer = (state, action) => {
         ...state,
         loading: payload
       }
+    case "CLEAR_RESERVATION":
+      return {
+        ...state,
+        reservation: {}
+      }
     default:
       throw new Error("Caso não previsto no reducer.")
   }

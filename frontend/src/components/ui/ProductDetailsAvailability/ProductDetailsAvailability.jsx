@@ -1,28 +1,45 @@
 import { pt } from "date-fns/locale"
 import { useState } from "react"
 import { DateRange } from "react-date-range";
-import { useWindowSize } from "src/hooks"
+import { useAuth, useReservations, useWindowSize } from "src/hooks"
 import { BaseButton } from "src/components";
+import { makeNumberFromDate } from "src/utils";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "./ProductDetailsAvailability.scss"
 
-export const ProductDetailsAvailability = ({unavailable, id}) => {
+export const ProductDetailsAvailability = ({product}) => {
   const size = useWindowSize()
+  const { setReservation } = useReservations()
+  const { user } = useAuth()
+
+  const unavailableDates = product?.unavailable?.map(date => {
+    const chunks = date.split("/")
+    return new Date(chunks[0], chunks[1]-1, chunks[2])
+  })
+
+  const minDate = () => {
+    let dayToReturn = new Date()
+
+    unavailableDates && unavailableDates.forEach(date => {
+      if (makeNumberFromDate(date) === makeNumberFromDate(dayToReturn)) {
+        dayToReturn.setDate(dayToReturn.getDate()+1)
+      }
+    })
+
+    return dayToReturn
+  }
+
   const [ ranges, setRanges ] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: minDate(),
+    endDate: minDate(),
     key: "selection"
   })
 
   const handleSelect = (range) => {
     setRanges(range.selection)
+    setReservation({ product, user, checkIn: range.selection.startDate, checkOut: range.selection.endDate })
   }
-
-  const unavailableDates = unavailable?.map(date => {
-    const chunks = date.split("/")
-    return new Date(chunks[0], chunks[1]-1, chunks[2])
-  })
 
   return <>
     <section>
@@ -36,13 +53,13 @@ export const ProductDetailsAvailability = ({unavailable, id}) => {
           onChange={handleSelect}
           dateDisplayFormat="d/MMM/yyyy"
           months={2}
-          minDate={new Date()}
+          minDate={minDate()}
           disabledDates={unavailableDates}
         />
 
         <div className="ProductDetailsReserve">
           <p>Escolha as datas desejadas e clique no botão abaixo para iniciar o processo de reserva</p>
-          <BaseButton type="link" to={"/reserve/" + id}>Reservar</BaseButton>
+          <BaseButton type="link" to={"/reserve/" + product.id}>Reservar</BaseButton>
         </div>
       </div>
     </section>

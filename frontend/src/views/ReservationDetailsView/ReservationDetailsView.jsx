@@ -11,9 +11,11 @@ import {
   BackButton, 
   BaseButton,
   StarsMeter,
-  ProductDetailsPolicies
+  ProductDetailsPolicies,
+  InputGroup
 } from "src/components"
 import { useAuth, useProducts, useReservations, useWindowSize } from "src/hooks"
+import { makeNumberFromDate } from "src/utils";
 
 import styles from "./ReservationDetailsView.module.scss"
 import "react-date-range/dist/styles.css";
@@ -21,17 +23,54 @@ import "react-date-range/dist/theme/default.css";
 import "./ReservationDetailsCalendar.scss"
 
 export const ReservationDetailsView = () => {
+  const checkInTimes = [
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00"
+  ]
+
   const params = useParams()
   const navigate = useNavigate()
 
+  const size = useWindowSize()
+  const { user } = useAuth()
+  const { findProductById, product, loading: loadingProduct } = useProducts()
+  const { setReservation, clearReservation, reservation, loading: loadingReservation } = useReservations()
+
+  const unavailableDates = product?.unavailable?.map(date => {
+    const chunks = date.split("/")
+    return new Date(chunks[0], chunks[1]-1, chunks[2])
+  })
+  
+  const minDate = () => {
+    let dayToReturn = new Date()
+
+    unavailableDates && unavailableDates.forEach(date => {
+      if (makeNumberFromDate(date) === makeNumberFromDate(dayToReturn)) {
+        dayToReturn.setDate(dayToReturn.getDate()+1)
+      }
+    })
+
+    return dayToReturn
+  }
+
   const [ ranges, setRanges ] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: reservation.checkIn ? reservation.checkIn : minDate(),
+    endDate: reservation.checkOut ? reservation.checkOut : minDate(),
     key: "selection"
   })
 
   const handleSelect = (range) => {
     setRanges(range.selection)
+    setReservation({ user, product, checkIn: range.selection.startDate, checkIn: range.selection.endDate })
   }
 
   const handleSubmit = () => {
@@ -40,21 +79,13 @@ export const ReservationDetailsView = () => {
       'Você reservou sua hospedagem com sucesso.',
       "success"
     )
+    clearReservation()
     navigate("/")
   }
 
-  const size = useWindowSize()
-  const { user } = useAuth()
-  const { findProductById, product, loading: loadingProduct } = useProducts()
-  const { setReservation, reservation, loading: loadingReservation } = useReservations()
-
   useEffect(() => {
     findProductById(params.id)
-  }, [])
-
-  useEffect(() => {
-    setReservation({ product, user, checkIn: null, checkOut: null })
-  }, [product])
+  }, [params])
 
   return (
     <>
@@ -63,11 +94,11 @@ export const ReservationDetailsView = () => {
         <ResponsiveContainer className={styles.ReservationDetails}>
           <BackButton to={"/products/" + params.id}>Voltar</BackButton>
           {
-            loadingProduct || loadingReservation || !reservation.product ?
+            loadingProduct || loadingReservation || !product.id ?
               <h1>Carregando...</h1>
             :
               <>
-                <h1 className={styles.ReservationTitle}>{reservation.product.title}</h1>
+                <h1 className={styles.ReservationTitle}>{product.title}</h1>
                 <section className={styles.Reservation}>
                   <div className={styles.ReservationBody}>
                     <div className={styles.ReservationBlock}>
@@ -75,12 +106,16 @@ export const ReservationDetailsView = () => {
                       <div className={styles.ReservationCard}>
                         <p>
                           <strong>Nome</strong>
-                          <span>{reservation.user.fullName}</span>
+                          <span>{user.fullName}</span>
                         </p>
                         <p>
                           <strong>E-mail</strong>
-                          <span>{reservation.user.email}</span>
+                          <span>{user.email}</span>
                         </p>
+                        <div>
+                          <label htmlFor="city">Cidade</label>
+                          <input type="text" name="city" id="city" />
+                        </div>
                       </div>
                     </div>
                     <div className={styles.ReservationBlock}>
@@ -94,47 +129,60 @@ export const ReservationDetailsView = () => {
                           onChange={handleSelect}
                           dateDisplayFormat="d/MMM/yyyy"
                           months={2}
-                          minDate={new Date()}
+                          minDate={minDate()}
+                          disabledDates={unavailableDates}
                         />
                       </div>
                     </div>
                     <div className={styles.ReservationBlock}>
                       <h2>Selecione seu horário de chegada</h2>
-                      <div className={styles.ReservationCard}>Horário</div>
+                      <div className={styles.ReservationCard}>
+                        <p className={styles.CheckIn}>
+                          <span className="material-icons">{ product.policies.rules.description[0].icon }</span>
+                          <span>{ product.policies.rules.description[0].description }</span>
+                        </p>
+                        <select name="checkInTime">
+                          {
+                            checkInTimes.map(time => <option key={time} value={time}>{time}</option>)
+                          }
+                        </select>
+                      </div>
                     </div>
                   </div>
                   <div className={styles.ReservationAside}>
-                    <h2>Detalhes da reserva</h2>
-                    <img src={reservation.product.images[0]} />
                     <div>
-                      <p className={styles.CategoryName}>Hotel</p>
-                      <h3>{reservation.product.title}</h3>
-                      {reservation.product.stars && <StarsMeter value={reservation.product.stars} />}
-                    </div>
-                    <p className={styles.Address}>
-                      <span className="material-icons">place</span>
-                      <span>
-                        {reservation.product.address}
-                      </span>
-                    </p>
-                    <div className={styles.ReservationDates}>
-                      <p>
-                        <span>Check in</span>
-                        <span>{ranges.startDate.toLocaleDateString("pt-BR")}</span>
+                      <h2>Detalhes da reserva</h2>
+                      <img src={product.images[0]} />
+                      <div>
+                        <p className={styles.CategoryName}>Hotel</p>
+                        <h3>{product.title}</h3>
+                        {product.stars && <StarsMeter value={product.stars} />}
+                      </div>
+                      <p className={styles.Address}>
+                        <span className="material-icons">place</span>
+                        <span>
+                          {product.address}
+                        </span>
                       </p>
-                      <hr />
-                      <p>
-                        <span>Check out</span>
-                        <span>{ranges.endDate.toLocaleDateString("pt-BR")}</span>
-                      </p>
+                      <div className={styles.ReservationDates}>
+                        <p>
+                          <span>Check in</span>
+                          <span>{ranges.startDate.toLocaleDateString("pt-BR")}</span>
+                        </p>
+                        <hr />
+                        <p>
+                          <span>Check out</span>
+                          <span>{ranges.endDate.toLocaleDateString("pt-BR")}</span>
+                        </p>
+                      </div>
+                      <BaseButton onClick={handleSubmit}>Confirmar Reserva</BaseButton>
                     </div>
-                    <BaseButton onClick={handleSubmit}>Confirmar Reserva</BaseButton>
                   </div>
                 </section>
               </>
           }
         </ResponsiveContainer>
-        { reservation?.product?.policies && <ProductDetailsPolicies policies={reservation.product.policies} className={styles.Policies} title="O que você precisa saber" />}
+        { product?.policies && <ProductDetailsPolicies policies={product.policies} className={styles.Policies} title="O que você precisa saber" />}
       </div>
     </>
   )

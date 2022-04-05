@@ -18,7 +18,6 @@ export const ProductDetailsView = () => {
   const params = useParams()
   const { findProductById, product, loading } = useProducts()
 
-
   useEffect(() => {
     findProductById(params.id)
     // eslint-disable-next-line
@@ -43,7 +42,7 @@ export const ProductDetailsView = () => {
               </div>
               <ProductDetailsUtilities utilities={product.utilities} />
               <ProductDetailsPolicies policies={product.policies} />
-              <ProductDetailsAvailability unavailable={product.unavailable} id={product.id} />
+              <ProductDetailsAvailability product={product} />
               <ProductDetailsMap lon={product.longitude} lat={product.latitude} />
             </>
         }

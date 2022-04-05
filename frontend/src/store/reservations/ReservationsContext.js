@@ -18,10 +18,22 @@ export const ReservationsProvider = ({children}) => {
     }
   }
 
+  const clearReservation = async () => {
+    dispatch({type: "SET_RESERVATION_LOADING", payload: true})
+    try {
+      dispatch({type: "CLEAR_RESERVATION"})
+    } catch(e) {
+      console.error(e)
+    } finally {
+      dispatch({type: "SET_RESERVATION_LOADING", payload: false})
+    }
+  }
+
   const value = {
     reservation: state.reservation,
     loading: state.loading,
     setReservation,
+    clearReservation
   }
 
   return (

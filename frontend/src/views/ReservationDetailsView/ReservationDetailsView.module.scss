@@ -28,12 +28,45 @@
   box-shadow: 0 0.25rem 0.25rem var(--col-shadow-light);
   background: var(--col-body);
 
-  > p {
+  > p,
+  > div {
     display: flex;
     flex-direction: column;
 
-    + p {
+    + p,
+    + div {
       margin-top: 2rem;
+    }
+  }
+
+  > div {
+    label {
+      font-weight: 600;
+    }
+
+    input {
+      max-width: 40ch;
+      padding: 0.5rem 1rem;
+      border-radius: .25rem;
+      border: 1px solid var(--col-shadow-light);
+    }
+  }
+
+  select {
+    padding: 0.25rem 3rem;
+  }
+
+  .CheckIn {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+
+    span:first-of-type {
+      margin-right: 0.75rem;
+    }
+
+    span {
+      display: flex;
     }
   }
 }
@@ -52,40 +85,44 @@
 }
 
 .ReservationAside {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
   margin-top: 2.925rem;
   margin-bottom: 0.5rem;
-  border-radius: 0.25rem;
-  box-shadow: 0 0.25rem 0.25rem var(--col-shadow-light);
-  background: var(--col-body);
   
-  > * {
-    margin: 1rem;
-  }
-
-  > img {
-    margin: 0;
-    max-width: 100%;
-  }
-
-  .CategoryName {
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
-
-  .Address {
+  > div {
+    position: sticky;
+    top: 6rem;
     display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.25rem 0.25rem var(--col-shadow-light);
+    background: var(--col-body);
 
-    span:first-of-type {
-      margin-right: 0.75rem;
+    > * {
+      margin: 1rem;
     }
-
-    span {
+  
+    > img {
+      margin: 0;
+      max-width: 100%;
+    }
+  
+    .CategoryName {
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  
+    .Address {
       display: flex;
+  
+      span:first-of-type {
+        margin-right: 0.75rem;
+      }
+  
+      span {
+        display: flex;
+      }
     }
   }
 }
