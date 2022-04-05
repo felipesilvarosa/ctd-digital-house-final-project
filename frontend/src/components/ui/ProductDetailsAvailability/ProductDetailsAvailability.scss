@@ -11,6 +11,10 @@
   @media (min-width: 1300px) {
     height: 22rem;
   }
+
+  @media (min-width: 1500px) {
+    height: 30vw;
+  }
   
   .rdrCalendarWrapper {
     width: unset !important;
@@ -67,9 +71,6 @@
 
   > p {
     line-height: 1.25;
-  }
-
-  > button {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 }

@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   gap: 4rem;
-  margin: 4rem 0;
+  margin: 2rem 0;
   line-height: 1.25;
 
   h3 {
@@ -20,4 +20,13 @@
     margin-left: 1rem;
     padding-top: 0.125rem;
   }
+}
+
+.Title {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--col-shadow-lightest);
+}
+
+.PoliciesContainer {
+  margin: 4rem 0;
 }

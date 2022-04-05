@@ -1,5 +1,5 @@
 import { TheScaffold } from "src/components";
-import { HomeView, LoginView, SignupView, ProductDetailsView } from "src/views"
+import { HomeView, LoginView, SignupView, ProductDetailsView, ReservationDetailsView, ProtectedView } from "src/views"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import { GlobalProvider } from "src/store";
 
@@ -14,6 +14,7 @@ function App() {
             <Route path="/login" element={<LoginView />} />
             <Route path="/signup" element={<SignupView />} />
             <Route path="/products/:id" element={<ProductDetailsView />} />
+            <Route path="/reserve/:id" element={<ProtectedView><ReservationDetailsView /></ProtectedView>} />
           </Routes>
         </TheScaffold>
       </GlobalProvider>

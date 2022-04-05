@@ -1,19 +1,19 @@
 import { AuthProvider } from "src/store/auth";
 import { CategoriesProvider } from "src/store/categories";
 import { ProductsProvider } from "src/store/products";
-import { ThemesProvider } from "src/store/themes";
 import { DestinationProvider } from "src/store/destinations";
+import { ReservationsProvider } from "src/store/reservations";
 
 export const GlobalProvider = ({ children }) => {
   return (
     <AuthProvider>
       <CategoriesProvider>
         <ProductsProvider>
-          <ThemesProvider>
+          <ReservationsProvider>
             <DestinationProvider>
               {children}
             </DestinationProvider>
-          </ThemesProvider>
+          </ReservationsProvider>
         </ProductsProvider>
       </CategoriesProvider>
     </AuthProvider>
