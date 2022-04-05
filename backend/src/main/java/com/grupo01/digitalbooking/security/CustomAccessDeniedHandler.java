@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.FAILED;
 
@@ -28,8 +29,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                     + " attempted to access the protected URL: "
                     + request.getRequestURI());
         }
+        log.error("Error : {}",accessDeniedException.getMessage());
         response.setStatus(403);
+        Map<String, String> data = Map.of("exception: ", accessDeniedException.getMessage());
         new ObjectMapper().writeValue(response.getOutputStream(),
-                new DefaultResponseDTO(FAILED,"Access Denied"));
+                new DefaultResponseDTO(FAILED, data, "Access Denied"));
     }
 }
