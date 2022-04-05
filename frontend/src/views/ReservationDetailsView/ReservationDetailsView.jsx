@@ -12,7 +12,6 @@ import {
   BaseButton,
   StarsMeter,
   ProductDetailsPolicies,
-  InputGroup
 } from "src/components"
 import { useAuth, useProducts, useReservations, useWindowSize } from "src/hooks"
 import { makeNumberFromDate } from "src/utils";
@@ -70,7 +69,7 @@ export const ReservationDetailsView = () => {
 
   const handleSelect = (range) => {
     setRanges(range.selection)
-    setReservation({ user, product, checkIn: range.selection.startDate, checkIn: range.selection.endDate })
+    setReservation({ user, product, checkIn: range.selection.startDate, checkOut: range.selection.endDate })
   }
 
   const handleSubmit = () => {
@@ -85,6 +84,7 @@ export const ReservationDetailsView = () => {
 
   useEffect(() => {
     findProductById(params.id)
+    // eslint-disable-next-line
   }, [params])
 
   return (
@@ -152,7 +152,7 @@ export const ReservationDetailsView = () => {
                   <div className={styles.ReservationAside}>
                     <div>
                       <h2>Detalhes da reserva</h2>
-                      <img src={product.images[0]} />
+                      <img src={product.images[0]} alt="foto da acomodação" />
                       <div>
                         <p className={styles.CategoryName}>Hotel</p>
                         <h3>{product.title}</h3>

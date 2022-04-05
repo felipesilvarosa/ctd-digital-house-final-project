@@ -23,7 +23,7 @@ export const LoginView = () => {
     if(user) {
       navigate(redirectUrl)
     }
-  }, [user, navigate])
+  }, [user, navigate, query])
 
   // eslint-disable-next-line
   useEffect(() => clearLoginErrors(), [clearLoginErrors])

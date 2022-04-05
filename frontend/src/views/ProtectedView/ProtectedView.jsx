@@ -11,7 +11,7 @@ export const ProtectedView = ({children}) => {
     if (!user || !user.id) {
       navigate(`/login?continue=${location.pathname}`)
     }
-  }, [user])
+  }, [user, navigate, location.pathname])
   
   return (
     user && user.id ? children : null
