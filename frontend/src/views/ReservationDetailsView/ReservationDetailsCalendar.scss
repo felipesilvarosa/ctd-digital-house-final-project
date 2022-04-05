@@ -4,10 +4,6 @@
   display: flex;
   justify-content: center;
 
-  @media (min-width: 720px) {
-    height: 31rem;
-  }
-
   @media (min-width: 1300px) {
     height: 28rem;
   }

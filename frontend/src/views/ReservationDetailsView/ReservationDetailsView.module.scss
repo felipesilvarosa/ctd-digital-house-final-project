@@ -40,8 +40,15 @@
 
 .Reservation {
   display: grid;
-  grid-template-columns: 3fr 1fr;
   gap: 1rem;
+
+  @media (min-width: 931px) {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  @media (min-width: 1300px) {
+    grid-template-columns: 3fr 1fr;
+  }
 }
 
 .ReservationAside {
@@ -64,6 +71,23 @@
     max-width: 100%;
   }
 
+  .CategoryName {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .Address {
+    display: flex;
+
+    span:first-of-type {
+      margin-right: 0.75rem;
+    }
+
+    span {
+      display: flex;
+    }
+  }
 }
 
 .ReservationDates {
@@ -83,4 +107,8 @@
     border: none;
     border-top: 1px solid var(--col-main-low-contrast);
   }
+}
+
+.Policies {
+  padding: 1rem var(--rc-ph);
 }
