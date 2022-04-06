@@ -93,6 +93,12 @@ button {
 
 @media (min-width: 2000px) {
   :root {
+    --rc-ph: 15vw;
+  }
+}
+
+@media (min-width: 3100px) {
+  :root {
     --rc-ph: 25vw;
   }
 }

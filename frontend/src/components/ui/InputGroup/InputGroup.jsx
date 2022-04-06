@@ -4,7 +4,7 @@ import iconHide from "src/assets/icon-passwordhide.png"
 import styles from "./InputGroup.module.scss"
 import { Field } from "formik"
 
-export const InputGroup = ({id, inputType, error, label, style, showPassword, loading, ...otherProps}) => {
+export const InputGroup = ({id, inputType, error, label, style, showPassword, loading, regular, ...otherProps}) => {
   const [ type, setType ] = useState(inputType)
   const [ icon, setIcon ] = useState(iconHide)
   
@@ -17,7 +17,12 @@ export const InputGroup = ({id, inputType, error, label, style, showPassword, lo
     <div data-testid="input-group" className={styles.Wrapper} style={style}>
       <label htmlFor={id} className={styles.Label}>{label}</label>
       <div className={styles.InputWrapper}>
-        <Field type={type} name={id} id={id} className={styles.Input} data-error={!!error} {...otherProps}/>
+        {
+          regular ?
+            <input type={type} name={id} id={id} className={styles.Input} data-error={!!error} {...otherProps}/>
+          :
+            <Field type={type} name={id} id={id} className={styles.Input} data-error={!!error} {...otherProps}/>
+        }
         { showPassword && <button type="button" onClick={handleToggle} className={styles.ShowPassword}>
           <img src={icon} alt="eye icon" />
         </button> }
