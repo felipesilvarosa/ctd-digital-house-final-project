@@ -16,7 +16,7 @@ public class UserDTO{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long roleId;
+    private String role;
     private String firstName;
     private String lastName;
     private String email;
@@ -26,7 +26,7 @@ public class UserDTO{
         this.firstName = entity.getFirstName();
         this.lastName = entity.getLastName();
         this.email = entity.getEmail();
-        this.roleId = entity.getRole().getId();
+        this.role = entity.getRole().getRole();
     }
 
 

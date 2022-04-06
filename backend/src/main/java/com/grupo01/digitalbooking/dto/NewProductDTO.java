@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProductDTO {
+public class NewProductDTO {
     private Long id;
     private String name;
     private String description;
@@ -25,24 +25,24 @@ public class ProductDTO {
     private List<Long> imageIds;
     private List<LocalDate> availableDates;
 
-    public ProductDTO(Product entity){
+    public NewProductDTO(Product entity){
 
         this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.categoryId = entity.getCategory().getId();
-        this.cityId = entity.getCity().getId();
-        this.availableDates = entity.getAvailableDates()
+        this.cityId = entity.getLocation().getId();
+        this.availableDates = entity.getUnavailableDates()
                 .stream()
-                .map(AvailableDate::getValue)
+                .map(UnavailableDate::getValue)
                 .collect(Collectors.toList());
         this.imageIds = entity.getImages()
                 .stream()
                 .map(Image::getId)
                 .collect(Collectors.toList());
-        this.characteristicIds = entity.getCharacteristics()
+        this.characteristicIds = entity.getUtilities()
                 .stream()
-                .map(Characteristic::getId)
+                .map(Utilities::getId)
                 .collect(Collectors.toList());
     }
 

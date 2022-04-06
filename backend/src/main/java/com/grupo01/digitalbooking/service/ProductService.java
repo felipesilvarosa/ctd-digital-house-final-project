@@ -1,7 +1,8 @@
 package com.grupo01.digitalbooking.service;
 
 import com.grupo01.digitalbooking.domain.Product;
-import com.grupo01.digitalbooking.dto.ProductDTO;
+import com.grupo01.digitalbooking.dto.NewProductDTO;
+import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.*;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
@@ -24,21 +25,21 @@ public class ProductService {
     private final ImageRepository imageRepository;
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getProducts(){
+    public List<ProductDetailedDTO> getProducts(){
         List<Product> response = repository.findAll();
         if (response.isEmpty())throw new NotFoundException("No product was found");
-        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
+        return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public ProductDTO getProductById(Long id){
+    public ProductDetailedDTO getProductById(Long id){
         Product entity = repository.findById(id).orElseThrow(
                 ()-> new NotFoundException("No product with provided id was found"));
-        return new ProductDTO(entity);
+        return new ProductDetailedDTO(entity);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> searchProducts(Map<String, Object> searchCriteria) {
+    public List<ProductDetailedDTO> searchProducts(Map<String, Object> searchCriteria) {
 
         if(searchCriteria.get("cityId")==null&&searchCriteria.get("categoryId")==null&&
                 searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
@@ -60,12 +61,12 @@ public class ProductService {
 
         List<Product> response = repository.search(query.toString());
         if (response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
-        return response.stream().map(ProductDTO::new).collect(Collectors.toList());
+        return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
 
     }
 
     @Transactional
-    public ProductDTO createProduct(ProductDTO dto){
+    public ProductDetailedDTO createProduct(NewProductDTO dto){
 
         if (dto.getCategoryId()==null || dto.getImageIds()==null){
             throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
@@ -78,15 +79,15 @@ public class ProductService {
         imageRepository.findAllById(dto.getImageIds()).stream().findAny().orElseThrow(()->
                 new BadRequestException("No image with provided id was found"));
 
-        return new ProductDTO(repository.save(new Product(dto)));
+        return new ProductDetailedDTO(repository.save(new Product(dto)));
     }
 
-    public ProductDTO editProduct(ProductDTO dto) {
+    public ProductDetailedDTO editProduct(NewProductDTO dto) {
         repository.findById(dto.getId())
                 .orElseThrow(()-> new NotFoundException("Product not found"));
         Product response = new Product(dto);
         response = repository.save(response);
-        return new ProductDTO(response);
+        return new ProductDetailedDTO(response);
     }
 
     public void deleteProduct(Long id){

@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.dto.CityDTO;
+import com.grupo01.digitalbooking.dto.LocationDTO;
 import com.grupo01.digitalbooking.service.CityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,15 +23,15 @@ public class CityController {
 
     @ApiOperation("Busca todas as cidades")
     @GetMapping
-    public ResponseEntity<List<CityDTO>> findAllCities() {
-        List<CityDTO> response = cityService.getCity();
+    public ResponseEntity<List<LocationDTO>> findAllCities() {
+        List<LocationDTO> response = cityService.getCity();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation("Cria uma nova cidade")
     @PostMapping
-    public ResponseEntity<CityDTO> createCity(@RequestBody CityDTO cityDTO) {
-        CityDTO response = cityService.createCity(cityDTO);
+    public ResponseEntity<LocationDTO> createCity(@RequestBody LocationDTO locationDTO) {
+        LocationDTO response = cityService.createCity(locationDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

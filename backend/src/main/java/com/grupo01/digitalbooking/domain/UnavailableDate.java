@@ -12,15 +12,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AvailableDate {
+public class UnavailableDate {
 
     @Id
     private LocalDate value;
-    @ManyToMany
-    private List<Product> productList;
-
-    public AvailableDate(LocalDate value){
-        this.value = value;
-    }
 
 }

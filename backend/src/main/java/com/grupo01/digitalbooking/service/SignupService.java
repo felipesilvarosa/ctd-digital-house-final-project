@@ -35,7 +35,7 @@ public class SignupService {
         }
         Util.validatePassword(newUser.getPassword());
         User entity = new User(newUser);
-        entity.setRole(new Role(1L));
+        entity.setRole(new Role(1L,"USER"));
         setDefaultUserInfo(entity);
         entity = userRepository.save(entity);
         log.info("New user created successfully");

@@ -1,9 +1,8 @@
 package com.grupo01.digitalbooking.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
+import com.grupo01.digitalbooking.service.AuthenticationService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,22 +15,19 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 
 public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final String secret;
     private final AuthenticationManager authenticationManager;
+    private final AuthenticationService authenticationService;
 
-    public JwtCredentialsAuthenticationFilter(String secret, AuthenticationManager authenticationManager) {
-        this.secret = secret;
+    public JwtCredentialsAuthenticationFilter(AuthenticationManager authenticationManager,AuthenticationService authenticationService) {
         this.authenticationManager = authenticationManager;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -57,35 +53,10 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
                                             FilterChain chain,
                                             Authentication authResult) throws IOException {
 
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        String access_token = JWT.create()
-                .withSubject(authResult.getName())
-                .withClaim("roles",authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .withIssuer("srot")
-                .withIssuedAt(Date.from(Instant.now()))
-                .withExpiresAt(Date.valueOf(LocalDate.now().plusDays(1)))
-                .sign(algorithm);
-
-        String refresh_token = JWT.create()
-                .withSubject(authResult.getName())
-                .withClaim("authorities",authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .withIssuer("srot")
-                .withIssuedAt(Date.from(Instant.now()))
-                .withExpiresAt(Date.valueOf(LocalDateTime.now().plusWeeks(2).toLocalDate()))
-                .sign(algorithm);
-
-        Cookie accessTokenCookie = new Cookie("access_token",access_token);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
-        accessTokenCookie.setPath("/");
-//        accessTokenCookie.setDomain();//TODO this line should be uncommented and updated with actual domain on production
-        Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
-        refreshTokenCookie.setPath("/");
-//        refreshTokenCookie.setDomain(); //TODO this line should be uncommented and updated with actual domain on production
-        response.addCookie(refreshTokenCookie);
-        response.addCookie(accessTokenCookie);
+        List<Cookie> jwtCookies = authenticationService.createJwtCookies(
+                authResult.getPrincipal().toString(),
+                authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        jwtCookies.forEach(response::addCookie);
         new ObjectMapper().writeValue(response.getOutputStream(),
                 new DefaultResponseDTO(SUCCESS,"User authenticated successfully"));
 

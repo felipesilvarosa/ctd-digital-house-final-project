@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.ProductDTO;
+import com.grupo01.digitalbooking.dto.NewProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +23,13 @@ public class Product {
     private Long id;
     private String name;
     private String description;
+    private Integer stars;
+    private Integer rating;
+    private Double latitude;
+    private Double longitude;
 
     @ManyToMany
-    private List<AvailableDate> availableDates;
+    private List<UnavailableDate> unavailableDates;
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;
@@ -36,24 +40,27 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    private City city;
+    private Location location;
 
     @ManyToMany
-    private List<Characteristic> characteristics;
+    private List<Utilities> utilities;
 
-    public Product(ProductDTO dto) {
+    @OneToMany
+    private List<Policy> policies;
+
+    public Product(NewProductDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.category = new Category(dto.getCategoryId());
-        this.city = new City(dto.getCityId());
+        this.location = new Location(dto.getCityId());
         this.description = dto.getDescription();
-        this.availableDates = dto.getAvailableDates() == null ? null : dto.getAvailableDates()
+        this.unavailableDates = dto.getAvailableDates() == null ? null : dto.getAvailableDates()
                 .stream()
-                .map(AvailableDate::new)
+                .map(UnavailableDate::new)
                 .collect(Collectors.toList());
-        this.characteristics = dto.getCharacteristicIds()
+        this.utilities = dto.getCharacteristicIds()
                 .stream()
-                .map(Characteristic::new)
+                .map(Utilities::new)
                 .collect(Collectors.toList());
     }
 }

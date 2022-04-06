@@ -22,8 +22,11 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -81,5 +84,32 @@ public class AuthenticationService implements UserDetailsService {
         String currentUserName = authentication.getName();
         return userRepository.findByEmail(currentUserName).orElseThrow(() ->
                 new NotFoundException("User " + currentUserName + " not found"));
+    }
+
+    public List<Cookie> createJwtCookies(String subject, List<String> authorities){
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        String access_token = JWT.create()
+                .withSubject(subject)
+                .withClaim("authorities",authorities)
+                .withIssuer("digitalbooking")
+                .withIssuedAt(java.sql.Date.from(Instant.now()))
+                .withExpiresAt(java.sql.Date.valueOf(LocalDateTime.now().plusMinutes(30).toLocalDate()))
+                .sign(algorithm);
+
+        String refresh_token = JWT.create()
+                .withSubject(subject)
+                .withClaim("authorities",authorities)
+                .withIssuer("digitalbooking")
+                .withIssuedAt(java.sql.Date.from(Instant.now()))
+                .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusWeeks(1)))
+                .sign(algorithm);
+
+        Cookie accessTokenCookie = new Cookie("access_token",access_token);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true);
+        Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        return List.of(accessTokenCookie,refreshTokenCookie);
     }
 }
