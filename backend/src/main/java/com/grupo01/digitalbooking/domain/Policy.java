@@ -15,8 +15,12 @@ public class Policy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer type;
     private String title;
-    @OneToMany
-    private List<PolicyDescription> description;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    @OneToMany(mappedBy = "policy")
+    private List<PolicyDescription> policyDescriptions;
 
 }

@@ -4,10 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
-@Table(name = "tb_available_date")
+@Table(name = "tb_unavailable_dates")
 @Getter
 @Setter
 @NoArgsConstructor

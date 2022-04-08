@@ -55,7 +55,11 @@ public class ProductDetailedDTO {
                 .stream()
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
-        this.policies = Map.of();
+        this.policies = entity.getPolicies().isEmpty()?null:Map.of(
+                "rules",new PolicyDTO(entity.getPolicies().get(0)),
+                "safety",new PolicyDTO(entity.getPolicies().get(1)),
+                "canceling",new PolicyDTO(entity.getPolicies().get(2))
+        );
         this.utilities = entity.getUtilities()
                 .stream()
                 .map(Utilities::getName)

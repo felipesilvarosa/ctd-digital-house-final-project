@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -16,11 +17,14 @@ import java.util.List;
 public class PolicyDTO {
 
     private String title;
-    private List<PolicyDescription> description;
+    private List<PolicyDescriptionDTO> descriptions;
 
-    private PolicyDTO(Policy entity){
+    public PolicyDTO(Policy entity){
         this.title = entity.getTitle();
-        this.description = entity.getDescription();
+        this.descriptions = entity.getPolicyDescriptions()
+                .stream()
+                .map(PolicyDescriptionDTO::new)
+                .collect(Collectors.toList());
     }
 
 }

@@ -16,5 +16,8 @@ public class PolicyDescription {
     private Long id;
     private String icon;
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "policy_id")
+    private Policy policy;
 
 }

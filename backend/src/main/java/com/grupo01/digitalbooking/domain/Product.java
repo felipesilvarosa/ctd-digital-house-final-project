@@ -45,7 +45,7 @@ public class Product {
     @ManyToMany
     private List<Utilities> utilities;
 
-    @OneToMany
+    @OneToMany(mappedBy = "product")
     private List<Policy> policies;
 
     public Product(NewProductDTO dto) {
