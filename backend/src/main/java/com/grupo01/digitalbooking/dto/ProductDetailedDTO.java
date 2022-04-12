@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -65,12 +64,12 @@ public class ProductDetailedDTO {
     }
 
     private String getLocationFromEntity(Product entity) {
-        if(entity.getLocation()==null) return null;
+        if(entity.getDestination()==null) return null;
         String location = "%s, %s";
-        if(entity.getLocation().getName()!=null)
-            location = String.format(location,entity.getLocation().getName(),entity.getLocation().getCity());
+        if(entity.getDestination().getName()!=null)
+            location = String.format(location,entity.getDestination().getName(),entity.getDestination().getCity());
         else
-            location = String.format(location,entity.getLocation().getCity(),entity.getLocation().getCountry());
+            location = String.format(location,entity.getDestination().getCity(),entity.getDestination().getCountry());
         return location;
     }
 

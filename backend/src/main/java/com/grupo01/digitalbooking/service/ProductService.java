@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,7 +20,7 @@ public class ProductService {
 
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
-    private final CityRepository locationRepository;
+    private final DestinationRepository locationRepository;
     private final CharacteristicRepository characteristicRepository;
     private final ImageRepository imageRepository;
 

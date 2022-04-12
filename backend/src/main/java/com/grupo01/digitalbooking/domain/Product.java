@@ -1,7 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
 import com.grupo01.digitalbooking.dto.NewProductDTO;
-import com.grupo01.digitalbooking.dto.ReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,8 +39,8 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @JoinColumn(name = "destination_id")
+    private Destination destination;
 
     @ManyToMany
     private List<Utilities> utilities;
@@ -56,7 +55,7 @@ public class Product {
         this.id = dto.getId();
         this.name = dto.getName();
         this.category = new Category(dto.getCategoryId());
-        this.location = new Location(dto.getCityId());
+        this.destination = new Destination(dto.getCityId());
         this.description = dto.getDescription();
         this.reservations = dto.getReservationsIds()
                 .stream()
