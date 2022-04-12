@@ -15,7 +15,7 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "tb_user")
+@Table(name = "tb_users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
@@ -94,4 +94,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

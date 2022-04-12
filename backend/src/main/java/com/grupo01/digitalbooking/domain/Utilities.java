@@ -8,25 +8,20 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_roles")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+@NoArgsConstructor
+@Table(name = "tb_utilities")
+public class Utilities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String role;
+    private String name;
 
-    public Role(Long id) {
-        this.id=id;
-    }
-
-    @Override
-    public String toString() {
-        return role;
+    public Utilities(Long id) {
+        this.id = id;
     }
 
 }

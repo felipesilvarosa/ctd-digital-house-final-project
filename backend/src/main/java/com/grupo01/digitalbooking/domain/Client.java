@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_client")
+@Table(name = "tb_clients")
 @Getter
 @Setter
 @AllArgsConstructor

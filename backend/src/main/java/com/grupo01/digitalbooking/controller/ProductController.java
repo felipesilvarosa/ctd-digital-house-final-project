@@ -1,6 +1,7 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.dto.ProductDTO;
+import com.grupo01.digitalbooking.dto.NewProductDTO;
+import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,37 +26,37 @@ public class ProductController {
 
     @ApiOperation("Busca por todos os podutos")
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getProducts(){
-        List<ProductDTO> response = service.getProducts();
+    public ResponseEntity<List<ProductDetailedDTO>> getProducts(){
+        List<ProductDetailedDTO> response = service.getProducts();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation("Busca um produto po ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductsById(@PathVariable Long id){
-        ProductDTO response = service.getProductById(id);
+    public ResponseEntity<ProductDetailedDTO> getProductsById(@PathVariable Long id){
+        ProductDetailedDTO response = service.getProductById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation("Faz uma busca por produto de acordo com os parametros")
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam(required = false) Long cityId,
-                                                             @RequestParam(required = false) Long categoryId,
-                                                             @RequestParam(required = false) String startDate,
-                                                             @RequestParam(required = false) String endDate){
+    public ResponseEntity<List<ProductDetailedDTO>> searchProducts(@RequestParam(required = false) Long locationId,
+                                                              @RequestParam(required = false) Long categoryId,
+                                                              @RequestParam(required = false) String startDate,
+                                                              @RequestParam(required = false) String endDate){
         Map<String, Object> params = new HashMap<>();
-        params.put("cityId",cityId);
+        params.put("locationId",locationId);
         params.put("categoryId",categoryId);
         params.put("startDate",startDate);
         params.put("endDate",endDate);
-        List<ProductDTO> response = service.searchProducts(params);
+        List<ProductDetailedDTO> response = service.searchProducts(params);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation("Cria um novo produto")
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto){
-        ProductDTO response = service.createProduct(dto);
+    public ResponseEntity<ProductDetailedDTO> createProduct(@RequestBody NewProductDTO dto){
+        ProductDetailedDTO response = service.createProduct(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

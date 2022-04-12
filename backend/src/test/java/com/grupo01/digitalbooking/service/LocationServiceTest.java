@@ -1,7 +1,7 @@
 package com.grupo01.digitalbooking.service;
 
-import com.grupo01.digitalbooking.domain.City;
-import com.grupo01.digitalbooking.dto.CityDTO;
+import com.grupo01.digitalbooking.domain.Location;
+import com.grupo01.digitalbooking.dto.LocationDTO;
 import com.grupo01.digitalbooking.repository.CityRepository;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CityServiceTest {
+class LocationServiceTest {
 
     @InjectMocks
     private CityService cityService;
@@ -30,23 +30,23 @@ class CityServiceTest {
 
     @Test
     void createShouldCreateNewCity(){
-        CityDTO cityDTO = mockCityDTO();
-        cityService.createCity(cityDTO);
+        LocationDTO locationDTO = mockCityDTO();
+        cityService.createCity(locationDTO);
         verify(cityRepository, Mockito.times(1)).save(any());
 
     }
 
     @Test
     void createShouldFailWhenCityAlreadyExists(){
-        CityDTO cityDTO = mockCityDTO();
-        City city = new City(cityDTO);
+        LocationDTO locationDTO = mockCityDTO();
+        Location location = new Location(locationDTO);
 
-        when(cityRepository.findByName(cityDTO.getName().toLowerCase())).thenReturn(city);
+        when(cityRepository.findByName(locationDTO.getName().toLowerCase())).thenReturn(location);
 
         ConflictException e = assertThrows(ConflictException.class,
-                ()-> cityService.createCity(cityDTO));
+                ()-> cityService.createCity(locationDTO));
 
-        assertTrue(e.getMessage().contains("Cidade " + cityDTO.getName() + " já cadastrada"));
+        assertTrue(e.getMessage().contains("Cidade " + locationDTO.getName() + " já cadastrada"));
 
     }
 
@@ -54,13 +54,13 @@ class CityServiceTest {
 
     void getCityShouldReturnListOfCityDTO(){
         when(cityRepository.findAll()).thenReturn(List.of());
-        List<CityDTO> testOutput = cityService.getCity();
+        List<LocationDTO> testOutput = cityService.getCity();
         assertNotNull(testOutput);
     }
 
 
-    public CityDTO mockCityDTO(){
-        return CityDTO.builder()
+    public LocationDTO mockCityDTO(){
+        return LocationDTO.builder()
                 .country("Brasil")
                 .name("São Paulo")
                 .build();

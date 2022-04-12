@@ -1,10 +1,11 @@
 package com.grupo01.digitalbooking.service;
 
 import com.grupo01.digitalbooking.domain.Category;
-import com.grupo01.digitalbooking.domain.City;
 import com.grupo01.digitalbooking.domain.Image;
+import com.grupo01.digitalbooking.domain.Location;
 import com.grupo01.digitalbooking.domain.Product;
-import com.grupo01.digitalbooking.dto.ProductDTO;
+import com.grupo01.digitalbooking.dto.NewProductDTO;
+import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
 import com.grupo01.digitalbooking.repository.CityRepository;
 import com.grupo01.digitalbooking.repository.ImageRepository;
@@ -18,7 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,7 +45,7 @@ class ProductServiceTest {
     private Long existingId;
     private Long nonExistingId;
     private Product responseProduct;
-    private ProductDTO testInput;
+    private NewProductDTO testInput;
     private List<Long> existingImageIds;
     private List<Long> nonExistingImageIds;
 
@@ -49,29 +53,29 @@ class ProductServiceTest {
     void init(){
         this.existingId = 5L;
         this.nonExistingId = 0L;
-        this.testInput = new ProductDTO();
+        this.testInput = new NewProductDTO();
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
         this.testInput.setCharacteristicIds(List.of());
         this.testInput.setImageIds(existingImageIds);
-        this.testInput.setAvailableDates(List.of());
+        this.testInput.setReservationsIds(List.of());
         this.existingImageIds = List.of(existingId);
         this.responseProduct = new Product();
         this.responseProduct.setId(existingId);
         this.responseProduct.setImages(List.of(new Image(existingId)));
-        this.responseProduct.setCity(new City(existingId));
+        this.responseProduct.setLocation(new Location(existingId));
         this.responseProduct.setCategory(new Category((existingId)));
-        this.responseProduct.setAvailableDates(List.of());
-        this.responseProduct.setCharacteristics(List.of());
+        this.responseProduct.setReservations(List.of());
+        this.responseProduct.setUtilities(List.of());
         this.nonExistingImageIds = List.of();
         List<Product> findAllResponse = List.of(responseProduct);
         Product saveResponse = new Product();
         saveResponse.setId(existingId);
         saveResponse.setCategory(new Category(existingId));
-        saveResponse.setCity(new City(existingId));
+        saveResponse.setLocation(new Location(existingId));
         saveResponse.setImages(List.of(new Image(existingId)));
-        saveResponse.setAvailableDates(List.of());
-        saveResponse.setCharacteristics(List.of());
+        saveResponse.setReservations(List.of());
+        saveResponse.setUtilities(List.of());
         when(repository.findAll()).thenReturn(findAllResponse);
         when(repository.save(any(Product.class))).thenReturn(saveResponse);
         when(repository.findById(existingId)).thenReturn(Optional.of(responseProduct));
@@ -79,7 +83,7 @@ class ProductServiceTest {
         when(repository.search(any(String.class))).thenReturn(List.of());
         when(categoryRepository.findById(existingId)).thenReturn(Optional.of(new Category()));
         when(categoryRepository.findById(nonExistingId)).thenReturn(Optional.empty());
-        when(cityRepository.findById(existingId)).thenReturn(Optional.of(new City()));
+        when(cityRepository.findById(existingId)).thenReturn(Optional.of(new Location()));
         when(cityRepository.findById(nonExistingId)).thenReturn(Optional.empty());
         when(imageRepository.findAllById(existingImageIds)).thenReturn(List.of(new Image()));
         when(imageRepository.findAllById(nonExistingImageIds)).thenReturn(List.of());
@@ -88,7 +92,7 @@ class ProductServiceTest {
 
     @Test
     void getProductsShouldReturnDTOList(){
-        List<ProductDTO> testOutput = service.getProducts();
+        List<ProductDetailedDTO> testOutput = service.getProducts();
         assertNotNull(testOutput);
     }
     @Test
@@ -98,7 +102,7 @@ class ProductServiceTest {
     }
     @Test
     void getProductByIdShouldReturnDTOList(){
-        ProductDTO testOutput = service.getProductById(existingId);
+        ProductDetailedDTO testOutput = service.getProductById(existingId);
         assertNotNull(testOutput);
     }
     @Test
@@ -128,7 +132,7 @@ class ProductServiceTest {
         testInput.setImageIds(existingImageIds);
         testInput.setCategoryId(existingId);
         testInput.setCityId(existingId);
-        ProductDTO testOutput = service.createProduct(testInput);
+        ProductDetailedDTO testOutput = service.createProduct(testInput);
         assertEquals(5L,testOutput.getId());
     }
     @Test
@@ -144,7 +148,7 @@ class ProductServiceTest {
     }
     @Test
     void editProductShouldReturnDTOWhenIdExists(){
-        ProductDTO testOutput = service.editProduct(testInput);
+        ProductDetailedDTO testOutput = service.editProduct(testInput);
         assertEquals(5L,testOutput.getId());
     }
 
@@ -162,8 +166,8 @@ class ProductServiceTest {
         Map<String,Object> searchCriteria = new HashMap<>();
         searchCriteria.put("cityId",existingId);
         searchCriteria.put("categoryId",existingId);
-        searchCriteria.put("startDate","");
-        searchCriteria.put("endDate","");
+        searchCriteria.put("startDate",null);
+        searchCriteria.put("endDate",null);
         assertThrows(NotFoundException.class,()->service.searchProducts(searchCriteria));
     }
     @Test
@@ -172,9 +176,9 @@ class ProductServiceTest {
         Map<String,Object> searchCriteria = new HashMap<>();
         searchCriteria.put("cityId",existingId);
         searchCriteria.put("categoryId",existingId);
-        searchCriteria.put("startDate","");
-        searchCriteria.put("endDate","");
-        List<ProductDTO> testOutput = service.searchProducts(searchCriteria);
+        searchCriteria.put("startDate",null);
+        searchCriteria.put("endDate",null);
+        List<ProductDetailedDTO> testOutput = service.searchProducts(searchCriteria);
         assertNotNull(testOutput);
 
     }

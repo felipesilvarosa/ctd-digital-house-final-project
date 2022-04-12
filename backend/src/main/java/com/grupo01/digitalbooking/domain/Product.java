@@ -1,13 +1,17 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.ProductDTO;
+import com.grupo01.digitalbooking.dto.NewProductDTO;
+import com.grupo01.digitalbooking.dto.ReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Entity
@@ -23,9 +27,10 @@ public class Product {
     private Long id;
     private String name;
     private String description;
-
-    @ManyToMany
-    private List<AvailableDate> availableDates;
+    private Integer stars;
+    private Integer rating;
+    private Double latitude;
+    private Double longitude;
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;
@@ -35,25 +40,44 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
-    private City city;
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @ManyToMany
-    private List<Characteristic> characteristics;
+    private List<Utilities> utilities;
 
-    public Product(ProductDTO dto) {
+    @OneToMany(mappedBy = "product")
+    private List<Policy> policies;
+
+    @OneToMany(mappedBy = "product")
+    private List<Reservation> reservations;
+
+    public Product(NewProductDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.category = new Category(dto.getCategoryId());
-        this.city = new City(dto.getCityId());
+        this.location = new Location(dto.getCityId());
         this.description = dto.getDescription();
-        this.availableDates = dto.getAvailableDates() == null ? null : dto.getAvailableDates()
+        this.reservations = dto.getReservationsIds()
                 .stream()
-                .map(AvailableDate::new)
+                .map(Reservation::new)
                 .collect(Collectors.toList());
-        this.characteristics = dto.getCharacteristicIds()
+        this.utilities = dto.getCharacteristicIds()
                 .stream()
-                .map(Characteristic::new)
+                .map(Utilities::new)
                 .collect(Collectors.toList());
+    }
+
+    public Set<LocalDate> getUnavailableDates() {
+        Set<LocalDate> unavailableDates = new TreeSet<>();
+        getReservations().forEach(reservation -> {
+            LocalDate endDate = reservation.getCheckoutDateTime().toLocalDate();
+            LocalDate unavailableDate = reservation.getCheckinDateTime().toLocalDate();
+            while (!unavailableDate.isEqual(endDate.plusDays(1))) {
+                unavailableDates.add(unavailableDate);
+                unavailableDate = unavailableDate.plusDays(1);
+            }
+        });
+        return unavailableDates;
     }
 }

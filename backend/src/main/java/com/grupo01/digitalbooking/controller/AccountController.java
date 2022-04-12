@@ -2,6 +2,7 @@ package com.grupo01.digitalbooking.controller;
 
 import com.grupo01.digitalbooking.dto.NewUserDTO;
 import com.grupo01.digitalbooking.dto.UserDTO;
+import com.grupo01.digitalbooking.service.AuthenticationService;
 import com.grupo01.digitalbooking.service.SignupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
@@ -22,11 +27,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final SignupService service;
+    private final AuthenticationService authenticationService;
+
 
     @ApiOperation("Criação de nova conta de usuario")
     @PostMapping
-    public ResponseEntity<UserDTO> createNewUser(@RequestBody NewUserDTO newUser){
+    public ResponseEntity<UserDTO> createNewUser(@RequestBody NewUserDTO newUser,
+                                                 HttpServletResponse response){
         UserDTO result = service.createNewUser(newUser);
+        List<Cookie> cookies = authenticationService.createJwtCookies(result.getEmail(),List.of(result.getRole()));
+        cookies.forEach(response::addCookie);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 

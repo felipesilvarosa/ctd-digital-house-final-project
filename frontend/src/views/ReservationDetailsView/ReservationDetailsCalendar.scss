@@ -1,0 +1,34 @@
+.ReservationDetailsCalendar {
+  position: relative;
+  height: 42rem;
+  display: flex;
+  justify-content: center;
+
+  @media (min-width: 1300px) {
+    height: 28rem;
+  }
+
+  @media (min-width: 1750px) {
+    height: calc(28rem + 6vw);
+  }
+  
+  .rdrCalendarWrapper {
+    width: unset !important;
+    box-shadow: none !important;
+    font-size: clamp(0.75rem, 0.9vw, 1.25rem);
+    
+    transform-origin: left top;
+  }
+  
+  .rdrDateDisplay,
+  .rdrDateDisplay,
+  .rdrDateInput {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important
+  }
+
+  .rdrMonthsHorizontal {
+    align-items: flex-start;
+  }
+}

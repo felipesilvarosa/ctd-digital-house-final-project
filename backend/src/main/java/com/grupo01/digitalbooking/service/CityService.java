@@ -1,8 +1,8 @@
 package com.grupo01.digitalbooking.service;
 
 
-import com.grupo01.digitalbooking.domain.City;
-import com.grupo01.digitalbooking.dto.CityDTO;
+import com.grupo01.digitalbooking.domain.Location;
+import com.grupo01.digitalbooking.dto.LocationDTO;
 import com.grupo01.digitalbooking.repository.CityRepository;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +18,21 @@ public class CityService {
 
     private final CityRepository cityRepository;
 
-    public List<CityDTO> getCity() {
-        List<City> cities = cityRepository.findAll();
-        return cities.stream().map(CityDTO::new).collect(Collectors.toList());
+    public List<LocationDTO> getCity() {
+        List<Location> cities = cityRepository.findAll();
+        return cities.stream().map(LocationDTO::new).collect(Collectors.toList());
     }
 
-    public CityDTO createCity(CityDTO cityDTO) {
-        City city = new City(cityDTO);
+    public LocationDTO createCity(LocationDTO locationDTO) {
+        Location location = new Location(locationDTO);
 
-        City cityFound = cityRepository.findByName(cityDTO.getName().toLowerCase());
+        Location locationFound = cityRepository.findByName(locationDTO.getName().toLowerCase());
 
-        if(Objects.nonNull(cityFound)){
-            throw new ConflictException("Cidade " + cityDTO.getName() + " já cadastrada");
+        if(Objects.nonNull(locationFound)){
+            throw new ConflictException("Cidade " + locationDTO.getName() + " já cadastrada");
         }
 
-        cityRepository.save(city);
-        return new CityDTO(city);
+        cityRepository.save(location);
+        return new LocationDTO(location);
     }
 }

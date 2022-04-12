@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tb_reservation")
+@Table(name = "tb_reservations")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,10 +20,12 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     private Client client;
-    @OneToOne
+    @ManyToOne
     private Product product;
+    private LocalDateTime checkinDateTime;
+    private LocalDateTime checkoutDateTime;
 
     public Reservation(ReservationDTO dto){
         this.id = dto.getId();
@@ -30,4 +33,7 @@ public class Reservation {
         this.product = dto.getProduct();
     }
 
+    public Reservation(Long id) {
+        this.id = id;
+    }
 }

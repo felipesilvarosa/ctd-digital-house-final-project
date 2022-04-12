@@ -32,11 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .cors()
-                .and()
+                .and().cors().and()
                 .addFilterBefore(new JwtAuthorizationFilter(secret), UsernamePasswordAuthenticationFilter.class)
-                .addFilter(new JwtCredentialsAuthenticationFilter(secret,authenticationManager()))
+                .addFilter(new JwtCredentialsAuthenticationFilter(authenticationManager(),authService))
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .anyRequest()

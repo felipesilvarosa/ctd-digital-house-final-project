@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import { Form, Formik } from "formik"
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
 import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "src/components";
 import { useAuth } from "src/hooks"
 import style from "./LoginView.module.scss"
 
 export const LoginView = () => {
+  const [query] = useSearchParams()
   const navigate = useNavigate()
   const {loading, user, loginErrors, userLogin, clearLoginErrors} = useAuth()
 
@@ -17,10 +19,11 @@ export const LoginView = () => {
   }
 
   useEffect(() => {
+    const redirectUrl = query.get("continue") ?? "/"
     if(user) {
-      navigate("/")
+      navigate(redirectUrl)
     }
-  }, [user, navigate])
+  }, [user, navigate, query])
 
   // eslint-disable-next-line
   useEffect(() => clearLoginErrors(), [clearLoginErrors])
