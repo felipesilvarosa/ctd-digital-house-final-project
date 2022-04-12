@@ -1,7 +1,7 @@
 package com.grupo01.digitalbooking.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.grupo01.digitalbooking.dto.LocationDTO;
+import com.grupo01.digitalbooking.dto.DestinationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +15,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_locations")
-public class Location {
+@Table(name = "tb_destinations")
+public class Destination {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +26,16 @@ public class Location {
     private String country;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "location",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "destination",fetch = FetchType.LAZY)
     private List<Product> products;
 
-    public Location(LocationDTO dto){
+    public Destination(DestinationDTO dto){
         this.id = dto.getId();
         this.name = dto.getName();
         this.country = dto.getCountry();
     }
 
-    public Location(Long id) {
+    public Destination(Long id) {
         this.id = id;
     }
 }

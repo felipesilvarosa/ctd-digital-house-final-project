@@ -1,7 +1,7 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.dto.LocationDTO;
-import com.grupo01.digitalbooking.service.CityService;
+import com.grupo01.digitalbooking.dto.DestinationDTO;
+import com.grupo01.digitalbooking.service.DestinationsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("cities")
+@RequestMapping("destinations")
 @RequiredArgsConstructor
 @Api(value ="", tags = {"Cidades"})
 @Tag(name ="Cidades", description="End point para controle de cidades")
-public class CityController {
+public class DestinationController {
 
-    private final CityService cityService;
+    private final DestinationsService destinationsService;
 
     @ApiOperation("Busca todas as cidades")
     @GetMapping
-    public ResponseEntity<List<LocationDTO>> findAllCities() {
-        List<LocationDTO> response = cityService.getCity();
+    public ResponseEntity<List<DestinationDTO>> findAllDestinations() {
+        List<DestinationDTO> response = destinationsService.getDestinations();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation("Cria uma nova cidade")
     @PostMapping
-    public ResponseEntity<LocationDTO> createCity(@RequestBody LocationDTO locationDTO) {
-        LocationDTO response = cityService.createCity(locationDTO);
+    public ResponseEntity<DestinationDTO> createDestination(@RequestBody DestinationDTO destinationDTO) {
+        DestinationDTO response = destinationsService.createDestination(destinationDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

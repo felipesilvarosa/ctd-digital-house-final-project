@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class NewProductDTO {
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.categoryId = entity.getCategory().getId();
-        this.cityId = entity.getLocation().getId();
+        this.cityId = entity.getDestination().getId();
         this.imageIds = entity.getImages()
                 .stream()
                 .map(Image::getId)
