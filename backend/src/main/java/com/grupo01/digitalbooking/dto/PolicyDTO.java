@@ -1,7 +1,6 @@
 package com.grupo01.digitalbooking.dto;
 
 import com.grupo01.digitalbooking.domain.Policy;
-import com.grupo01.digitalbooking.domain.PolicyDescription;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

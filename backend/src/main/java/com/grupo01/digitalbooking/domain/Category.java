@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_category")
+@Table(name = "tb_categories")
 public class Category {
 
     @Id

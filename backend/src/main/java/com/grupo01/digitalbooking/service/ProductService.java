@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +21,7 @@ public class ProductService {
 
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
-    private final CityRepository cityRepository;
+    private final CityRepository locationRepository;
     private final CharacteristicRepository characteristicRepository;
     private final ImageRepository imageRepository;
 
@@ -41,25 +42,42 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> searchProducts(Map<String, Object> searchCriteria) {
 
-        if(searchCriteria.get("cityId")==null&&searchCriteria.get("categoryId")==null&&
+        if(searchCriteria.get("locationId")==null&&searchCriteria.get("categoryId")==null&&
                 searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
             throw new BadRequestException("No acceptable search criteria");
         }
+        if(searchCriteria.get("startDate")!=null&&searchCriteria.get("endDate")==null)
+            throw new BadRequestException("Start date without end date");
+        if(searchCriteria.get("endDate")!=null&&searchCriteria.get("startDate")==null)
+            throw new BadRequestException("End date without start date");
 
-        StringBuilder query = new StringBuilder("SELECT p from Product p WHERE ");
+        String query = "SELECT p from Product p WHERE ";
 
-        if(searchCriteria.get("cityId")!=null)
-            query.append("p.city.id = ").append(searchCriteria.get("cityId")).append(" AND ");
+        if(searchCriteria.get("locationId")!=null)
+            query+= "p.location.id = " + searchCriteria.get("locationId") + " AND ";
         if(searchCriteria.get("categoryId")!=null)
-            query.append("p.category.id = ").append(searchCriteria.get("categoryId")).append(" AND ");
-        if(searchCriteria.get("startDate")!=null)
-            query.append("p.availableDate >= ").append(searchCriteria.get("startDate")).append(" AND ");
-        if(searchCriteria.get("endDate")!=null)
-            query.append("p.availableDate <= ").append(searchCriteria.get("endDate")).append(" AND ");
+            query+= "p.category.id = " + searchCriteria.get("categoryId") + " AND ";
+        if(query.endsWith(" AND "))
+            query = query.substring(0,query.length()-4);
+        if(query.endsWith(" WHERE "))
+            query = query.substring(0,query.length()-6);
 
-        query.replace(query.length()-4, query.length(),"");
+        List<Product> response = repository.search(query);
 
-        List<Product> response = repository.search(query.toString());
+        if(searchCriteria.get("endDate")!=null&&searchCriteria.get("startDate")!=null){
+            Set<LocalDate> searchDates = new HashSet<>();
+            LocalDate searchDate = LocalDate.parse(searchCriteria.get("startDate").toString());
+            LocalDate endDate = LocalDate.parse(searchCriteria.get("endDate").toString());
+            while (!searchDate.isEqual(endDate.plusDays(1))){
+                searchDates.add(searchDate);
+                searchDate = searchDate.plusDays(1);
+            }
+
+            response = response
+                    .stream()
+                    .filter(p->!p.getUnavailableDates().containsAll(searchDates))
+                    .collect(Collectors.toList());
+        }
         if (response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
         return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
 
@@ -74,8 +92,8 @@ public class ProductService {
 
         categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
                 new BadRequestException("No category with provided id was found"));
-        cityRepository.findById(dto.getCityId()).orElseThrow(()->
-                new BadRequestException("No city with provided id was found"));
+        locationRepository.findById(dto.getCityId()).orElseThrow(()->
+                new BadRequestException("No location with provided id was found"));
         imageRepository.findAllById(dto.getImageIds()).stream().findAny().orElseThrow(()->
                 new BadRequestException("No image with provided id was found"));
 

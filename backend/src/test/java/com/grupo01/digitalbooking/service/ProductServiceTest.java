@@ -58,14 +58,14 @@ class ProductServiceTest {
         this.testInput.setCategoryId(existingId);
         this.testInput.setCharacteristicIds(List.of());
         this.testInput.setImageIds(existingImageIds);
-        this.testInput.setAvailableDates(List.of());
+        this.testInput.setReservationsIds(List.of());
         this.existingImageIds = List.of(existingId);
         this.responseProduct = new Product();
         this.responseProduct.setId(existingId);
         this.responseProduct.setImages(List.of(new Image(existingId)));
         this.responseProduct.setLocation(new Location(existingId));
         this.responseProduct.setCategory(new Category((existingId)));
-        this.responseProduct.setUnavailableDates(List.of());
+        this.responseProduct.setReservations(List.of());
         this.responseProduct.setUtilities(List.of());
         this.nonExistingImageIds = List.of();
         List<Product> findAllResponse = List.of(responseProduct);
@@ -74,7 +74,7 @@ class ProductServiceTest {
         saveResponse.setCategory(new Category(existingId));
         saveResponse.setLocation(new Location(existingId));
         saveResponse.setImages(List.of(new Image(existingId)));
-        saveResponse.setUnavailableDates(List.of());
+        saveResponse.setReservations(List.of());
         saveResponse.setUtilities(List.of());
         when(repository.findAll()).thenReturn(findAllResponse);
         when(repository.save(any(Product.class))).thenReturn(saveResponse);
@@ -166,8 +166,8 @@ class ProductServiceTest {
         Map<String,Object> searchCriteria = new HashMap<>();
         searchCriteria.put("cityId",existingId);
         searchCriteria.put("categoryId",existingId);
-        searchCriteria.put("startDate","");
-        searchCriteria.put("endDate","");
+        searchCriteria.put("startDate",null);
+        searchCriteria.put("endDate",null);
         assertThrows(NotFoundException.class,()->service.searchProducts(searchCriteria));
     }
     @Test
@@ -176,8 +176,8 @@ class ProductServiceTest {
         Map<String,Object> searchCriteria = new HashMap<>();
         searchCriteria.put("cityId",existingId);
         searchCriteria.put("categoryId",existingId);
-        searchCriteria.put("startDate","");
-        searchCriteria.put("endDate","");
+        searchCriteria.put("startDate",null);
+        searchCriteria.put("endDate",null);
         List<ProductDetailedDTO> testOutput = service.searchProducts(searchCriteria);
         assertNotNull(testOutput);
 

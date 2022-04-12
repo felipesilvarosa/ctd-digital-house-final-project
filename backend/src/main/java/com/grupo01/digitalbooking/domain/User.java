@@ -15,7 +15,7 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "tb_user")
+@Table(name = "tb_users")
 @Getter
 @Setter
 @NoArgsConstructor

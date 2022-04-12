@@ -23,7 +23,7 @@ public class NewProductDTO {
     private Long userRatings;
     private List<Long> characteristicIds;
     private List<Long> imageIds;
-    private List<LocalDate> availableDates;
+    private List<Long> reservationsIds;
 
     public NewProductDTO(Product entity){
 
@@ -32,10 +32,6 @@ public class NewProductDTO {
         this.description = entity.getDescription();
         this.categoryId = entity.getCategory().getId();
         this.cityId = entity.getLocation().getId();
-        this.availableDates = entity.getUnavailableDates()
-                .stream()
-                .map(UnavailableDate::getValue)
-                .collect(Collectors.toList());
         this.imageIds = entity.getImages()
                 .stream()
                 .map(Image::getId)

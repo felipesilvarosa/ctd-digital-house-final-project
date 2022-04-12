@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_cities")
+@Table(name = "tb_locations")
 public class Location {
 
     @Id

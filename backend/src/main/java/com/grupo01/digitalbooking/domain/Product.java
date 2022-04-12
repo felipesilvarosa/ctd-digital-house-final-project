@@ -1,13 +1,17 @@
 package com.grupo01.digitalbooking.domain;
 
 import com.grupo01.digitalbooking.dto.NewProductDTO;
+import com.grupo01.digitalbooking.dto.ReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Entity
@@ -28,9 +32,6 @@ public class Product {
     private Double latitude;
     private Double longitude;
 
-    @ManyToMany
-    private List<UnavailableDate> unavailableDates;
-
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
@@ -39,7 +40,7 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "location_id")
     private Location location;
 
     @ManyToMany
@@ -48,19 +49,35 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Policy> policies;
 
+    @OneToMany(mappedBy = "product")
+    private List<Reservation> reservations;
+
     public Product(NewProductDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.category = new Category(dto.getCategoryId());
         this.location = new Location(dto.getCityId());
         this.description = dto.getDescription();
-        this.unavailableDates = dto.getAvailableDates() == null ? null : dto.getAvailableDates()
+        this.reservations = dto.getReservationsIds()
                 .stream()
-                .map(UnavailableDate::new)
+                .map(Reservation::new)
                 .collect(Collectors.toList());
         this.utilities = dto.getCharacteristicIds()
                 .stream()
                 .map(Utilities::new)
                 .collect(Collectors.toList());
+    }
+
+    public Set<LocalDate> getUnavailableDates() {
+        Set<LocalDate> unavailableDates = new TreeSet<>();
+        getReservations().forEach(reservation -> {
+            LocalDate endDate = reservation.getCheckoutDateTime().toLocalDate();
+            LocalDate unavailableDate = reservation.getCheckinDateTime().toLocalDate();
+            while (!unavailableDate.isEqual(endDate.plusDays(1))) {
+                unavailableDates.add(unavailableDate);
+                unavailableDate = unavailableDate.plusDays(1);
+            }
+        });
+        return unavailableDates;
     }
 }

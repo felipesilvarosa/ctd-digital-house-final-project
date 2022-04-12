@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_policy")
+@Table(name = "tb_policies")
 public class Policy {
 
     @Id
