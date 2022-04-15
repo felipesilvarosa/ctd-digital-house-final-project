@@ -47,7 +47,8 @@ public class ProductDetailedDTO {
         this.latitude = entity.getLatitude();
         this.longitude = entity.getLongitude();
         this.unavailable = entity.getUnavailableDates();
-        this.destination = getLocationFromEntity(entity);
+        this.destination = entity.getDestination().getCity()+", "+
+                entity.getDestination().getCountry();
         this.images = entity.getImages()
                 .stream()
                 .map(Image::getUrl)
@@ -61,16 +62,6 @@ public class ProductDetailedDTO {
                 .stream()
                 .map(Utility::getName)
                 .collect(Collectors.toList());
-    }
-
-    private String getLocationFromEntity(Product entity) {
-        if(entity.getDestination()==null) return null;
-        String location = "%s, %s";
-        if(entity.getDestination().getName()!=null)
-            location = String.format(location,entity.getDestination().getName(),entity.getDestination().getCity());
-        else
-            location = String.format(location,entity.getDestination().getCity(),entity.getDestination().getCountry());
-        return location;
     }
 
 

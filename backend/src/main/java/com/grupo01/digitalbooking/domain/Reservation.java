@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.ReservationDTO;
+import com.grupo01.digitalbooking.dto.NewReservationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,13 +27,12 @@ public class Reservation {
     private LocalDateTime checkinDateTime;
     private LocalDateTime checkoutDateTime;
 
-    public Reservation(ReservationDTO dto){
+    public Reservation(NewReservationDTO dto){
         this.id = dto.getId();
         this.client = new Client(dto.getClientId());
         this.product = dto.getProduct();
+        this.checkinDateTime = LocalDateTime.of(dto.getCheckinDate(),dto.getCheckinTime());
+        this.checkoutDateTime = LocalDateTime.of(dto.getCheckoutDate(),dto.getCheckoutTime());
     }
 
-    public Reservation(Long id) {
-        this.id = id;
-    }
 }

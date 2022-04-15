@@ -1,6 +1,8 @@
 package com.grupo01.digitalbooking.controller;
 
+import com.grupo01.digitalbooking.domain.Reservation;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
+import com.grupo01.digitalbooking.dto.NewReservationDTO;
 import com.grupo01.digitalbooking.dto.ReservationDTO;
 import com.grupo01.digitalbooking.service.ReservationService;
 import io.swagger.annotations.Api;
@@ -27,9 +29,15 @@ public class ReservationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/client/{id}")
+    public ResponseEntity<List<ReservationDTO>> findReservationsByClient(@PathVariable Long id) {
+        List<ReservationDTO> response = reservationService.getReservationsByClient(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<ReservationDTO> createReservation(@RequestBody ReservationDTO reservationDTO) {
-        ReservationDTO response = reservationService.createReservation(reservationDTO);
+    public ResponseEntity<ReservationDTO> createReservation(@RequestBody NewReservationDTO newReservationDTO) {
+        ReservationDTO response = reservationService.createReservation(newReservationDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -40,8 +48,8 @@ public class ReservationController {
     }
 
     @PutMapping
-    public ResponseEntity<ReservationDTO> editReservation(@RequestBody ReservationDTO reservationDTO) {
-        ReservationDTO response = reservationService.editReservation(reservationDTO);
+    public ResponseEntity<ReservationDTO> editReservation(@RequestBody NewReservationDTO newReservationDTO) {
+        ReservationDTO response = reservationService.editReservation(newReservationDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

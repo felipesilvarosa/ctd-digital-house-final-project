@@ -10,13 +10,11 @@ import lombok.*;
 @Builder
 public class DestinationDTO {
     private Long id;
-    private String name;
     private String city;
     private String country;
 
     public DestinationDTO(Destination entity){
         this.id = entity.getId();
-        this.name = entity.getName();
         this.city = entity.getCity();
         this.country = entity.getCountry();
     }
