@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import static javax.persistence.FetchType.EAGER;
+import static org.hibernate.annotations.CascadeType.ALL;
 
 @Entity
 @Getter
@@ -31,43 +35,49 @@ public class Product {
     private Double latitude;
     private Double longitude;
 
-    @OneToMany(mappedBy = "product")
-    private List<Image> images;
-
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "destination_id")
     private Destination destination;
 
-    @ManyToMany
-    private List<Utilities> utilities;
+    @OneToMany(mappedBy = "product")
+    private List<Image> images;
+
+    @ManyToMany()
+    private List<Utility> utilities;
 
     @OneToMany(mappedBy = "product")
+    @Cascade(ALL)
     private List<Policy> policies;
 
     @OneToMany(mappedBy = "product")
     private List<Reservation> reservations;
 
     public Product(NewProductDTO dto) {
-        this.id = dto.getId();
         this.name = dto.getName();
-        this.category = new Category(dto.getCategoryId());
-        this.destination = new Destination(dto.getCityId());
         this.description = dto.getDescription();
-        this.reservations = dto.getReservationsIds()
+        this.stars = dto.getStars();
+        this.rating = dto.getRating();
+        this.latitude = dto.getLatitude();
+        this.longitude = dto.getLongitude();
+        this.category = new Category(dto.getCategoryId());
+        this.destination = new Destination(dto.getDestinationId());
+        this.images = dto.getImagesIds()
                 .stream()
-                .map(Reservation::new)
+                .map(Image::new)
                 .collect(Collectors.toList());
-        this.utilities = dto.getCharacteristicIds()
+        this.utilities = dto.getUtilitiesIds()
                 .stream()
-                .map(Utilities::new)
+                .map(Utility::new)
                 .collect(Collectors.toList());
+
     }
 
     public Set<LocalDate> getUnavailableDates() {
+        if(getReservations()==null)return null;
         Set<LocalDate> unavailableDates = new TreeSet<>();
         getReservations().forEach(reservation -> {
             LocalDate endDate = reservation.getCheckoutDateTime().toLocalDate();

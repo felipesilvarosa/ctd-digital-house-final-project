@@ -56,9 +56,8 @@ class ProductServiceTest {
         this.testInput = new NewProductDTO();
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
-        this.testInput.setCharacteristicIds(List.of());
-        this.testInput.setImageIds(existingImageIds);
-        this.testInput.setReservationsIds(List.of());
+        this.testInput.setUtilitiesIds(List.of());
+        this.testInput.setImagesIds(existingImageIds);
         this.existingImageIds = List.of(existingId);
         this.responseProduct = new Product();
         this.responseProduct.setId(existingId);
@@ -114,24 +113,24 @@ class ProductServiceTest {
         testInput.setCategoryId(null);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput));
         testInput.setCategoryId(existingId);
-        testInput.setImageIds(null);
+        testInput.setImagesIds(null);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput));
-        testInput.setImageIds(existingImageIds);
+        testInput.setImagesIds(existingImageIds);
         testInput.setCategoryId(nonExistingId);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput));
         testInput.setCategoryId(existingId);
-        testInput.setCityId(nonExistingId);
+        testInput.setDestinationId(nonExistingId);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput));
-        testInput.setCityId(existingId);
-        testInput.setImageIds(nonExistingImageIds);
+        testInput.setDestinationId(existingId);
+        testInput.setImagesIds(nonExistingImageIds);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput));
 
     }
     @Test
     void createProductShouldReturnDTOWhenValidIds(){
-        testInput.setImageIds(existingImageIds);
+        testInput.setImagesIds(existingImageIds);
         testInput.setCategoryId(existingId);
-        testInput.setCityId(existingId);
+        testInput.setDestinationId(existingId);
         ProductDetailedDTO testOutput = service.createProduct(testInput);
         assertEquals(5L,testOutput.getId());
     }

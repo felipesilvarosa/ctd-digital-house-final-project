@@ -46,7 +46,7 @@ class destinationsServiceTest {
         ConflictException e = assertThrows(ConflictException.class,
                 ()-> destinationsService.createDestination(destinationDTO));
 
-        assertTrue(e.getMessage().contains("Cidade " + destinationDTO.getName() + " já cadastrada"));
+        assertTrue(e.getMessage().contains("Destino " + destinationDTO.getName() + " já cadastrado"));
 
     }
 

@@ -1,6 +1,8 @@
 package com.grupo01.digitalbooking.domain;
 
+import com.grupo01.digitalbooking.dto.PolicyDescriptionDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "tb_policies_descriptions")
+@NoArgsConstructor
 public class PolicyDescription {
 
     @Id
@@ -19,5 +22,10 @@ public class PolicyDescription {
     @ManyToOne
     @JoinColumn(name = "policy_id")
     private Policy policy;
+
+    public PolicyDescription(PolicyDescriptionDTO dto){
+        this.icon = dto.getIcon();
+        this.description = dto.getDescription();
+    }
 
 }

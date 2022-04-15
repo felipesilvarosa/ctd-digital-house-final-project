@@ -1,6 +1,6 @@
 package com.grupo01.digitalbooking.service;
 
-import com.grupo01.digitalbooking.domain.Product;
+import com.grupo01.digitalbooking.domain.*;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.*;
@@ -20,8 +20,8 @@ public class ProductService {
 
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
-    private final DestinationRepository locationRepository;
-    private final CharacteristicRepository characteristicRepository;
+    private final DestinationRepository destinationRepository;
+    private final UtilitiesRepository utilitiesRepository;
     private final ImageRepository imageRepository;
 
     @Transactional(readOnly = true)
@@ -85,18 +85,27 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO createProduct(NewProductDTO dto){
 
-        if (dto.getCategoryId()==null || dto.getImageIds()==null){
+        if (dto.getCategoryId()==null || dto.getImagesIds()==null){
             throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
         }
 
-        categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
                 new BadRequestException("No category with provided id was found"));
-        locationRepository.findById(dto.getCityId()).orElseThrow(()->
+        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
                 new BadRequestException("No location with provided id was found"));
-        imageRepository.findAllById(dto.getImageIds()).stream().findAny().orElseThrow(()->
-                new BadRequestException("No image with provided id was found"));
-
-        return new ProductDetailedDTO(repository.save(new Product(dto)));
+        List<Utility> utilities = Optional.of(utilitiesRepository.findAllById(dto.getUtilitiesIds())).orElseThrow(()->
+                new BadRequestException("No utility with provided id was found"));
+        List<Image> images = imageRepository.findAllById(dto.getImagesIds());
+        Product response = new Product(dto);
+        List<Policy> policies = new ArrayList<>();
+        dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
+        response.setPolicies(policies);
+        response.setUtilities(utilities);
+        response.setImages(images);
+        response.setCategory(category);
+        response.setDestination(destination);
+        response = repository.save(response);
+        return new ProductDetailedDTO(response);
     }
 
     public ProductDetailedDTO editProduct(NewProductDTO dto) {
