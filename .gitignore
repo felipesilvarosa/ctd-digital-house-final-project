@@ -25,7 +25,7 @@
 **/dist/
 **/nbdist/
 **/.nb-gradle/
-**/build/
+# **/build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -45,7 +45,7 @@
 **/coverage
 
 # production
-**/build
+# **/build
 
 # misc
 **/.DS_Store
