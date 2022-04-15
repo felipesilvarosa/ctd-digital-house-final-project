@@ -24,7 +24,7 @@ public class ProductController {
 
     private final ProductService service;
 
-    @ApiOperation("Busca por todos os podutos")
+    @ApiOperation("Busca por todos os produtos")
     @GetMapping
     public ResponseEntity<List<ProductDetailedDTO>> getProducts(){
         List<ProductDetailedDTO> response = service.getProducts();
@@ -38,7 +38,7 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ApiOperation("Faz uma busca por produto de acordo com os parametros")
+    @ApiOperation("Faz uma busca por produto de acordo com os parâmetros")
     @GetMapping("/search")
     public ResponseEntity<List<ProductDetailedDTO>> searchProducts(@RequestParam(required = false) Long locationId,
                                                               @RequestParam(required = false) Long categoryId,
@@ -58,5 +58,12 @@ public class ProductController {
     public ResponseEntity<ProductDetailedDTO> createProduct(@RequestBody NewProductDTO dto){
         ProductDetailedDTO response = service.createProduct(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @ApiOperation("Atualiza um produto")
+    @PutMapping
+    public ResponseEntity<ProductDetailedDTO> editProduct(@RequestBody NewProductDTO dto){
+        ProductDetailedDTO response = service.editProduct(dto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

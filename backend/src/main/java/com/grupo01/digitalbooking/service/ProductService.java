@@ -90,12 +90,16 @@ public class ProductService {
         }
 
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new BadRequestException("No category with provided id was found"));
+                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new BadRequestException("No location with provided id was found"));
-        List<Utility> utilities = Optional.of(utilitiesRepository.findAllById(dto.getUtilitiesIds())).orElseThrow(()->
-                new BadRequestException("No utility with provided id was found"));
+                new BadRequestException("Nenhum destino com id informada foi encontrado"));
+        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
         List<Image> images = imageRepository.findAllById(dto.getImagesIds());
+        if(utilities.size()<dto.getUtilitiesIds().size())
+            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+        if(images.size()<dto.getImagesIds().size())
+            throw new BadRequestException("Imagens não foram encontradas para algumas ids informadas");
+
         Product response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
@@ -108,10 +112,35 @@ public class ProductService {
         return new ProductDetailedDTO(response);
     }
 
-    public ProductDetailedDTO editProduct(NewProductDTO dto) {
-        repository.findById(dto.getId())
-                .orElseThrow(()-> new NotFoundException("Product not found"));
-        Product response = new Product(dto);
+    @SuppressWarnings("all")
+    @Transactional
+    public ProductDetailedDTO editProduct(NewProductDTO dto){
+
+        Product response = repository.findById(dto.getId()).orElseThrow(()->
+                new BadRequestException("Nenhum produto com id informada foi encontrado"));
+
+        if (dto.getCategoryId()==null || dto.getImagesIds()==null){
+            throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
+        }
+
+        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
+        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
+                new BadRequestException("Nenhum destino com id informada foi encontrado"));
+        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
+        List<Image> images = imageRepository.findAllById(dto.getImagesIds());
+        if(utilities.size()<dto.getUtilitiesIds().size())
+            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+        if(images.size()<dto.getImagesIds().size())
+            throw new BadRequestException("Imagens não foram encontradas para algumas ids informadas");
+        response = new Product(dto);
+        List<Policy> policies = new ArrayList<>();
+        dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
+        response.setPolicies(policies);
+        response.setUtilities(utilities);
+        response.setImages(images);
+        response.setCategory(category);
+        response.setDestination(destination);
         response = repository.save(response);
         return new ProductDetailedDTO(response);
     }
