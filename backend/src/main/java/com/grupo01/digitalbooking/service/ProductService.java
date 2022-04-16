@@ -9,6 +9,7 @@ import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -23,6 +24,7 @@ public class ProductService {
     private final DestinationRepository destinationRepository;
     private final UtilitiesRepository utilitiesRepository;
     private final ImageRepository imageRepository;
+    private final AWSS3OperationsService s3Service;
 
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> getProducts(){
@@ -83,32 +85,28 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDetailedDTO createProduct(NewProductDTO dto){
+    public ProductDetailedDTO createProduct(NewProductDTO dto,List<MultipartFile>images){
 
-        if (dto.getCategoryId()==null || dto.getImagesIds()==null){
-            throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
+        if (dto.getCategoryId()==null || dto.getDestinationId()==null){
+            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
         }
-
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
                 new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
                 new BadRequestException("Nenhum destino com id informada foi encontrado"));
         List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
-        List<Image> images = imageRepository.findAllById(dto.getImagesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
-        if(images.size()<dto.getImagesIds().size())
-            throw new BadRequestException("Imagens não foram encontradas para algumas ids informadas");
 
         Product response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
-        response.setUtilities(utilities);
-        response.setImages(images);
         response.setCategory(category);
         response.setDestination(destination);
+        response.setUtilities(utilities);
         response = repository.save(response);
+        response.setImages(s3Service.uploadAndRegisterImages(images,response));
         return new ProductDetailedDTO(response);
     }
 
@@ -119,28 +117,28 @@ public class ProductService {
         Product response = repository.findById(dto.getId()).orElseThrow(()->
                 new BadRequestException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getImagesIds()==null){
-            throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
-        }
-
-        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
-        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new BadRequestException("Nenhum destino com id informada foi encontrado"));
-        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
-        List<Image> images = imageRepository.findAllById(dto.getImagesIds());
-        if(utilities.size()<dto.getUtilitiesIds().size())
-            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
-        if(images.size()<dto.getImagesIds().size())
-            throw new BadRequestException("Imagens não foram encontradas para algumas ids informadas");
+//        if (dto.getCategoryId()==null || dto.getImagesIds()==null){
+//            throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
+//        }
+//
+//        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+//                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
+//        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
+//                new BadRequestException("Nenhum destino com id informada foi encontrado"));
+//        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
+//        List<Image> images = imageRepository.findAllById(dto.getImagesIds());
+//        if(utilities.size()<dto.getUtilitiesIds().size())
+//            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+//        if(images.size()<dto.getImagesIds().size())
+//            throw new BadRequestException("Imagens não foram encontradas para algumas ids informadas");
         response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
-        response.setUtilities(utilities);
-        response.setImages(images);
-        response.setCategory(category);
-        response.setDestination(destination);
+//        response.setUtilities(utilities);
+//        response.setImages(images);
+//        response.setCategory(category);
+//        response.setDestination(destination);
         response = repository.save(response);
         return new ProductDetailedDTO(response);
     }

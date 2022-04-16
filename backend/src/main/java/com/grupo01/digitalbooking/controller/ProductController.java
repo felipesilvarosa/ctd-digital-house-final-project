@@ -1,5 +1,7 @@
 package com.grupo01.digitalbooking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.service.ProductService;
@@ -7,13 +9,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("products")
@@ -28,14 +33,14 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductDetailedDTO>> getProducts(){
         List<ProductDetailedDTO> response = service.getProducts();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, OK);
     }
 
     @ApiOperation("Busca um produto po ID")
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailedDTO> getProductsById(@PathVariable Long id){
         ProductDetailedDTO response = service.getProductById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, OK);
     }
 
     @ApiOperation("Faz uma busca por produto de acordo com os parâmetros")
@@ -50,20 +55,22 @@ public class ProductController {
         params.put("startDate",startDate);
         params.put("endDate",endDate);
         List<ProductDetailedDTO> response = service.searchProducts(params);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, OK);
     }
 
     @ApiOperation("Cria um novo produto")
     @PostMapping
-    public ResponseEntity<ProductDetailedDTO> createProduct(@RequestBody NewProductDTO dto){
-        ProductDetailedDTO response = service.createProduct(dto);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<ProductDetailedDTO> createProduct(String dtoJSON,List<MultipartFile> images) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        NewProductDTO dto = mapper.readValue(dtoJSON,NewProductDTO.class);
+        ProductDetailedDTO response = service.createProduct(dto,images);
+        return new ResponseEntity<>(response, CREATED);
     }
 
     @ApiOperation("Atualiza um produto")
     @PutMapping
     public ResponseEntity<ProductDetailedDTO> editProduct(@RequestBody NewProductDTO dto){
         ProductDetailedDTO response = service.editProduct(dto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, OK);
     }
 }

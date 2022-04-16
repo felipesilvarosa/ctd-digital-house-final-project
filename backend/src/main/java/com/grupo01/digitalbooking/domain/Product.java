@@ -65,15 +65,19 @@ public class Product {
         this.longitude = dto.getLongitude();
         this.category = new Category(dto.getCategoryId());
         this.destination = new Destination(dto.getDestinationId());
-        this.images = dto.getImagesIds()
-                .stream()
-                .map(Image::new)
-                .collect(Collectors.toList());
+//        this.images = dto.getImagesIds()
+//                .stream()
+//                .map(Image::new)
+//                .collect(Collectors.toList());
         this.utilities = dto.getUtilitiesIds()
                 .stream()
                 .map(Utility::new)
                 .collect(Collectors.toList());
 
+    }
+
+    public Product(Long id) {
+        this.id = id;
     }
 
     public Set<LocalDate> getUnavailableDates() {

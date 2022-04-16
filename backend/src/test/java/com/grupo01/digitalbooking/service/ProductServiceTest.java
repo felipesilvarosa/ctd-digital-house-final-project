@@ -57,11 +57,11 @@ class ProductServiceTest {
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
         this.testInput.setUtilitiesIds(List.of());
-        this.testInput.setImagesIds(existingImageIds);
+//        this.testInput.setImagesIds(existingImageIds);
         this.existingImageIds = List.of(existingId);
         this.responseProduct = new Product();
         this.responseProduct.setId(existingId);
-        this.responseProduct.setImages(List.of(new Image(existingId)));
+//        this.responseProduct.setImages(List.of(new Image(existingId)));
         this.responseProduct.setDestination(new Destination(existingId));
         this.responseProduct.setCategory(new Category((existingId)));
         this.responseProduct.setReservations(List.of());
@@ -72,7 +72,7 @@ class ProductServiceTest {
         saveResponse.setId(existingId);
         saveResponse.setCategory(new Category(existingId));
         saveResponse.setDestination(new Destination(existingId));
-        saveResponse.setImages(List.of(new Image(existingId)));
+//        saveResponse.setImages(List.of(new Image(existingId)));
         saveResponse.setReservations(List.of());
         saveResponse.setUtilities(List.of());
         when(repository.findAll()).thenReturn(findAllResponse);
@@ -111,27 +111,27 @@ class ProductServiceTest {
     @Test
     void createProductShouldThrowExceptionWhenInvalidIds(){
         testInput.setCategoryId(null);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
         testInput.setCategoryId(existingId);
-        testInput.setImagesIds(null);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
-        testInput.setImagesIds(existingImageIds);
+//        testInput.setImagesIds(null);
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
+//        testInput.setImagesIds(existingImageIds);
         testInput.setCategoryId(nonExistingId);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
         testInput.setCategoryId(existingId);
         testInput.setDestinationId(nonExistingId);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
         testInput.setDestinationId(existingId);
-        testInput.setImagesIds(nonExistingImageIds);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+//        testInput.setImagesIds(nonExistingImageIds);
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
 
     }
     @Test
     void createProductShouldReturnDTOWhenValidIds(){
-        testInput.setImagesIds(existingImageIds);
+//        testInput.setImagesIds(existingImageIds);
         testInput.setCategoryId(existingId);
         testInput.setDestinationId(existingId);
-        ProductDetailedDTO testOutput = service.createProduct(testInput);
+        ProductDetailedDTO testOutput = service.createProduct(testInput,List.of());
         assertEquals(5L,testOutput.getId());
     }
     @Test
