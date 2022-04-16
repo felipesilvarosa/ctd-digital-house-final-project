@@ -1,13 +1,15 @@
 package com.grupo01.digitalbooking.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.grupo01.digitalbooking.dto.ImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -18,22 +20,15 @@ import javax.persistence.*;
 public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String title;
     private String url;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = REFRESH)
     @JoinColumn(name = "product_id")
     private Product product;
-
-    public Image(ImageDTO dto){
-        this.id = dto.getId();
-        this.title = dto.getTitle();
-        this.url = dto.getUrl();
-        this.product = dto.getProduct();
-    }
 
     public Image(Long id){
         this.id = id;

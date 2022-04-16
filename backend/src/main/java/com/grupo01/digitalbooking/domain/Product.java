@@ -23,7 +23,7 @@ import static org.hibernate.annotations.CascadeType.ALL;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_products")
-public class Product {
+public class        Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
-    @ManyToMany()
+    @ManyToMany
     private List<Utility> utilities;
 
     @OneToMany(mappedBy = "product")
@@ -57,6 +57,7 @@ public class Product {
     private List<Reservation> reservations;
 
     public Product(NewProductDTO dto) {
+        this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();
         this.stars = dto.getStars();
@@ -65,15 +66,15 @@ public class Product {
         this.longitude = dto.getLongitude();
         this.category = new Category(dto.getCategoryId());
         this.destination = new Destination(dto.getDestinationId());
-        this.images = dto.getImagesIds()
-                .stream()
-                .map(Image::new)
-                .collect(Collectors.toList());
         this.utilities = dto.getUtilitiesIds()
                 .stream()
                 .map(Utility::new)
                 .collect(Collectors.toList());
 
+    }
+
+    public Product(Long id) {
+        this.id = id;
     }
 
     public Set<LocalDate> getUnavailableDates() {
