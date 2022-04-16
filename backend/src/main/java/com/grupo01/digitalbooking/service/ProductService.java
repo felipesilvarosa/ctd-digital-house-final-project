@@ -6,7 +6,7 @@ import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
 import com.grupo01.digitalbooking.repository.DestinationRepository;
 import com.grupo01.digitalbooking.repository.ProductRepository;
-import com.grupo01.digitalbooking.repository.UtilitiesRepository;
+import com.grupo01.digitalbooking.repository.UtilityRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class ProductService {
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
     private final DestinationRepository destinationRepository;
-    private final UtilitiesRepository utilitiesRepository;
+    private final UtilityRepository utilityRepository;
     private final AwsS3OperationsService s3Service;
 
     @Transactional(readOnly = true)
@@ -45,7 +45,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> searchProducts(Map<String, Object> searchCriteria) {
 
-        if(searchCriteria.get("locationId")==null&&searchCriteria.get("categoryId")==null&&
+        if(searchCriteria.get("destinationId")==null&&searchCriteria.get("categoryId")==null&&
                 searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
             throw new BadRequestException("No acceptable search criteria");
         }
@@ -56,8 +56,8 @@ public class ProductService {
 
         String query = "SELECT p from Product p WHERE ";
 
-        if(searchCriteria.get("locationId")!=null)
-            query+= "p.location.id = " + searchCriteria.get("locationId") + " AND ";
+        if(searchCriteria.get("destinationId")!=null)
+            query+= "p.location.id = " + searchCriteria.get("destinationId") + " AND ";
         if(searchCriteria.get("categoryId")!=null)
             query+= "p.category.id = " + searchCriteria.get("categoryId") + " AND ";
         if(query.endsWith(" AND "))
@@ -89,16 +89,16 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO createProduct(NewProductDTO dto,List<MultipartFile>images){
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null){
+        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty()){
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
         }
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
+                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new BadRequestException("Nenhum destino com id informada foi encontrado"));
-        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
+                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+        List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
-            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+            throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
         Product response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
@@ -109,9 +109,7 @@ public class ProductService {
         response.setUtilities(utilities);
         response = repository.save(response);
         response = repository.findById(response.getId()).get();
-        if(images!=null) {
-            response.getImages().addAll(s3Service.uploadAndRegisterImages(images, response));
-        }
+        response.getImages().addAll(s3Service.uploadAndRegisterImages(images, response));
         return new ProductDetailedDTO(response);
     }
 
@@ -120,18 +118,18 @@ public class ProductService {
     public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
 
         Product response = repository.findById(dto.getId()).orElseThrow(()->
-                new BadRequestException("Nenhum produto com id informada foi encontrado"));
+                new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null){
+        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty()){
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
         }
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
+                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new BadRequestException("Nenhum destino com id informada foi encontrado"));
-        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
+                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+        List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
-            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+            throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
         response = new Product(dto);
         List<Policy> policies = new ArrayList<>();

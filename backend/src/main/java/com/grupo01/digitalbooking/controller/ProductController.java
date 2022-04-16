@@ -45,12 +45,12 @@ public class ProductController {
 
     @ApiOperation("Faz uma busca por produto de acordo com os parâmetros")
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDetailedDTO>> searchProducts(@RequestParam(required = false) Long locationId,
+    public ResponseEntity<List<ProductDetailedDTO>> searchProducts(@RequestParam(required = false) Long destinationId,
                                                               @RequestParam(required = false) Long categoryId,
                                                               @RequestParam(required = false) String startDate,
                                                               @RequestParam(required = false) String endDate){
         Map<String, Object> params = new HashMap<>();
-        params.put("locationId",locationId);
+        params.put("destinationId",destinationId);
         params.put("categoryId",categoryId);
         params.put("startDate",startDate);
         params.put("endDate",endDate);

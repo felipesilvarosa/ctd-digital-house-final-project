@@ -30,7 +30,7 @@ public class Reservation {
     public Reservation(NewReservationDTO dto){
         this.id = dto.getId();
         this.client = new Client(dto.getClientId());
-        this.product = dto.getProduct();
+        this.product = new Product(dto.getProductId());
         this.checkinDateTime = LocalDateTime.of(dto.getCheckinDate(),dto.getCheckinTime());
         this.checkoutDateTime = LocalDateTime.of(dto.getCheckoutDate(),dto.getCheckoutTime());
     }
