@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class PolicyDTO {
 
     private String title;
+    private String order;
     private List<PolicyDescriptionDTO> descriptions;
 
     public PolicyDTO(Policy entity){

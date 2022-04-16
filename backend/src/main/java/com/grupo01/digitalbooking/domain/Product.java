@@ -23,12 +23,13 @@ import static org.hibernate.annotations.CascadeType.ALL;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_products")
-public class        Product {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Integer stars;
     private Integer rating;

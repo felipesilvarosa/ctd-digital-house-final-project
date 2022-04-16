@@ -9,6 +9,7 @@ import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,24 +22,28 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final String ID_CANNOT_BE_NULL = "Id não pode ser nula";
 
+    @Transactional(readOnly = true)
     public List<CategoryDTO> getCategories() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
+        return categories.stream().map(
+                category -> new CategoryDTO(category,category.getProducts().size())
+        ).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public CategoryDTO getCategoryById(Long id) {
 
-        if (id==null) throw new BadRequestException("Invalid id provided.");
+        if (id==null) throw new BadRequestException("A id não pode ser nula.");
 
         Category category = categoryRepository.findById(id).orElseThrow(()->
                 new NotFoundException("Categoria não encontrada"));
 
-        return new CategoryDTO(category);
+        return new CategoryDTO(category,category.getProducts().size());
 
     }
 
+    @Transactional
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         Category category = new Category(categoryDTO);
         Category categoryFound = (categoryRepository.findCategoryByTitle(categoryDTO.getTitle().toLowerCase()));
@@ -51,11 +56,13 @@ public class CategoryService {
         return new CategoryDTO(category);
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         if(id==null) throw new BadRequestException("Id inválida");
         categoryRepository.deleteById(id);
     }
 
+    @Transactional
     public CategoryDTO editCategory(CategoryDTO categoryDTO) {
         Category category = new Category(categoryDTO);
         Optional<Category> categoryFound = categoryRepository.findById(category.getId());

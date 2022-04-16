@@ -1,7 +1,5 @@
 package com.grupo01.digitalbooking.dto;
 
-import com.grupo01.digitalbooking.domain.Product;
-import com.grupo01.digitalbooking.domain.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,7 @@ public class NewReservationDTO {
 
     private Long id;
     private Long clientId;
-    private Product product;
+    private Long productId;
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
     private LocalTime checkinTime;
