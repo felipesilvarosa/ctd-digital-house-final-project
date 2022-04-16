@@ -17,7 +17,7 @@ public class ImageDTO {
     private String url;
     private Product product;
 
-    private ImageDTO(Image entity){
+    public ImageDTO(Image entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.url = entity.getUrl();

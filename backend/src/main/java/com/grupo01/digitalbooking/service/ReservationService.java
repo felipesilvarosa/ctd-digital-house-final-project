@@ -3,15 +3,14 @@ package com.grupo01.digitalbooking.service;
 
 import com.grupo01.digitalbooking.domain.Client;
 import com.grupo01.digitalbooking.domain.Reservation;
+import com.grupo01.digitalbooking.dto.NewReservationDTO;
 import com.grupo01.digitalbooking.dto.ReservationDTO;
 import com.grupo01.digitalbooking.repository.ReservationRepository;
-import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -26,12 +25,13 @@ public class ReservationService {
         return response.stream().map(ReservationDTO::new).collect(Collectors.toList());
     }
 
-    public ReservationDTO createReservation(ReservationDTO dto) {
+    public List<ReservationDTO> getReservationsByClient(Long id) {
+        List<Reservation> response = reservationRepository.findAllByClient(new Client(id));
+        return response.stream().map(ReservationDTO::new).collect(Collectors.toList());
+    }
 
-        Optional<Reservation> reservationFound = reservationRepository.findByClient(new Client(dto.getClientId()));
-        reservationFound.ifPresent(ignored->{
-            throw new ConflictException("There already is a reservation under this client's id");
-        });
+    public ReservationDTO createReservation(NewReservationDTO dto) {
+
         Reservation response = new Reservation(dto);
         response = reservationRepository.save(response);
         return new ReservationDTO(response);
@@ -42,12 +42,7 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
-
-    /**
-     * TODO: Verificar se necessita regras de negocios para a edição
-     *
-     * */
-    public ReservationDTO editReservation(ReservationDTO dto) {
+    public ReservationDTO editReservation(NewReservationDTO dto) {
         reservationRepository.findById(dto.getId())
                 .orElseThrow(()-> new NotFoundException("Reservation not found"));
         Reservation response = new Reservation(dto);

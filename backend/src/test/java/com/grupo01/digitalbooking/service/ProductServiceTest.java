@@ -1,13 +1,13 @@
 package com.grupo01.digitalbooking.service;
 
 import com.grupo01.digitalbooking.domain.Category;
+import com.grupo01.digitalbooking.domain.Destination;
 import com.grupo01.digitalbooking.domain.Image;
-import com.grupo01.digitalbooking.domain.Location;
 import com.grupo01.digitalbooking.domain.Product;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
-import com.grupo01.digitalbooking.repository.CityRepository;
+import com.grupo01.digitalbooking.repository.DestinationRepository;
 import com.grupo01.digitalbooking.repository.ImageRepository;
 import com.grupo01.digitalbooking.repository.ProductRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
@@ -38,7 +38,7 @@ class ProductServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
-    private CityRepository cityRepository;
+    private DestinationRepository destinationRepository;
     @Mock
     private ImageRepository imageRepository;
 
@@ -56,14 +56,13 @@ class ProductServiceTest {
         this.testInput = new NewProductDTO();
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
-        this.testInput.setCharacteristicIds(List.of());
-        this.testInput.setImageIds(existingImageIds);
-        this.testInput.setReservationsIds(List.of());
+        this.testInput.setUtilitiesIds(List.of());
+//        this.testInput.setImagesIds(existingImageIds);
         this.existingImageIds = List.of(existingId);
         this.responseProduct = new Product();
         this.responseProduct.setId(existingId);
-        this.responseProduct.setImages(List.of(new Image(existingId)));
-        this.responseProduct.setLocation(new Location(existingId));
+//        this.responseProduct.setImages(List.of(new Image(existingId)));
+        this.responseProduct.setDestination(new Destination(existingId));
         this.responseProduct.setCategory(new Category((existingId)));
         this.responseProduct.setReservations(List.of());
         this.responseProduct.setUtilities(List.of());
@@ -72,8 +71,8 @@ class ProductServiceTest {
         Product saveResponse = new Product();
         saveResponse.setId(existingId);
         saveResponse.setCategory(new Category(existingId));
-        saveResponse.setLocation(new Location(existingId));
-        saveResponse.setImages(List.of(new Image(existingId)));
+        saveResponse.setDestination(new Destination(existingId));
+//        saveResponse.setImages(List.of(new Image(existingId)));
         saveResponse.setReservations(List.of());
         saveResponse.setUtilities(List.of());
         when(repository.findAll()).thenReturn(findAllResponse);
@@ -83,8 +82,8 @@ class ProductServiceTest {
         when(repository.search(any(String.class))).thenReturn(List.of());
         when(categoryRepository.findById(existingId)).thenReturn(Optional.of(new Category()));
         when(categoryRepository.findById(nonExistingId)).thenReturn(Optional.empty());
-        when(cityRepository.findById(existingId)).thenReturn(Optional.of(new Location()));
-        when(cityRepository.findById(nonExistingId)).thenReturn(Optional.empty());
+        when(destinationRepository.findById(existingId)).thenReturn(Optional.of(new Destination()));
+        when(destinationRepository.findById(nonExistingId)).thenReturn(Optional.empty());
         when(imageRepository.findAllById(existingImageIds)).thenReturn(List.of(new Image()));
         when(imageRepository.findAllById(nonExistingImageIds)).thenReturn(List.of());
         doNothing().when(repository).deleteById(any(Long.class));
@@ -112,27 +111,27 @@ class ProductServiceTest {
     @Test
     void createProductShouldThrowExceptionWhenInvalidIds(){
         testInput.setCategoryId(null);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
         testInput.setCategoryId(existingId);
-        testInput.setImageIds(null);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
-        testInput.setImageIds(existingImageIds);
+//        testInput.setImagesIds(null);
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
+//        testInput.setImagesIds(existingImageIds);
         testInput.setCategoryId(nonExistingId);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
         testInput.setCategoryId(existingId);
-        testInput.setCityId(nonExistingId);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
-        testInput.setCityId(existingId);
-        testInput.setImageIds(nonExistingImageIds);
-        assertThrows(BadRequestException.class,()->service.createProduct(testInput));
+        testInput.setDestinationId(nonExistingId);
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
+        testInput.setDestinationId(existingId);
+//        testInput.setImagesIds(nonExistingImageIds);
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,List.of()));
 
     }
     @Test
     void createProductShouldReturnDTOWhenValidIds(){
-        testInput.setImageIds(existingImageIds);
+//        testInput.setImagesIds(existingImageIds);
         testInput.setCategoryId(existingId);
-        testInput.setCityId(existingId);
-        ProductDetailedDTO testOutput = service.createProduct(testInput);
+        testInput.setDestinationId(existingId);
+        ProductDetailedDTO testOutput = service.createProduct(testInput,List.of());
         assertEquals(5L,testOutput.getId());
     }
     @Test
@@ -144,11 +143,11 @@ class ProductServiceTest {
     @Test
     void editProductShouldThrowExceptionWhenIdDoesNotExist(){
         testInput.setId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput));
+        assertThrows(NotFoundException.class,()->service.editProduct(testInput,List.of()));
     }
     @Test
     void editProductShouldReturnDTOWhenIdExists(){
-        ProductDetailedDTO testOutput = service.editProduct(testInput);
+        ProductDetailedDTO testOutput = service.editProduct(testInput,List.of());
         assertEquals(5L,testOutput.getId());
     }
 

@@ -20,4 +20,11 @@ public class PolicyDescriptionDTO {
         this.description = entity.getDescription();
     }
 
+    @Override
+    public String toString() {
+        return "PolicyDescriptionDTO{" +
+                "icon='" + icon + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

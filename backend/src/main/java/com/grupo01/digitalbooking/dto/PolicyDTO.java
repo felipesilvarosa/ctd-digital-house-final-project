@@ -26,4 +26,11 @@ public class PolicyDTO {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public String toString() {
+        return "PolicyDTO{" +
+                "title='" + title + '\'' +
+                ", descriptions=" + descriptions +
+                '}';
+    }
 }
