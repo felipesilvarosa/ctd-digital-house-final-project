@@ -20,7 +20,7 @@ export const HomeCategories = () => {
                     clickable
                     key={category.id}
                     to={`/?category=${category.title}`}
-                    image={category.image}
+                    image={category.imageUrl}
                     title={category.title}
                   >
                     <h3 className={styles.CategoryTitle}>

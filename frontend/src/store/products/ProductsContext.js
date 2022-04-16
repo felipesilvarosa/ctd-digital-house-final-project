@@ -11,11 +11,8 @@ export const ProductsProvider = ({children}) => {
   const findProductById = async (id) => {
     dispatch({ type: "SET_PRODUCTS_LOADING", payload: true })
     try {
-      const response = await axios(`/api/products/${id}`)
-      const product = {
-        ...response.data.data.attributes,
-        id: response.data.data.id
-      }
+      const response = await axios(`/products/${id}`)
+      const product = response.data
       dispatch({ type: "SET_PRODUCT", payload: product })
     } catch (e) {
       console.error(e)
@@ -27,8 +24,10 @@ export const ProductsProvider = ({children}) => {
   const setProducts = async () => {
     dispatch({type: "SET_PRODUCTS_LOADING", payload: true})
     try {
-      const products = await axios("/api/products")
-      dispatch({type: "SET_PRODUCTS", payload: products.data.data.map(category => ({id: category.id, ...category.attributes}))})
+      const response = await axios("/products")
+      const products = response.data
+      console.log(products)
+      dispatch({type: "SET_PRODUCTS", payload: products})
     } catch(e) {
       console.error(e)
     } finally {

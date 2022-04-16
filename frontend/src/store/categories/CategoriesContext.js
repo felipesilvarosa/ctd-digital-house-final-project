@@ -11,8 +11,8 @@ export const CategoriesProvider = ({children}) => {
   const setCategories = async () => {
     dispatch({type: "SET_CATEGORIES_LOADING", payload: true})
     try {
-      const categories = await axios("/api/categories")
-      dispatch({type: "SET_CATEGORIES", payload: categories.data.data.map(category => ({id: category.id, ...category.attributes}))})
+      const categories = await axios("/categories")
+      dispatch({type: "SET_CATEGORIES", payload: categories.data})
     } catch(e) {
       console.error(e)
     } finally {
