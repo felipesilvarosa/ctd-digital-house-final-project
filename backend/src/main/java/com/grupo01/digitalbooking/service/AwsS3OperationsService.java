@@ -21,7 +21,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class AWSS3OperationsService {
+public class AwsS3OperationsService {
 
     private final ImageRepository repository;
     private final S3Client s3;
@@ -30,7 +30,7 @@ public class AWSS3OperationsService {
     private final String folder;
 
     @Autowired
-    public AWSS3OperationsService(ImageRepository repository){
+    public AwsS3OperationsService(ImageRepository repository){
         this.bucket = "t2g1-s3";
         this.awsDomain = "https://t2g1-s3.s3.amazonaws.com/";
         this.folder = "detalhes/";
@@ -45,24 +45,26 @@ public class AWSS3OperationsService {
             try {
                 File file = new File(image.getName());
                 image.transferTo(file);
-                String imageName = image.getOriginalFilename();
+                String imageTitle = image.getOriginalFilename();
                 PutObjectRequest request = PutObjectRequest
                         .builder()
                         .bucket(bucket)
                         .acl("public-read")
-                        .key(folder+imageName)
+                        .key(folder+imageTitle)
                         .build();
                 s3.putObject(request, RequestBody.fromFile(file));
 
-                String url = awsDomain+folder+imageName;
-                response.add(new Image(null,imageName,url,product));
+                String url = awsDomain+folder+imageTitle;
+                Image entity = repository.findByTitle(imageTitle)
+                        .orElse(new Image(null,imageTitle,url,product));
+                response.add(entity);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        return repository.saveAllAndFlush(response);
+        return repository.saveAll(response);
 
     }
 }

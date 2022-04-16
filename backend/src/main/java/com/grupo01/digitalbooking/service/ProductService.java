@@ -3,7 +3,10 @@ package com.grupo01.digitalbooking.service;
 import com.grupo01.digitalbooking.domain.*;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
-import com.grupo01.digitalbooking.repository.*;
+import com.grupo01.digitalbooking.repository.CategoryRepository;
+import com.grupo01.digitalbooking.repository.DestinationRepository;
+import com.grupo01.digitalbooking.repository.ProductRepository;
+import com.grupo01.digitalbooking.repository.UtilitiesRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +26,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final DestinationRepository destinationRepository;
     private final UtilitiesRepository utilitiesRepository;
-    private final ImageRepository imageRepository;
-    private final AWSS3OperationsService s3Service;
+    private final AwsS3OperationsService s3Service;
 
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> getProducts(){
@@ -106,40 +108,40 @@ public class ProductService {
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response.setImages(s3Service.uploadAndRegisterImages(images,response));
+        response = repository.findById(response.getId()).get();
+        if(images!=null) {
+            response.getImages().addAll(s3Service.uploadAndRegisterImages(images, response));
+        }
         return new ProductDetailedDTO(response);
     }
 
     @SuppressWarnings("all")
     @Transactional
-    public ProductDetailedDTO editProduct(NewProductDTO dto){
+    public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
 
         Product response = repository.findById(dto.getId()).orElseThrow(()->
                 new BadRequestException("Nenhum produto com id informada foi encontrado"));
 
-//        if (dto.getCategoryId()==null || dto.getImagesIds()==null){
-//            throw new BadRequestException("Não pode fazer cadastro sem categorias ou imagens");
-//        }
-//
-//        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-//                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
-//        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-//                new BadRequestException("Nenhum destino com id informada foi encontrado"));
-//        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
-//        List<Image> images = imageRepository.findAllById(dto.getImagesIds());
-//        if(utilities.size()<dto.getUtilitiesIds().size())
-//            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
-//        if(images.size()<dto.getImagesIds().size())
-//            throw new BadRequestException("Imagens não foram encontradas para algumas ids informadas");
+        if (dto.getCategoryId()==null || dto.getDestinationId()==null){
+            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
+        }
+        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
+        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
+                new BadRequestException("Nenhum destino com id informada foi encontrado"));
+        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
+        if(utilities.size()<dto.getUtilitiesIds().size())
+            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+
         response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
-//        response.setUtilities(utilities);
-//        response.setImages(images);
-//        response.setCategory(category);
-//        response.setDestination(destination);
+        response.setCategory(category);
+        response.setDestination(destination);
+        response.setUtilities(utilities);
         response = repository.save(response);
+        response.setImages(s3Service.uploadAndRegisterImages(images,response));
         return new ProductDetailedDTO(response);
     }
 

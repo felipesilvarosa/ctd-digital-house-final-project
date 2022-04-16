@@ -143,11 +143,11 @@ class ProductServiceTest {
     @Test
     void editProductShouldThrowExceptionWhenIdDoesNotExist(){
         testInput.setId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput));
+        assertThrows(NotFoundException.class,()->service.editProduct(testInput,List.of()));
     }
     @Test
     void editProductShouldReturnDTOWhenIdExists(){
-        ProductDetailedDTO testOutput = service.editProduct(testInput);
+        ProductDetailedDTO testOutput = service.editProduct(testInput,List.of());
         assertEquals(5L,testOutput.getId());
     }
 

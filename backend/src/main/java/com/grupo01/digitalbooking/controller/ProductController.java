@@ -69,8 +69,10 @@ public class ProductController {
 
     @ApiOperation("Atualiza um produto")
     @PutMapping
-    public ResponseEntity<ProductDetailedDTO> editProduct(@RequestBody NewProductDTO dto){
-        ProductDetailedDTO response = service.editProduct(dto);
+    public ResponseEntity<ProductDetailedDTO> editProduct(String dtoJSON,List<MultipartFile>images) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        NewProductDTO dto = mapper.readValue(dtoJSON,NewProductDTO.class);
+        ProductDetailedDTO response = service.editProduct(dto,images);
         return new ResponseEntity<>(response, OK);
     }
 }
