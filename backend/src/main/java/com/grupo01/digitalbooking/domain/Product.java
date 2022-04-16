@@ -23,7 +23,7 @@ import static org.hibernate.annotations.CascadeType.ALL;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_products")
-public class Product {
+public class        Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
-    @ManyToMany()
+    @ManyToMany
     private List<Utility> utilities;
 
     @OneToMany(mappedBy = "product")
