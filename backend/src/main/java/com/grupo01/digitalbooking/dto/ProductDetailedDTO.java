@@ -2,7 +2,7 @@ package com.grupo01.digitalbooking.dto;
 
 import com.grupo01.digitalbooking.domain.Image;
 import com.grupo01.digitalbooking.domain.Product;
-import com.grupo01.digitalbooking.domain.Utilities;
+import com.grupo01.digitalbooking.domain.Utility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class ProductDetailedDTO {
     private String title;
     private String description;
     private String category;
-    private String location;
+    private String destination;
     private Integer stars;
     private Integer rating;
     private Double longitude;
@@ -47,30 +47,21 @@ public class ProductDetailedDTO {
         this.latitude = entity.getLatitude();
         this.longitude = entity.getLongitude();
         this.unavailable = entity.getUnavailableDates();
-        this.location = getLocationFromEntity(entity);
+        this.destination = entity.getDestination().getCity()+", "+
+                entity.getDestination().getCountry();
         this.images = entity.getImages()
                 .stream()
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
-        this.policies = entity.getPolicies()==null||entity.getPolicies().isEmpty()?null:Map.of(
-                "rules",new PolicyDTO(entity.getPolicies().get(0)),
-                "safety",new PolicyDTO(entity.getPolicies().get(1)),
-                "canceling",new PolicyDTO(entity.getPolicies().get(2))
+        this.policies = Map.of(
+                entity.getPolicies().get(0).getType(),new PolicyDTO(entity.getPolicies().get(0)),
+                entity.getPolicies().get(1).getType(),new PolicyDTO(entity.getPolicies().get(1)),
+                entity.getPolicies().get(2).getType(),new PolicyDTO(entity.getPolicies().get(2))
         );
         this.utilities = entity.getUtilities()
                 .stream()
-                .map(Utilities::getName)
+                .map(Utility::getName)
                 .collect(Collectors.toList());
-    }
-
-    private String getLocationFromEntity(Product entity) {
-        if(entity.getDestination()==null) return null;
-        String location = "%s, %s";
-        if(entity.getDestination().getName()!=null)
-            location = String.format(location,entity.getDestination().getName(),entity.getDestination().getCity());
-        else
-            location = String.format(location,entity.getDestination().getCity(),entity.getDestination().getCountry());
-        return location;
     }
 
 

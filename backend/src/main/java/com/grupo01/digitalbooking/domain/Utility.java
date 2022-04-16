@@ -13,14 +13,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_utilities")
-public class Utilities {
+public class Utility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    public Utilities(Long id) {
+    public Utility(Long id) {
         this.id = id;
     }
 

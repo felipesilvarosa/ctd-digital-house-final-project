@@ -26,11 +26,12 @@ public class DestinationsService {
     public DestinationDTO createDestination(DestinationDTO destinationDTO) {
         Destination destination = new Destination(destinationDTO);
 
-        Destination destinationFound = destinationRepository.findByName(destinationDTO.getName().toLowerCase());
-
-        if(Objects.nonNull(destinationFound)){
-            throw new ConflictException("Destino " + destinationDTO.getName() + " já cadastrado");
-        }
+        destinationRepository.findByCityAndCountry(destinationDTO.getCity(),destinationDTO.getCountry())
+                .ifPresent((d)->{
+                    throw new ConflictException("Destino " +
+                            destinationDTO.getCity() +", "+destinationDTO.getCountry()+
+                            " já cadastrado");
+                });
 
         destinationRepository.save(destination);
         return new DestinationDTO(destination);

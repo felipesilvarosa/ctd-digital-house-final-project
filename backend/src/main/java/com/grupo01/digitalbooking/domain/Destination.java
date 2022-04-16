@@ -21,7 +21,6 @@ public class Destination {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private String city;
     private String country;
 
@@ -31,7 +30,6 @@ public class Destination {
 
     public Destination(DestinationDTO dto){
         this.id = dto.getId();
-        this.name = dto.getName();
         this.country = dto.getCountry();
     }
 

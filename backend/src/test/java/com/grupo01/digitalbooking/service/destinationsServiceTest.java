@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,15 +40,12 @@ class destinationsServiceTest {
     @Test
     void createShouldFailWhenCityAlreadyExists(){
         DestinationDTO destinationDTO = mockCityDTO();
-        Destination destination = new Destination(destinationDTO);
+        Optional<Destination> destination = Optional.of(new Destination(destinationDTO));
 
-        when(destinationRepository.findByName(destinationDTO.getName().toLowerCase())).thenReturn(destination);
+        when(destinationRepository.findByCityAndCountry(destinationDTO.getCity(),destinationDTO.getCountry())).thenReturn(destination);
 
-        ConflictException e = assertThrows(ConflictException.class,
+        assertThrows(ConflictException.class,
                 ()-> destinationsService.createDestination(destinationDTO));
-
-        assertTrue(e.getMessage().contains("Cidade " + destinationDTO.getName() + " já cadastrada"));
-
     }
 
     @Test
@@ -62,7 +60,7 @@ class destinationsServiceTest {
     public DestinationDTO mockCityDTO(){
         return DestinationDTO.builder()
                 .country("Brasil")
-                .name("São Paulo")
+                .city("São Paulo")
                 .build();
     }
 
