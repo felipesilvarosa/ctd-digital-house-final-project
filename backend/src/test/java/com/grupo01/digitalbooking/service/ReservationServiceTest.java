@@ -1,6 +1,8 @@
 package com.grupo01.digitalbooking.service;
 
 import com.grupo01.digitalbooking.domain.Client;
+import com.grupo01.digitalbooking.domain.Destination;
+import com.grupo01.digitalbooking.domain.Product;
 import com.grupo01.digitalbooking.domain.Reservation;
 import com.grupo01.digitalbooking.dto.NewReservationDTO;
 import com.grupo01.digitalbooking.dto.ReservationDTO;
@@ -43,6 +45,8 @@ class ReservationServiceTest {
     private LocalDate invalidDate;
     private LocalTime validTime;
     private LocalTime invalidTime;
+    private Client clientWithReservation;
+    private Client clientWithoutReservation;
 
     @BeforeEach
     void init(){
@@ -54,16 +58,22 @@ class ReservationServiceTest {
         this.invalidDate = LocalDate.of(2000,12,31);
         this.validTime = LocalTime.of(12,0);
         this.invalidTime = LocalTime.of(0,0);
+        this.clientWithReservation = new Client(existingId);
+        this.clientWithReservation.setReservations(List.of(new Reservation()));
+        this.clientWithoutReservation = new Client(emptyId);
         List<Reservation> findAllResponse = new ArrayList<>();
         Reservation saveResponse = new Reservation();
+        Product mockProduct = new Product(existingId);
+        mockProduct.setDestination(new Destination(existingId));
         saveResponse.setId(1L);
         saveResponse.setClient(new Client(existingId));
+        saveResponse.setProduct(mockProduct);
         when(clientRepository.findById(existingId)).thenReturn(Optional.of(new Client(existingId)));
-//        when(clientRepository.findById(nonExistingId)).thenReturn(Optional.of());
+        when(clientRepository.findById(nonExistingId)).thenReturn(Optional.empty());
         when(reservationRepository.findAll()).thenReturn(findAllResponse);
         when(reservationRepository.save(any(Reservation.class))).thenReturn(saveResponse);
-        when(reservationRepository.findByClient(new Client(existingId))).thenReturn(Optional.of(new Reservation()));
-        when(reservationRepository.findByClient(new Client(emptyId))).thenReturn(Optional.empty());
+        when(reservationRepository.findAllByClient(clientWithReservation)).thenReturn(clientWithReservation.getReservations());
+        when(reservationRepository.findAllByClient(clientWithoutReservation)).thenReturn(List.of());
         when(reservationRepository.findById(existingId)).thenReturn(Optional.of(new Reservation()));
         when(reservationRepository.findById(nonExistingId)).thenReturn(Optional.empty());
         doNothing().when(reservationRepository).deleteById(any(Long.class));
@@ -98,6 +108,7 @@ class ReservationServiceTest {
     @Test
     void createReservationShouldReturnDTOWhenClientDoesNotExist(){
         testInput.setClientId(nonExistingId);
+        testInput.setProductId(existingId);
         ReservationDTO testOutput = service.createReservation(testInput);
         assertNotNull(testOutput);
     }
@@ -115,6 +126,10 @@ class ReservationServiceTest {
     @Test
     void editReservationShouldReturnDTOWhenIdExists(){
         testInput.setId(existingId);
+        testInput.setCheckinDate(validDate);
+        testInput.setCheckinTime(validTime);
+        testInput.setCheckoutDate(validDate);
+        testInput.setCheckoutTime(validTime);
         ReservationDTO testOutput = service.editReservation(testInput);
         assertNotNull(testOutput);
     }
