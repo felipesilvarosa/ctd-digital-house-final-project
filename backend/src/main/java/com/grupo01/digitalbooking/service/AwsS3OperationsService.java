@@ -14,7 +14,6 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +42,6 @@ public class AwsS3OperationsService {
         List<Image> response = new ArrayList<>();
         images.forEach(image-> {
             try {
-                File file = new File(image.getName());
-                image.transferTo(file);
                 String imageTitle = image.getOriginalFilename();
                 PutObjectRequest request = PutObjectRequest
                         .builder()
@@ -52,8 +49,7 @@ public class AwsS3OperationsService {
                         .acl("public-read")
                         .key(folder+imageTitle)
                         .build();
-                s3.putObject(request, RequestBody.fromFile(file));
-
+                s3.putObject(request, RequestBody.fromBytes(image.getBytes()));
                 String url = awsDomain+folder+imageTitle;
                 Image entity = repository.findByTitle(imageTitle)
                         .orElse(new Image(null,imageTitle,url,product));
