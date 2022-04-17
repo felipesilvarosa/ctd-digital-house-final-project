@@ -70,7 +70,7 @@ public class CategoryService {
             categoryRepository.save(category);
             return new CategoryDTO(category);
         } else {
-            throw new NotFoundException("Category not found");
+            throw new NotFoundException("Categoria não encontrada");
         }
     }
 }

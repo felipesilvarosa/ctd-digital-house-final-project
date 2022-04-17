@@ -31,14 +31,14 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> getProducts(){
         List<Product> response = repository.findAll();
-        if (response.isEmpty())throw new NotFoundException("No product was found");
+        if (response.isEmpty())throw new NotFoundException("Produto não encontrado");
         return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public ProductDetailedDTO getProductById(Long id){
         Product entity = repository.findById(id).orElseThrow(
-                ()-> new NotFoundException("No product with provided id was found"));
+                ()-> new NotFoundException("Nenhum produto com esta id foi encontrado"));
         return new ProductDetailedDTO(entity);
     }
 
@@ -47,12 +47,12 @@ public class ProductService {
 
         if(searchCriteria.get("destinationId")==null&&searchCriteria.get("categoryId")==null&&
                 searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
-            throw new BadRequestException("No acceptable search criteria");
+            throw new BadRequestException("Nenhum critério de busca aceitável");
         }
         if(searchCriteria.get("startDate")!=null&&searchCriteria.get("endDate")==null)
-            throw new BadRequestException("Start date without end date");
+            throw new BadRequestException("Data inicial sem data final");
         if(searchCriteria.get("endDate")!=null&&searchCriteria.get("startDate")==null)
-            throw new BadRequestException("End date without start date");
+            throw new BadRequestException("Data final sem data inicial");
 
         String query = "SELECT p from Product p WHERE ";
 
@@ -81,7 +81,7 @@ public class ProductService {
                     .filter(p->!p.getUnavailableDates().containsAll(searchDates))
                     .collect(Collectors.toList());
         }
-        if (response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
+        if (response.isEmpty())throw new NotFoundException("Nenhum produto com estes critérios foi encontrado");
         return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
 
     }

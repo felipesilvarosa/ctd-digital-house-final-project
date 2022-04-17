@@ -1,13 +1,13 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.grupo01.digitalbooking.dto.CategoryDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -24,8 +24,7 @@ public class Category {
     private String description;
     private String imageUrl;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     public Category(CategoryDTO dto) {
