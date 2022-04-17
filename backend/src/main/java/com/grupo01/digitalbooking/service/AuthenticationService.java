@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,20 +42,20 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(()-> new NotFoundException("No user with provided information was found"));
+                .orElseThrow(()-> new NotFoundException("Nenhum usuário com este email foi encontrado"));
     }
 
     public String refreshAccessToken(HttpServletRequest request){
 
         Cookie[] cookies = request.getCookies();
-        if(cookies==null) throw new ForbiddenException("Error refreshing access token: no cookies were found");
+        if(cookies==null) throw new ForbiddenException("Erro ao atualizar cookie: nenhum cookie encontrado");
         Cookie refreshTokenCookie = null;
         for (Cookie cookie : cookies) {
             if(cookie.getName().equals("refresh_token")) refreshTokenCookie = cookie;
         }
         if (refreshTokenCookie==null) {
             log.error("Error refreshing access token: unable to find 'refresh_token' cookie");
-            throw new ForbiddenException("Error refreshing access token: unable to find 'refresh_token' cookie");
+            throw new ForbiddenException("Erro ao atualizar token de acesso: Não foi encontrado o cookie 'refresh_token'");
         }
         try {
             String refreshToken = refreshTokenCookie.getValue();
@@ -75,7 +74,7 @@ public class AuthenticationService implements UserDetailsService {
 
         } catch (Exception e) {
             log.error("Error refreshing access token: {}", e.getMessage());
-            throw new ForbiddenException(format("Error refreshing access token: %s",e.getMessage()));
+            throw new ForbiddenException(format("Erro ao atualizar token de acesso: Mensagem de erro: %s",e.getMessage()));
         }
     }
 
@@ -83,7 +82,7 @@ public class AuthenticationService implements UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
         return userRepository.findByEmail(currentUserName).orElseThrow(() ->
-                new NotFoundException("User " + currentUserName + " not found"));
+                new NotFoundException("Usuário não encontrado"));
     }
 
     public List<Cookie> createJwtCookies(String subject, List<String> authorities){

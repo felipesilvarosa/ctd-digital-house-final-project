@@ -4,7 +4,6 @@ import com.grupo01.digitalbooking.domain.Role;
 import com.grupo01.digitalbooking.domain.User;
 import com.grupo01.digitalbooking.dto.NewUserDTO;
 import com.grupo01.digitalbooking.dto.UserDTO;
-import com.grupo01.digitalbooking.repository.RoleRepository;
 import com.grupo01.digitalbooking.repository.UserRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class SignupService {
         Optional<User> existingEmailUser = userRepository.findByEmail(newUser.getEmail());
         if(existingEmailUser.isPresent()){
             log.error("Provided e-mail already in use.");
-            throw new BadRequestException("Provided e-mail already in use.");
+            throw new BadRequestException("E-mail já está em uso");
         }
         Util.validatePassword(newUser.getPassword());
         User entity = new User(newUser);
@@ -55,7 +54,7 @@ public class SignupService {
                 newUser.getLastName()==null || newUser.getLastName().isBlank() ||
                 newUser.getEmail()==null || newUser.getEmail().isBlank()||
                 newUser.getPassword()==null || newUser.getPassword().isBlank()){
-            throw new BadRequestException("First name, Last name, email or password is missing");
+            throw new BadRequestException("Nome, sobrenome, email ou senha faltantes.");
         }
     }
 }

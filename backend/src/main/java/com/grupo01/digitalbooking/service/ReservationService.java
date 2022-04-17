@@ -52,7 +52,7 @@ public class ReservationService {
         LocalDateTime checkinDateTime = LocalDateTime.of(dto.getCheckinDate(),dto.getCheckinTime());
         LocalDateTime checkoutDateTime = LocalDateTime.of(dto.getCheckoutDate(),dto.getCheckoutTime());
         if(checkoutDateTime.isBefore(checkinDateTime))
-            throw new BadRequestException("Checkout date and time cannot be before Checkin date and time");
+            throw new BadRequestException("Horário e data de checkout não podem ser antes da data e horário de checkin");
 
         return new ReservationDTO(reservationRepository.save(new Reservation(dto)));
     }
@@ -63,11 +63,11 @@ public class ReservationService {
 
     public ReservationDTO editReservation(NewReservationDTO dto) {
         reservationRepository.findById(dto.getId())
-                .orElseThrow(()-> new NotFoundException("Reservation not found"));
+                .orElseThrow(()-> new NotFoundException("Reserva não encontrada"));
         LocalDateTime checkinDateTime = LocalDateTime.of(dto.getCheckinDate(),dto.getCheckinTime());
         LocalDateTime checkoutDateTime = LocalDateTime.of(dto.getCheckoutDate(),dto.getCheckoutTime());
         if(checkoutDateTime.isBefore(checkinDateTime))
-            throw new BadRequestException("Checkout date and time cannot be before Checkin date and time");
+            throw new BadRequestException("Horário e data de checkout não podem ser antes da data e horário de checkin");
         return new ReservationDTO(reservationRepository.save(new Reservation(dto)));
     }
 }
