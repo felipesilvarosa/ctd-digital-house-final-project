@@ -1,7 +1,8 @@
 package com.grupo01.digitalbooking.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
+import com.grupo01.digitalbooking.domain.User;
+import com.grupo01.digitalbooking.dto.UserDTO;
 import com.grupo01.digitalbooking.service.AuthenticationService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 
 public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -57,8 +56,10 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
                 authResult.getPrincipal().toString(),
                 authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         jwtCookies.forEach(response::addCookie);
-        new ObjectMapper().writeValue(response.getOutputStream(),
-                new DefaultResponseDTO(SUCCESS,"User authenticated successfully"));
+        User userEntity = (User) authenticationService.loadUserByUsername(((User)authResult.getPrincipal()).getUsername());
+        UserDTO responseData = new UserDTO(userEntity);
+
+        new ObjectMapper().writeValue(response.getOutputStream(),responseData);
 
     }
 

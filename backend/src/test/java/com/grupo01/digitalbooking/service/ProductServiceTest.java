@@ -19,7 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -45,10 +46,11 @@ class ProductServiceTest {
     private Long nonExistingId;
     private Product responseProduct;
     private NewProductDTO testInput;
-    private List<Image> existingImages;
     private List<MultipartFile> testImagesInput;
-    private List<Long> existingIdList;
     private List<Long> nonExistingIdList;
+    private List<Long> exceedingIdList;
+    private Long hotelCategoryId;
+    private Long nonHotelCategoryId;
 
     @BeforeEach
     void init(){
@@ -66,6 +68,8 @@ class ProductServiceTest {
         policy3.setPolicyDescriptions(List.of());
         this.existingId = 5L;
         this.nonExistingId = 0L;
+        this.hotelCategoryId = 10L;
+        this.nonHotelCategoryId = 11L;
         this.testInput = new NewProductDTO();
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
@@ -76,9 +80,9 @@ class ProductServiceTest {
                 policy2.getType(),new PolicyDTO(policy2),
                 policy3.getType(),new PolicyDTO(policy3)
         ));
-        this.existingImages = new ArrayList<>();
-        this.existingImages.add(new Image(existingId));
-        this.existingIdList = List.of(existingId);
+        List<Image> existingImages = new ArrayList<>();
+        existingImages.add(new Image(existingId));
+        List<Long> existingIdList = List.of(existingId);
         this.responseProduct = new Product();
         this.responseProduct.setId(existingId);
         this.responseProduct.setImages(existingImages);
@@ -95,18 +99,26 @@ class ProductServiceTest {
         saveResponse.setId(existingId);
         saveResponse.setCategory(new Category(existingId));
         saveResponse.setDestination(new Destination(existingId));
-        saveResponse.setImages(List.of(new Image(existingId)));
+        saveResponse.setImages(existingImages);
         saveResponse.setReservations(List.of());
         saveResponse.setUtilities(List.of());
         saveResponse.setPolicies(List.of(policy1,policy2,policy3));
+        Category hotelCategory = new Category(hotelCategoryId);
+        hotelCategory.setTitle("Hotéis");
+        Category nonHotelCategory = new Category(nonHotelCategoryId);
+        nonHotelCategory.setTitle("Non-Hotel");
+        Destination responseDestination = new Destination();
+        responseDestination.setLatitude(10.0);
+        responseDestination.setLongitude(10.0);
         when(repository.findAll()).thenReturn(findAllResponse);
         when(repository.save(any(Product.class))).thenReturn(saveResponse);
         when(repository.findById(existingId)).thenReturn(Optional.of(responseProduct));
         when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
         when(repository.search(any(String.class))).thenReturn(List.of());
-        when(categoryRepository.findById(existingId)).thenReturn(Optional.of(new Category()));
+        when(categoryRepository.findById(hotelCategoryId)).thenReturn(Optional.of(hotelCategory));
+        when(categoryRepository.findById(nonHotelCategoryId)).thenReturn(Optional.of(nonHotelCategory));
         when(categoryRepository.findById(nonExistingId)).thenReturn(Optional.empty());
-        when(destinationRepository.findById(existingId)).thenReturn(Optional.of(new Destination()));
+        when(destinationRepository.findById(existingId)).thenReturn(Optional.of(responseDestination));
         when(destinationRepository.findById(nonExistingId)).thenReturn(Optional.empty());
         when(imageRepository.findAllById(existingIdList)).thenReturn(List.of(new Image()));
         when(imageRepository.findAllById(nonExistingIdList)).thenReturn(List.of());
@@ -121,47 +133,69 @@ class ProductServiceTest {
         List<ProductDetailedDTO> testOutput = service.getProducts();
         assertNotNull(testOutput);
     }
+
     @Test
     void getProductsShouldThrowExceptionWhenNoProductFound(){
         when(repository.findAll()).thenReturn(List.of());
         assertThrows(NotFoundException.class, ()->service.getProducts());
     }
+
     @Test
     void getProductByIdShouldReturnDTOList(){
         ProductDetailedDTO testOutput = service.getProductById(existingId);
         assertNotNull(testOutput);
     }
+
     @Test
     void getProductByIdShouldThrowExceptionWhenNoProductFound(){
         assertThrows(NotFoundException.class, ()->service.getProductById(nonExistingId));
     }
+
     @Test
     void createProductShouldThrowExceptionWhenInvalidParams(){
+
         testInput.setCategoryId(null);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
-        testInput.setCategoryId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
-        testInput.setCategoryId(existingId);
-        testInput.setUtilitiesIds(nonExistingIdList);
-        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
-        testInput.setUtilitiesIds(List.of(existingId));
-        testInput.setCategoryId(existingId);
-        testInput.setDestinationId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
+        testInput.setCategoryId(hotelCategoryId);
+        testInput.setDestinationId(null);
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
         testInput.setDestinationId(existingId);
         testImagesInput = null;
         assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
-        testImagesInput = List.of();
+        testImagesInput = new ArrayList<>();
+        testImagesInput.add(new MockMultipartFile("Mock",(byte[]) null));
         assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
+        testInput.setCategoryId(nonExistingId);
+        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
+        testInput.setCategoryId(nonHotelCategoryId);
+        testInput.setStars(5);
+        assertThrows(BadRequestException.class, ()->service.createProduct(testInput,testImagesInput));
+        testInput.setCategoryId(hotelCategoryId);
+        testInput.setStars(null);
+        assertThrows(BadRequestException.class, ()->service.createProduct(testInput,testImagesInput));
+        testInput.setStars(5);
+        testInput.setDestinationId(nonExistingId);
+        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
+        testInput.setDestinationId(existingId);
+        testInput.setUtilitiesIds(nonExistingIdList);
+        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
+
 
     }
+
     @Test
     void createProductShouldReturnDTOWhenValidIds(){
-        testInput.setCategoryId(existingId);
+        testInput.setCategoryId(hotelCategoryId);
+        testInput.setStars(5);
         testInput.setDestinationId(existingId);
         ProductDetailedDTO testOutput = service.createProduct(testInput,testImagesInput);
-        assertEquals(5L,testOutput.getId());
+        assertNotNull(testOutput);
+        testInput.setCategoryId(nonHotelCategoryId);
+        testInput.setStars(null);
+        testOutput = service.createProduct(testInput,testImagesInput);
+        assertNotNull(testOutput);
     }
+
     @Test
     void deleteProductShouldCallRepositoryDeleteByIdOnce(){
         service.deleteProduct(1L);
@@ -170,30 +204,48 @@ class ProductServiceTest {
 
     @Test
     void editProductShouldThrowExceptionWhenInvalidParams(){
+
         testInput.setId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput,List.of()));
+        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
         testInput.setId(existingId);
         testInput.setCategoryId(null);
         assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
-        testInput.setCategoryId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
-        testInput.setCategoryId(existingId);
-        testInput.setUtilitiesIds(nonExistingIdList);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
-        testInput.setUtilitiesIds(List.of(existingId));
-        testInput.setCategoryId(existingId);
-        testInput.setDestinationId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
+        testInput.setCategoryId(hotelCategoryId);
+        testInput.setDestinationId(null);
+        assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
         testInput.setDestinationId(existingId);
         testImagesInput = null;
         assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
         testImagesInput = List.of();
         assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
+        testImagesInput = new ArrayList<>();
+        testImagesInput.add(new MockMultipartFile("Mock",(byte[]) null));
+        testInput.setCategoryId(nonExistingId);
+        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
+        testInput.setCategoryId(nonHotelCategoryId);
+        testInput.setStars(5);
+        assertThrows(BadRequestException.class, ()->service.editProduct(testInput,testImagesInput));
+        testInput.setCategoryId(hotelCategoryId);
+        testInput.setStars(null);
+        assertThrows(BadRequestException.class, ()->service.editProduct(testInput,testImagesInput));
+        testInput.setStars(5);
+        testInput.setDestinationId(nonExistingId);
+        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
+        testInput.setDestinationId(existingId);
+        testInput.setUtilitiesIds(nonExistingIdList);
+        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
     }
+
     @Test
-    void editProductShouldReturnDTOWhenIdExists(){
+    void editProductShouldReturnDTOWhenValidParams(){
+        testInput.setCategoryId(hotelCategoryId);
+        testInput.setStars(5);
         ProductDetailedDTO testOutput = service.editProduct(testInput,testImagesInput);
-        assertEquals(5L,testOutput.getId());
+        assertNotNull(testOutput);
+        testInput.setCategoryId(nonHotelCategoryId);
+        testInput.setStars(null);
+        testOutput = service.editProduct(testInput,testImagesInput);
+        assertNotNull(testOutput);
     }
 
     @Test
@@ -205,6 +257,7 @@ class ProductServiceTest {
         searchCriteria.put("endDate",null);
         assertThrows(BadRequestException.class,()->service.searchProducts(searchCriteria));
     }
+
     @Test
     void searchProductsShouldThrowExceptionWhenInvalidParams(){
         Map<String,Object> searchCriteria = new HashMap<>();
@@ -219,6 +272,7 @@ class ProductServiceTest {
         searchCriteria.put("endDate",LocalDate.now());
         assertThrows(BadRequestException.class,()->service.searchProducts(searchCriteria));
     }
+
     @Test
     void searchProductShouldThrowExceptionWhenNoProductFound(){
         Map<String,Object> searchCriteria = new HashMap<>();
@@ -228,6 +282,7 @@ class ProductServiceTest {
         searchCriteria.put("endDate",null);
         assertThrows(NotFoundException.class,()->service.searchProducts(searchCriteria));
     }
+
     @Test
     void searchProductsShouldReturnDTOList(){
         when(repository.search(any(String.class))).thenReturn(List.of(responseProduct));
@@ -245,6 +300,5 @@ class ProductServiceTest {
         testOutput = service.searchProducts(searchCriteria);
         assertNotNull(testOutput);
     }
-
 
 }
