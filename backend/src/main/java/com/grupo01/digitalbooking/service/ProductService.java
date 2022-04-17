@@ -93,9 +93,11 @@ public class ProductService {
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
         }
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+            new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+        if(!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)
+            throw new BadRequestException("Somente hotéis podem possuir estrelas");
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+            new NotFoundException("Nenhum destino com id informada foi encontrado"));
         List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
@@ -108,8 +110,7 @@ public class ProductService {
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response = repository.findById(response.getId()).get();
-        response.getImages().addAll(s3Service.uploadAndRegisterImages(images, response));
+        response.setImages(s3Service.uploadAndRegisterImages(images, response));
         return new ProductDetailedDTO(response);
     }
 
@@ -118,15 +119,17 @@ public class ProductService {
     public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
 
         Product response = repository.findById(dto.getId()).orElseThrow(()->
-                new NotFoundException("Nenhum produto com id informada foi encontrado"));
+            new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty()){
+        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty())
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
-        }
+
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+            new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+        if(!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)
+            throw new BadRequestException("Somente hotéis podem possuir estrelas");
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+            new NotFoundException("Nenhum destino com id informada foi encontrado"));
         List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
@@ -139,7 +142,7 @@ public class ProductService {
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response.setImages(s3Service.uploadAndRegisterImages(images,response));
+        response.getImages().addAll(s3Service.uploadAndRegisterImages(images,response));
         return new ProductDetailedDTO(response);
     }
 
