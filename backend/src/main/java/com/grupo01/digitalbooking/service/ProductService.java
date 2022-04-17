@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,14 +94,17 @@ public class ProductService {
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
         }
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+            new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+        if(!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)
+            throw new BadRequestException("Somente hotéis podem possuir estrelas");
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+            new NotFoundException("Nenhum destino com id informada foi encontrado"));
         List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
-        Product response = new Product(dto);
+        Double[] coordinates = generateRandomCoordinatesFromDestination(destination);
+        Product response = new Product(dto,coordinates[0],coordinates[1]);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
@@ -108,30 +112,31 @@ public class ProductService {
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response = repository.findById(response.getId()).get();
-        response.getImages().addAll(s3Service.uploadAndRegisterImages(images, response));
+        response.setImages(s3Service.uploadAndRegisterImages(images, response));
         return new ProductDetailedDTO(response);
     }
 
-    @SuppressWarnings("all")
     @Transactional
     public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
 
-        Product response = repository.findById(dto.getId()).orElseThrow(()->
-                new NotFoundException("Nenhum produto com id informada foi encontrado"));
+        repository.findById(dto.getId()).orElseThrow(()->
+            new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty()){
+        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty())
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
-        }
+
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+            new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+        if(!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)
+            throw new BadRequestException("Somente hotéis podem possuir estrelas");
         Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+            new NotFoundException("Nenhum destino com id informada foi encontrado"));
         List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
-        response = new Product(dto);
+        Double[] coordinates = generateRandomCoordinatesFromDestination(destination);
+        Product response = new Product(dto,coordinates[0],coordinates[1]);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
@@ -139,12 +144,26 @@ public class ProductService {
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response.setImages(s3Service.uploadAndRegisterImages(images,response));
+        response.getImages().addAll(s3Service.uploadAndRegisterImages(images,response));
         return new ProductDetailedDTO(response);
     }
 
     public void deleteProduct(Long id){
         repository.deleteById(id);
+    }
+
+    private Double[] generateRandomCoordinatesFromDestination(Destination destination) {
+        Double[] coordinates = new Double[2];
+        Random random = new Random();
+        int negative = random.nextInt(2);
+        BigDecimal randomAmount = BigDecimal.valueOf(((double) random.nextInt(50000) + 1) / 10000000);
+        if (negative==1) randomAmount = BigDecimal.valueOf(-randomAmount.doubleValue());
+        coordinates[0] = randomAmount.add(BigDecimal.valueOf(destination.getLatitude())).doubleValue();
+        negative = random.nextInt(2);
+        randomAmount = BigDecimal.valueOf(((double) random.nextInt(50000) + 1) / 10000000);
+        if (negative==1) randomAmount = BigDecimal.valueOf(-randomAmount.doubleValue());
+        coordinates[1] = randomAmount.add(BigDecimal.valueOf(destination.getLongitude())).doubleValue();
+        return coordinates;
     }
 
 }
