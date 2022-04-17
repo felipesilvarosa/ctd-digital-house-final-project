@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -102,7 +103,8 @@ public class ProductService {
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
-        Product response = new Product(dto);
+        Double[] coordinates = generateRandomCoordinatesFromDestination(destination);
+        Product response = new Product(dto,coordinates[0],coordinates[1]);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
@@ -114,11 +116,10 @@ public class ProductService {
         return new ProductDetailedDTO(response);
     }
 
-    @SuppressWarnings("all")
     @Transactional
     public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
 
-        Product response = repository.findById(dto.getId()).orElseThrow(()->
+        repository.findById(dto.getId()).orElseThrow(()->
             new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
         if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty())
@@ -134,7 +135,8 @@ public class ProductService {
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
-        response = new Product(dto);
+        Double[] coordinates = generateRandomCoordinatesFromDestination(destination);
+        Product response = new Product(dto,coordinates[0],coordinates[1]);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
@@ -148,6 +150,20 @@ public class ProductService {
 
     public void deleteProduct(Long id){
         repository.deleteById(id);
+    }
+
+    private Double[] generateRandomCoordinatesFromDestination(Destination destination) {
+        Double[] coordinates = new Double[2];
+        Random random = new Random();
+        int negative = random.nextInt(2);
+        BigDecimal randomAmount = BigDecimal.valueOf(((double) random.nextInt(50000) + 1) / 10000000);
+        if (negative==1) randomAmount = BigDecimal.valueOf(-randomAmount.doubleValue());
+        coordinates[0] = randomAmount.add(BigDecimal.valueOf(destination.getLatitude())).doubleValue();
+        negative = random.nextInt(2);
+        randomAmount = BigDecimal.valueOf(((double) random.nextInt(50000) + 1) / 10000000);
+        if (negative==1) randomAmount = BigDecimal.valueOf(-randomAmount.doubleValue());
+        coordinates[1] = randomAmount.add(BigDecimal.valueOf(destination.getLongitude())).doubleValue();
+        return coordinates;
     }
 
 }

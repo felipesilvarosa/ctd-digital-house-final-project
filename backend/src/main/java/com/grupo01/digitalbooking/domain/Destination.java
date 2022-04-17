@@ -23,6 +23,8 @@ public class Destination {
     private Long id;
     private String city;
     private String country;
+    private Double latitude;
+    private Double longitude;
 
     @JsonIgnore
     @OneToMany(mappedBy = "destination",fetch = FetchType.LAZY)

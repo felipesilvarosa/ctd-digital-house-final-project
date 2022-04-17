@@ -14,7 +14,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.EAGER;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 @Entity
@@ -36,11 +35,11 @@ public class Product {
     private Double latitude;
     private Double longitude;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "destination_id")
     private Destination destination;
 
@@ -57,14 +56,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Reservation> reservations;
 
-    public Product(NewProductDTO dto) {
+    public Product(NewProductDTO dto,Double latitude, Double longitude) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();
         this.stars = dto.getStars();
         this.rating = dto.getRating();
-        this.latitude = dto.getLatitude();
-        this.longitude = dto.getLongitude();
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.category = new Category(dto.getCategoryId());
         this.destination = new Destination(dto.getDestinationId());
         this.utilities = dto.getUtilitiesIds()
