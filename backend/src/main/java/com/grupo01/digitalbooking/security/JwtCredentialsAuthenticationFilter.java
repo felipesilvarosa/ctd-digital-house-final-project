@@ -38,7 +38,7 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
             CredentialsAuthenticationRequest authenticationRequest =
                     new ObjectMapper().readValue(request.getInputStream(), CredentialsAuthenticationRequest.class);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    authenticationRequest.getUsername(),
+                    authenticationRequest.getEmail(),
                     authenticationRequest.getPassword()
             );
             return authenticationManager.authenticate(authentication);
