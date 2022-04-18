@@ -16,10 +16,16 @@ import java.util.stream.Collectors;
 public class PolicyDTO {
 
     private String title;
+    private Integer order;
     private List<PolicyDescriptionDTO> descriptions;
 
     public PolicyDTO(Policy entity){
         this.title = entity.getTitle();
+        switch (entity.getType()){
+            case "rules" : order = 0;break;
+            case "safety" : order = 1;break;
+            case "canceling" : order = 2;break;
+        }
         this.descriptions = entity.getPolicyDescriptions()
                 .stream()
                 .map(PolicyDescriptionDTO::new)
@@ -33,4 +39,5 @@ public class PolicyDTO {
                 ", descriptions=" + descriptions +
                 '}';
     }
+
 }

@@ -6,13 +6,14 @@ import com.grupo01.digitalbooking.dto.DestinationDTO;
 import com.grupo01.digitalbooking.repository.DestinationRepository;
 import com.grupo01.digitalbooking.service.exceptions.ConflictException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DestinationsService {
 

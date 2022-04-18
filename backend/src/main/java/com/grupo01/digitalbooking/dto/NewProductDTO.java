@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -18,12 +17,10 @@ public class NewProductDTO {
     private Long id;
     private String name;
     private String description;
+    private String address;
     private Integer stars;
     private Integer rating;
-    private Double latitude;
-    private Double longitude;
     private Long categoryId;
-    private Long destinationId;
     private List<Long> utilitiesIds;
     private Map<String,PolicyDTO> policies;
 

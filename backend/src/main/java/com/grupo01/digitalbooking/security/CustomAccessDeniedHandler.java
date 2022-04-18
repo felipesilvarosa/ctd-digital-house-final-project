@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,6 +32,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(403);
         Map<String, String> data = Map.of("exception: ", accessDeniedException.getMessage());
         new ObjectMapper().writeValue(response.getOutputStream(),
-                new DefaultResponseDTO(FAILED, data, "Access Denied"));
+                new DefaultResponseDTO(FAILED, data, "Acesso negado"));
     }
 }

@@ -14,13 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class destinationsServiceTest {
+class DestinationsServiceTest {
 
     @InjectMocks
     private DestinationsService destinationsService;
@@ -30,16 +31,16 @@ class destinationsServiceTest {
 
 
     @Test
-    void createShouldCreateNewCity(){
-        DestinationDTO destinationDTO = mockCityDTO();
+    void createShouldCreateNewDestination(){
+        DestinationDTO destinationDTO = mockDestinationDTO();
         destinationsService.createDestination(destinationDTO);
         verify(destinationRepository, Mockito.times(1)).save(any());
 
     }
 
     @Test
-    void createShouldFailWhenCityAlreadyExists(){
-        DestinationDTO destinationDTO = mockCityDTO();
+    void createShouldFailWhenDestinationAlreadyExists(){
+        DestinationDTO destinationDTO = mockDestinationDTO();
         Optional<Destination> destination = Optional.of(new Destination(destinationDTO));
 
         when(destinationRepository.findByCityAndCountry(destinationDTO.getCity(),destinationDTO.getCountry())).thenReturn(destination);
@@ -50,14 +51,14 @@ class destinationsServiceTest {
 
     @Test
 
-    void getCityShouldReturnListOfCityDTO(){
+    void getDestinationShouldReturnListOfDestinationDTO(){
         when(destinationRepository.findAll()).thenReturn(List.of());
         List<DestinationDTO> testOutput = destinationsService.getDestinations();
         assertNotNull(testOutput);
     }
 
 
-    public DestinationDTO mockCityDTO(){
+    public DestinationDTO mockDestinationDTO(){
         return DestinationDTO.builder()
                 .country("Brasil")
                 .city("São Paulo")

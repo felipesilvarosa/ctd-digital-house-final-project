@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,8 +13,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import static javax.persistence.FetchType.EAGER;
-import static org.hibernate.annotations.CascadeType.ALL;
+import static javax.persistence.CascadeType.REMOVE;
+
 
 @Entity
 @Getter
@@ -23,34 +22,35 @@ import static org.hibernate.annotations.CascadeType.ALL;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_products")
-public class        Product {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
+    private String address;
     private Integer stars;
     private Integer rating;
-    private Double latitude;
-    private Double longitude;
+    private String latitude;
+    private String longitude;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne
     @JoinColumn(name = "destination_id")
     private Destination destination;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = REMOVE)
     private List<Image> images;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "products", cascade = REMOVE)
     private List<Utility> utilities;
 
-    @OneToMany(mappedBy = "product")
-    @Cascade(ALL)
+    @OneToMany(mappedBy = "product", cascade = REMOVE)
     private List<Policy> policies;
 
     @OneToMany(mappedBy = "product")
@@ -60,16 +60,11 @@ public class        Product {
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();
+        this.address = dto.getAddress();
         this.stars = dto.getStars();
         this.rating = dto.getRating();
-        this.latitude = dto.getLatitude();
-        this.longitude = dto.getLongitude();
         this.category = new Category(dto.getCategoryId());
-        this.destination = new Destination(dto.getDestinationId());
-        this.utilities = dto.getUtilitiesIds()
-                .stream()
-                .map(Utility::new)
-                .collect(Collectors.toList());
+        this.utilities = dto.getUtilitiesIds().stream().map(Utility::new).collect(Collectors.toList());
 
     }
 
@@ -78,7 +73,7 @@ public class        Product {
     }
 
     public Set<LocalDate> getUnavailableDates() {
-        if(getReservations()==null)return null;
+        if (getReservations() == null) return null;
         Set<LocalDate> unavailableDates = new TreeSet<>();
         getReservations().forEach(reservation -> {
             LocalDate endDate = reservation.getCheckoutDateTime().toLocalDate();

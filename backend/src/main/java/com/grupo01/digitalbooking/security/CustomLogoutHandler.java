@@ -31,7 +31,7 @@ public class CustomLogoutHandler implements LogoutHandler {
         log.info("User has been logged out");
         try {
             new ObjectMapper().writeValue(response.getOutputStream(),
-                    new DefaultResponseDTO(SUCCESS,"User has been logged out"));
+                    new DefaultResponseDTO(SUCCESS,"Usuário foi deslogado."));
         } catch (IOException e) {
             e.printStackTrace();
         }

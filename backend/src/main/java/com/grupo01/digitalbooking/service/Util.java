@@ -13,12 +13,12 @@ public class Util {
         Matcher matcher = pattern.matcher(password);
         if(!matcher.matches()){
             throw new BadRequestException(
-                    "Invalid password. " +
-                            "The password must have "+
-                            "a minimum of 8 characters, " +
-                            "1 lower case character, " +
-                            "1 upper case character, " +
-                            "1 number and 1 special character");
+                    "Senha inválida. " +
+                            "A senha deve ter:  "+
+                            "um mínimo de 8 caracteres, " +
+                            "1 caractere caixa baixa, " +
+                            "1 caractere caixa alta, " +
+                            "1 número e 1 caractere especial");
         }
 
     }

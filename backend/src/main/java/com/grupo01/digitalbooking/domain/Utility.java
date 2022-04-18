@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -16,10 +19,14 @@ import javax.persistence.*;
 public class Utility {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
-
+    @ManyToMany
+    @JoinTable(name = "tb_products_utilities",
+            joinColumns = {@JoinColumn(name = "utility_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")})
+    private List<Product> products;
     public Utility(Long id) {
         this.id = id;
     }

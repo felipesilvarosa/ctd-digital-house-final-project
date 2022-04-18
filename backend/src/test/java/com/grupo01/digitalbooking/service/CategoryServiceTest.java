@@ -66,10 +66,8 @@ class CategoryServiceTest {
 
         when(categoryRepository.findById(categoryDTO.getId())).thenReturn(Optional.empty());
 
-        NotFoundException e = assertThrows(NotFoundException.class,
-                ()-> categoryService.editCategory(categoryDTO));
+        assertThrows(NotFoundException.class,()-> categoryService.editCategory(categoryDTO));
 
-        assertTrue(e.getMessage().contains("Category not found"));
     }
 
     @Test
@@ -88,7 +86,9 @@ class CategoryServiceTest {
 
     @Test
     void getCategoryByIdShouldReturnCategoryDTOWhenValidId(){
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(new Category(1L)));
+        Category mockCat = new Category(1L);
+        mockCat.setProducts(List.of());
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(mockCat));
         CategoryDTO testOutput = categoryService.getCategoryById(1L);
         assertNotNull(testOutput);
     }

@@ -6,58 +6,69 @@ import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.CategoryRepository;
 import com.grupo01.digitalbooking.repository.DestinationRepository;
 import com.grupo01.digitalbooking.repository.ProductRepository;
-import com.grupo01.digitalbooking.repository.UtilitiesRepository;
+import com.grupo01.digitalbooking.repository.UtilityRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.math.RoundingMode.FLOOR;
+import static org.springframework.web.reactive.function.client.WebClient.builder;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
     private final DestinationRepository destinationRepository;
-    private final UtilitiesRepository utilitiesRepository;
+    private final UtilityRepository utilityRepository;
     private final AwsS3OperationsService s3Service;
 
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> getProducts(){
         List<Product> response = repository.findAll();
-        if (response.isEmpty())throw new NotFoundException("No product was found");
+        if (response.isEmpty())throw new NotFoundException("Produto não encontrado");
         return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public ProductDetailedDTO getProductById(Long id){
         Product entity = repository.findById(id).orElseThrow(
-                ()-> new NotFoundException("No product with provided id was found"));
+                ()-> new NotFoundException("Nenhum produto com esta id foi encontrado"));
         return new ProductDetailedDTO(entity);
     }
 
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> searchProducts(Map<String, Object> searchCriteria) {
 
-        if(searchCriteria.get("locationId")==null&&searchCriteria.get("categoryId")==null&&
+        if(searchCriteria.get("destinationId")==null&&searchCriteria.get("categoryId")==null&&
                 searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
-            throw new BadRequestException("No acceptable search criteria");
+            throw new BadRequestException("Nenhum critério de busca aceitável");
         }
         if(searchCriteria.get("startDate")!=null&&searchCriteria.get("endDate")==null)
-            throw new BadRequestException("Start date without end date");
+            throw new BadRequestException("Data inicial sem data final");
         if(searchCriteria.get("endDate")!=null&&searchCriteria.get("startDate")==null)
-            throw new BadRequestException("End date without start date");
+            throw new BadRequestException("Data final sem data inicial");
 
         String query = "SELECT p from Product p WHERE ";
 
-        if(searchCriteria.get("locationId")!=null)
-            query+= "p.location.id = " + searchCriteria.get("locationId") + " AND ";
+        if(searchCriteria.get("destinationId")!=null)
+            query+= "p.location.id = " + searchCriteria.get("destinationId") + " AND ";
         if(searchCriteria.get("categoryId")!=null)
             query+= "p.category.id = " + searchCriteria.get("categoryId") + " AND ";
         if(query.endsWith(" AND "))
@@ -76,12 +87,12 @@ public class ProductService {
                 searchDate = searchDate.plusDays(1);
             }
 
-            response = response
-                    .stream()
-                    .filter(p->!p.getUnavailableDates().containsAll(searchDates))
+            response = response.stream()
+                    .filter(p-> p.getUnavailableDates()
+                    .stream().noneMatch(searchDates::contains))
                     .collect(Collectors.toList());
         }
-        if (response.isEmpty())throw new NotFoundException("No product with provided criteria was found");
+        if (response.isEmpty())throw new NotFoundException("Nenhum produto com estes critérios foi encontrado");
         return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
 
     }
@@ -89,18 +100,29 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO createProduct(NewProductDTO dto,List<MultipartFile>images){
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null){
-            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
-        }
-        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
-        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new BadRequestException("Nenhum destino com id informada foi encontrado"));
-        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
-        if(utilities.size()<dto.getUtilitiesIds().size())
-            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+        if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
+            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
+        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
+            new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
+
+        if((!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)||
+                (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
+            throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
+
+        String[] addressDetails = dto.getAddress().split(",");
+        Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim()).orElseThrow(
+                ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
+
+        List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
+        if(utilities.size()<dto.getUtilitiesIds().size())
+            throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
+
+        String[] coordinates = getCoordinatesFromApi(dto.getAddress());
         Product response = new Product(dto);
+        response.setLatitude(coordinates[0]);
+        response.setLongitude(coordinates[1]);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
@@ -108,45 +130,84 @@ public class ProductService {
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response = repository.findById(response.getId()).get();
-        if(images!=null) {
-            response.getImages().addAll(s3Service.uploadAndRegisterImages(images, response));
-        }
+        response.setImages(s3Service.uploadAndRegisterImages(images, response));
         return new ProductDetailedDTO(response);
     }
 
-    @SuppressWarnings("all")
     @Transactional
     public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
 
-        Product response = repository.findById(dto.getId()).orElseThrow(()->
-                new BadRequestException("Nenhum produto com id informada foi encontrado"));
+        repository.findById(dto.getId()).orElseThrow(()->
+            new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null){
-            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
-        }
+        if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
+            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
+
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
-                new BadRequestException("Nenhuma categoria com id informada foi encontrada"));
-        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new BadRequestException("Nenhum destino com id informada foi encontrado"));
-        List<Utility> utilities = utilitiesRepository.findAllById(dto.getUtilitiesIds());
-        if(utilities.size()<dto.getUtilitiesIds().size())
-            throw new BadRequestException("Utilidades não foram encontradas para algumas ids informadas");
+                new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
 
-        response = new Product(dto);
+        if((!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)||
+                (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
+            throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
+
+        String[] addressDetails = dto.getAddress().split(",");
+        Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim()).orElseThrow(
+                ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
+
+        List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
+        if(utilities.size()<dto.getUtilitiesIds().size())
+            throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
+
+        String[] coordinates = getCoordinatesFromApi(dto.getAddress());
+        Product response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
+        response.setLongitude(coordinates[0]);
+        response.setLatitude(coordinates[1]);
         response.setPolicies(policies);
         response.setCategory(category);
         response.setDestination(destination);
         response.setUtilities(utilities);
         response = repository.save(response);
-        response.setImages(s3Service.uploadAndRegisterImages(images,response));
+        response.getImages().addAll(s3Service.uploadAndRegisterImages(images,response));
         return new ProductDetailedDTO(response);
     }
 
     public void deleteProduct(Long id){
-        repository.deleteById(id);
+        try{
+            log.info("does this this product id exist? {}",repository.findById(id).isPresent());
+            repository.deleteById(id);
+        }catch (EmptyResultDataAccessException ex){
+            log.info("Tried to delete product with id {} but it wasn't found",id);
+        }
+    }
+
+    private String[] getCoordinatesFromApi(String address) {
+
+        WebClient client = builder()
+                .baseUrl("https://nominatim.openstreetmap.org")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        Map<String,Object> response = Objects.requireNonNull(client
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search")
+                        .queryParam("q", address)
+                        .queryParam("format", "json")
+                        .queryParam("limit", 1)
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
+                }).block()).get(0);
+
+        DecimalFormat df = new DecimalFormat("#.#######");
+        df.setRoundingMode(FLOOR);
+        return new String[]{
+                df.format(Double.valueOf((String)response.get("lat"))),
+                df.format(Double.valueOf((String)response.get("lon")))
+        };
     }
 
 }
