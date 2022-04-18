@@ -2,6 +2,7 @@ package com.grupo01.digitalbooking.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.service.ProductService;
@@ -17,13 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.grupo01.digitalbooking.dto.DefaultResponseDTO.Status.SUCCESS;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("products")
 @RequiredArgsConstructor
-@Api(value ="", tags = {"Produtos"})
+@Api(tags = {"Produtos"})
 @Tag(name ="Produtos", description="End point para controle de produtos")
 public class ProductController {
 
@@ -74,5 +76,11 @@ public class ProductController {
         NewProductDTO dto = mapper.readValue(dtoJSON,NewProductDTO.class);
         ProductDetailedDTO response = service.editProduct(dto,images);
         return new ResponseEntity<>(response, OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<DefaultResponseDTO> deleteProduct(@RequestParam List<Long> ids){
+        ids.forEach(service::deleteProduct);
+        return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,Map.of(),"Produtos deletados"));
     }
 }

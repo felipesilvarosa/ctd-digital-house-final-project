@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface DestinationRepository extends JpaRepository<Destination,Long> {
-    @Query("SELECT d from Destination d where d.city=:city and d.country=:country")
+    @Query("SELECT d from Destination d where lower(d.city)=lower(:city) and lower(d.country)=lower(:country)")
     Optional<Destination> findByCityAndCountry(@Param("city") String city, @Param("country") String country);
 }

@@ -74,7 +74,7 @@ class ProductServiceTest {
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
         this.testInput.setUtilitiesIds(List.of());
-        this.testInput.setDestinationId(existingId);
+
         this.testInput.setPolicies(Map.of(
                 policy1.getType(),new PolicyDTO(policy1),
                 policy2.getType(),new PolicyDTO(policy2),
@@ -108,8 +108,8 @@ class ProductServiceTest {
         Category nonHotelCategory = new Category(nonHotelCategoryId);
         nonHotelCategory.setTitle("Non-Hotel");
         Destination responseDestination = new Destination();
-        responseDestination.setLatitude(10.0);
-        responseDestination.setLongitude(10.0);
+        responseDestination.setLatitude("10.0");
+        responseDestination.setLongitude("10.0");
         when(repository.findAll()).thenReturn(findAllResponse);
         when(repository.save(any(Product.class))).thenReturn(saveResponse);
         when(repository.findById(existingId)).thenReturn(Optional.of(responseProduct));
@@ -157,9 +157,9 @@ class ProductServiceTest {
         testInput.setCategoryId(null);
         assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
         testInput.setCategoryId(hotelCategoryId);
-        testInput.setDestinationId(null);
+        //substitute for address validation
         assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
-        testInput.setDestinationId(existingId);
+        //undo invalid adress
         testImagesInput = null;
         assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
         testImagesInput = new ArrayList<>();
@@ -174,9 +174,9 @@ class ProductServiceTest {
         testInput.setStars(null);
         assertThrows(BadRequestException.class, ()->service.createProduct(testInput,testImagesInput));
         testInput.setStars(5);
-        testInput.setDestinationId(nonExistingId);
+        //substitute for address validation
         assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
-        testInput.setDestinationId(existingId);
+        //undo invalid address
         testInput.setUtilitiesIds(nonExistingIdList);
         assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
 
@@ -187,7 +187,7 @@ class ProductServiceTest {
     void createProductShouldReturnDTOWhenValidIds(){
         testInput.setCategoryId(hotelCategoryId);
         testInput.setStars(5);
-        testInput.setDestinationId(existingId);
+        //substitute fora ddress validation
         ProductDetailedDTO testOutput = service.createProduct(testInput,testImagesInput);
         assertNotNull(testOutput);
         testInput.setCategoryId(nonHotelCategoryId);
@@ -211,27 +211,26 @@ class ProductServiceTest {
         testInput.setCategoryId(null);
         assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
         testInput.setCategoryId(hotelCategoryId);
-        testInput.setDestinationId(null);
-        assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
-        testInput.setDestinationId(existingId);
+        //substitute for address validation
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
+        //undo invalid adress
         testImagesInput = null;
-        assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
-        testImagesInput = List.of();
-        assertThrows(BadRequestException.class,()->service.editProduct(testInput,testImagesInput));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
         testImagesInput = new ArrayList<>();
         testImagesInput.add(new MockMultipartFile("Mock",(byte[]) null));
+        assertThrows(BadRequestException.class,()->service.createProduct(testInput,testImagesInput));
         testInput.setCategoryId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
+        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
         testInput.setCategoryId(nonHotelCategoryId);
         testInput.setStars(5);
-        assertThrows(BadRequestException.class, ()->service.editProduct(testInput,testImagesInput));
+        assertThrows(BadRequestException.class, ()->service.createProduct(testInput,testImagesInput));
         testInput.setCategoryId(hotelCategoryId);
         testInput.setStars(null);
-        assertThrows(BadRequestException.class, ()->service.editProduct(testInput,testImagesInput));
+        assertThrows(BadRequestException.class, ()->service.createProduct(testInput,testImagesInput));
         testInput.setStars(5);
-        testInput.setDestinationId(nonExistingId);
-        assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
-        testInput.setDestinationId(existingId);
+        //substitute for address validation
+        assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
+        //undo invalid address
         testInput.setUtilitiesIds(nonExistingIdList);
         assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
     }

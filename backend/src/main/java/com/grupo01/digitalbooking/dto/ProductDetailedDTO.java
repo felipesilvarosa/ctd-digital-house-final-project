@@ -26,10 +26,11 @@ public class ProductDetailedDTO {
     private String description;
     private String category;
     private String destination;
+    private String address;
     private Integer stars;
     private Integer rating;
-    private Double longitude;
-    private Double latitude;
+    private String latitude;
+    private String longitude;
     private List<String> images;
     private Set<LocalDate> unavailable;
     private List<String> utilities;
@@ -41,6 +42,7 @@ public class ProductDetailedDTO {
         this.id = entity.getId();
         this.title = entity.getName();
         this.description = entity.getDescription();
+        this.address = entity.getAddress();
         this.category = entity.getCategory().getTitle();
         this.stars = entity.getStars();
         this.rating = entity.getRating();
