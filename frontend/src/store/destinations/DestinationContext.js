@@ -14,6 +14,7 @@ export const DestinationProvider = ({children}) => {
       const response = await axios("/destinations")
       const destinations = response.data
       dispatch({type: "SET_DESTINATIONS", payload: destinations})
+      dispatch({type: "SET_FILTERED_DESTINATIONS", payload: destinations})
     } catch(e) {
       console.error(e)
     } finally {

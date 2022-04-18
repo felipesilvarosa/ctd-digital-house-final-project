@@ -11,14 +11,12 @@ export const ProductDetailsPolicies = ({policies, className, title}) => {
               <h3>{policy[1].title}</h3>
               <div>
                 {
-                  typeof policy[1].description === "string" 
-                    ? policy[1].description
-                    : policy[1].description.map(item => (
-                      <div key={item.description} className={styles.PolicyItem}>
-                        <span className="material-icons">{item.icon}</span>
-                        <p>{item.description}</p>
-                      </div>
-                    ))
+                  policy[1].descriptions.map(item => (
+                    <div key={item.description} className={styles.PolicyItem}>
+                      { item.icon && <span className="material-icons">{item.icon}</span> }
+                      <p>{item.description}</p>
+                    </div>
+                  ))
                 }
               </div>
             </div>

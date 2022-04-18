@@ -12,10 +12,10 @@ export const SignupView = () => {
 
   const navigate = useNavigate()
 
-  const handleSubmit = async ({name, surname, email, password, passwordConfirmation}) =>{
+  const handleSubmit = async ({firstName, lastName, email, password, passwordConfirmation}) =>{
     if (loading) return
 
-    await registerUser({name, surname, email, password, passwordConfirmation})
+    await registerUser({firstName, lastName, email, password, passwordConfirmation})
   }
 
   useEffect(() => {
@@ -30,15 +30,15 @@ export const SignupView = () => {
   return(
     <>
       <div className={style.signup} data-testid="signup-view">
-        <Formik initialValues={{name: '', surname: '', email: '', password: '', passwordConfirmation: ''}} onSubmit={handleSubmit}>
+        <Formik initialValues={{firstName: '', lastName: '', email: '', password: '', passwordConfirmation: ''}} onSubmit={handleSubmit}>
           <Form noValidate className={style.form}>
             <h2>Criar Conta</h2>
 
             { signupErrors.server && <FlashMessage type="error">{signupErrors.server}</FlashMessage> }
 
             <div className={style.nomeCompleto}>
-              <InputGroup loading={loading} id="name" inputType="text" label="Nome" error={signupErrors.nome} />
-              <InputGroup loading={loading} id="surname" inputType="text" label="Sobrenome" error={signupErrors.sobrenome} />
+              <InputGroup loading={loading} id="firstName" inputType="text" label="Nome" error={signupErrors.nome} />
+              <InputGroup loading={loading} id="lastName" inputType="text" label="Sobrenome" error={signupErrors.sobrenome} />
             </div>
 
             <InputGroup loading={loading} id="email" inputType="email" label="Email" error={signupErrors.email} />

@@ -59,7 +59,7 @@ export const HomeRecomendations = ({category, destination}) => {
                       
                       <p className={styles.Location}>{product.location}</p>
                       <div className={styles.Utilities}>
-                        { product.utilities.map(utility => <span key={utility} className="material-icons" data-tooltip={utility}>{ getUtilityMaterialIconString(utility) }</span>)}
+                        { product.utilities.map(utility => <span key={`${product.id} ${utility}`} className="material-icons" data-tooltip={utility}>{ getUtilityMaterialIconString(utility) }</span>)}
                       </div>
                       <p className={styles.Description}>{getTruncatedString(product.description)}... <Link to={`/products/${product.id}`}>mais</Link></p>
                       <BaseButton type="link" to={`/products/${product.id}`}>Ver mais</BaseButton>

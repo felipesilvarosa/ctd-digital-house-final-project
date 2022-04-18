@@ -26,7 +26,6 @@ export const ProductsProvider = ({children}) => {
     try {
       const response = await axios("/products")
       const products = response.data
-      console.log(products)
       dispatch({type: "SET_PRODUCTS", payload: products})
     } catch(e) {
       console.error(e)
