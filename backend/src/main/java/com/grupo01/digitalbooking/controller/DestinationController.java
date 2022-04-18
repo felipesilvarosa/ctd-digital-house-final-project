@@ -15,23 +15,23 @@ import java.util.List;
 @RestController
 @RequestMapping("destinations")
 @RequiredArgsConstructor
-@Api(value ="", tags = {"Cidades"})
+@Api(tags = {"Destinos"})
 @Tag(name ="Cidades", description="End point para controle de cidades")
 public class DestinationController {
 
-    private final DestinationsService destinationsService;
+    private final DestinationsService service;
 
     @ApiOperation("Busca todas as cidades")
     @GetMapping
     public ResponseEntity<List<DestinationDTO>> findAllDestinations() {
-        List<DestinationDTO> response = destinationsService.getDestinations();
+        List<DestinationDTO> response = service.getDestinations();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ApiOperation("Cria uma nova cidade")
     @PostMapping
     public ResponseEntity<DestinationDTO> createDestination(@RequestBody DestinationDTO destinationDTO) {
-        DestinationDTO response = destinationsService.createDestination(destinationDTO);
+        DestinationDTO response = service.createDestination(destinationDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

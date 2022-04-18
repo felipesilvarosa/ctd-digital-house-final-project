@@ -30,10 +30,11 @@ public class Product {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
+    private String address;
     private Integer stars;
     private Integer rating;
-    private Double latitude;
-    private Double longitude;
+    private String latitude;
+    private String longitude;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -56,16 +57,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Reservation> reservations;
 
-    public Product(NewProductDTO dto,Double latitude, Double longitude) {
+    public Product(NewProductDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();
+        this.address = dto.getAddress();
         this.stars = dto.getStars();
         this.rating = dto.getRating();
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.category = new Category(dto.getCategoryId());
-        this.destination = new Destination(dto.getDestinationId());
         this.utilities = dto.getUtilitiesIds()
                 .stream()
                 .map(Utility::new)

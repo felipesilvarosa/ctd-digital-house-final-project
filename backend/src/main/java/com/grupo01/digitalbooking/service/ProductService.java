@@ -10,17 +10,26 @@ import com.grupo01.digitalbooking.repository.UtilityRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.math.RoundingMode.FLOOR;
+import static org.springframework.web.reactive.function.client.WebClient.builder;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository repository;
@@ -77,9 +86,9 @@ public class ProductService {
                 searchDate = searchDate.plusDays(1);
             }
 
-            response = response
-                    .stream()
-                    .filter(p->!p.getUnavailableDates().containsAll(searchDates))
+            response = response.stream()
+                    .filter(p-> p.getUnavailableDates()
+                    .stream().noneMatch(searchDates::contains))
                     .collect(Collectors.toList());
         }
         if (response.isEmpty())throw new NotFoundException("Nenhum produto com estes critérios foi encontrado");
@@ -90,8 +99,8 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO createProduct(NewProductDTO dto,List<MultipartFile>images){
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty())
-            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
+        if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
+            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
             new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
@@ -100,15 +109,19 @@ public class ProductService {
                 (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
             throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
-        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-            new NotFoundException("Nenhum destino com id informada foi encontrado"));
+        String[] addressDetails = dto.getAddress().split(",");
+        Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim()).orElseThrow(
+                ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
 
         List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
-        Double[] coordinates = generateRandomCoordinatesFromDestination(destination);
-        Product response = new Product(dto,coordinates[0],coordinates[1]);
+        String[] coordinates = getCoordinatesFromApi(dto.getAddress());
+        Product response = new Product(dto);
+        response.setLatitude(coordinates[0]);
+        response.setLongitude(coordinates[1]);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
         response.setPolicies(policies);
@@ -126,8 +139,8 @@ public class ProductService {
         repository.findById(dto.getId()).orElseThrow(()->
             new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getDestinationId()==null||images==null||images.isEmpty())
-            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou destino");
+        if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
+            throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
                 new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
@@ -136,17 +149,21 @@ public class ProductService {
                 (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
             throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
-        Destination destination = destinationRepository.findById(dto.getDestinationId()).orElseThrow(()->
-                new NotFoundException("Nenhum destino com id informada foi encontrado"));
+        String[] addressDetails = dto.getAddress().split(",");
+        Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim()).orElseThrow(
+                ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
 
         List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
         if(utilities.size()<dto.getUtilitiesIds().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
-        Double[] coordinates = generateRandomCoordinatesFromDestination(destination);
-        Product response = new Product(dto,coordinates[0],coordinates[1]);
+        String[] coordinates = getCoordinatesFromApi(dto.getAddress());
+        Product response = new Product(dto);
         List<Policy> policies = new ArrayList<>();
         dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
+        response.setLongitude(coordinates[0]);
+        response.setLatitude(coordinates[1]);
         response.setPolicies(policies);
         response.setCategory(category);
         response.setDestination(destination);
@@ -160,18 +177,31 @@ public class ProductService {
         repository.deleteById(id);
     }
 
-    private Double[] generateRandomCoordinatesFromDestination(Destination destination) {
-        Double[] coordinates = new Double[2];
-        Random random = new Random();
-        int negative = random.nextInt(2);
-        BigDecimal randomAmount = BigDecimal.valueOf(((double) random.nextInt(50000) + 1) / 10000000);
-        if (negative==1) randomAmount = BigDecimal.valueOf(-randomAmount.doubleValue());
-        coordinates[0] = randomAmount.add(BigDecimal.valueOf(destination.getLatitude())).doubleValue();
-        negative = random.nextInt(2);
-        randomAmount = BigDecimal.valueOf(((double) random.nextInt(50000) + 1) / 10000000);
-        if (negative==1) randomAmount = BigDecimal.valueOf(-randomAmount.doubleValue());
-        coordinates[1] = randomAmount.add(BigDecimal.valueOf(destination.getLongitude())).doubleValue();
-        return coordinates;
+    private String[] getCoordinatesFromApi(String address) {
+
+        WebClient client = builder()
+                .baseUrl("https://nominatim.openstreetmap.org")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        Map<String,Object> response = Objects.requireNonNull(client
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search")
+                        .queryParam("q", address)
+                        .queryParam("format", "json")
+                        .queryParam("limit", 1)
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
+                }).block()).get(0);
+
+        DecimalFormat df = new DecimalFormat("#.#######");
+        df.setRoundingMode(FLOOR);
+        return new String[]{
+                df.format(Double.valueOf((String)response.get("lat"))),
+                df.format(Double.valueOf((String)response.get("lon")))
+        };
     }
 
 }
