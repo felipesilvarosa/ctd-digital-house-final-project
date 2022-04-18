@@ -12,6 +12,7 @@ import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -174,7 +175,12 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id){
-        repository.deleteById(id);
+        try{
+            log.info("does this this product id exist? {}",repository.findById(id).isPresent());
+            repository.deleteById(id);
+        }catch (EmptyResultDataAccessException ex){
+            log.info("Tried to delete product with id {} but it wasn't found",id);
+        }
     }
 
     private String[] getCoordinatesFromApi(String address) {
