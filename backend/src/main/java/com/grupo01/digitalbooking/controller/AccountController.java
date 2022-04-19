@@ -8,36 +8,40 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
-@Api(value ="", tags = {"Contas"})
+@Api(tags = {"Contas"})
 @Tag(name ="Contas", description="End point para controle de contas usuarios")
 public class AccountController {
 
-    private final SignupService service;
+    private final SignupService signupService;
     private final AuthenticationService authenticationService;
-
 
     @ApiOperation("Criação de nova conta de usuario")
     @PostMapping
     public ResponseEntity<UserDTO> createNewUser(@RequestBody NewUserDTO newUser,
                                                  HttpServletResponse response){
-        UserDTO result = service.createNewUser(newUser);
+        UserDTO result = signupService.createNewUser(newUser);
         List<Cookie> cookies = authenticationService.createJwtCookies(result.getEmail(),List.of(result.getRole()));
         cookies.forEach(response::addCookie);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        return new ResponseEntity<>(result, CREATED);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<UserDTO> validateUser(){
+        UserDTO result = authenticationService.validateUser();
+        return new ResponseEntity<>(result, OK);
     }
 
 }
