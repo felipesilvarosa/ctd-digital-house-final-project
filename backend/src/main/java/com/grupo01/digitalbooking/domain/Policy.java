@@ -1,13 +1,13 @@
 package com.grupo01.digitalbooking.domain;
 
-import com.grupo01.digitalbooking.dto.PolicyDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
@@ -17,23 +17,19 @@ import java.util.stream.Collectors;
 public class Policy {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private String title;
     private String type;
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-    @OneToMany(mappedBy = "policy")
-    private List<PolicyDescription> policyDescriptions;
+    private String title;
+    private String icon;
+    private String description;
+    @ManyToMany
+    @JoinTable(name = "tb_products_policies",
+            joinColumns = {@JoinColumn(name = "policy_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")})
+    private List<Product> products;
 
-    public Policy(String type,PolicyDTO dto){
-        this.type = type;
-        this.title = dto.getTitle();
-        this.policyDescriptions = dto.getDescriptions()
-                .stream()
-                .map(PolicyDescription::new)
-                .collect(Collectors.toList());
+    public Policy(Long id) {
+        this.id = id;
     }
-
 }

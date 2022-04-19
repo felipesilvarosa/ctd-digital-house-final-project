@@ -83,4 +83,5 @@ public class ProductController {
         ids.forEach(service::deleteProduct);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,Map.of(),"Produtos deletados"));
     }
+
 }
