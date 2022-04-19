@@ -1,6 +1,5 @@
 package com.grupo01.digitalbooking.controller;
 
-import com.grupo01.digitalbooking.domain.Reservation;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import com.grupo01.digitalbooking.dto.NewReservationDTO;
 import com.grupo01.digitalbooking.dto.ReservationDTO;
@@ -17,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("reservations")
 @RequiredArgsConstructor
-@Api(value ="", tags = {"Reservas"})
+@Api(tags = {"Reservas"})
 @Tag(name ="Reservas", description="End point para controle de reservas")
 public class ReservationController {
 

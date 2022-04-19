@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("destinations")
 @RequiredArgsConstructor
 @Api(tags = {"Destinos"})
-@Tag(name ="Cidades", description="End point para controle de cidades")
+@Tag(name ="Destinos", description="End point para controle de destinos")
 public class DestinationController {
 
     private final DestinationsService service;

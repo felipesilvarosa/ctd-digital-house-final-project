@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("categories")
 @RequiredArgsConstructor
-@Api(value ="", tags = {"Categorias"})
+@Api(tags = {"Categorias"})
 @Tag(name ="Categorias", description="End point para controle de categorias")
 public class CategoryController {
 
