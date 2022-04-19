@@ -1,6 +1,7 @@
 import { BaseButton, CardsGridLoader, HomeCard, HomeSection, RatingBlock, StarsMeter } from "src/components"
 import { Link } from "react-router-dom"
 import { useProducts, useWindowSize } from "src/hooks";
+import { getUtilityMaterialIconString, getRandomImage, getTruncatedString } from "src/utils";
 import { useEffect, useState } from "react";
 import styles from "./HomeRecomendations.module.scss";
 
@@ -42,7 +43,7 @@ export const HomeRecomendations = ({category, destination}) => {
                       horizontal={size.width >= 520 }
                       key={product.id}
                       to={`/products/${product.id}`}
-                      image={product.images[0]}
+                      image={product.images[0] ?? getRandomImage()}
                       title={product.title}
                     >
                       <div className={styles.Header}>
@@ -56,16 +57,11 @@ export const HomeRecomendations = ({category, destination}) => {
                         <RatingBlock rating={product.rating} />
                       </div>
                       
-                      <p className={styles.Location}>{product.location}</p>
+                      <p className={styles.Location}>{product.destination}</p>
                       <div className={styles.Utilities}>
-                        <div>
-                          <span className="material-icons">place</span>
-                          {product.utilities.distance}
-                        </div>
-                        { product.utilities.wifi && <span className="material-icons">wifi</span> }
-                        { product.utilities.swimming && <span className="material-icons">pool</span> }
+                        { product.utilities.map(utility => <span key={`${product.id} ${utility}`} className="material-icons" data-tooltip={utility}>{ getUtilityMaterialIconString(utility) }</span>)}
                       </div>
-                      <p className={styles.Description}>{product.description.match(/^.{80}\w*/)}... <Link to={`/products/${product.id}`}>mais</Link></p>
+                      <p className={styles.Description}>{getTruncatedString(product.description)}... <Link to={`/products/${product.id}`}>mais</Link></p>
                       <BaseButton type="link" to={`/products/${product.id}`}>Ver mais</BaseButton>
                     </HomeCard>
                   ))}

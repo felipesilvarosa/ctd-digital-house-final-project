@@ -16,20 +16,22 @@ export const HomeCategories = () => {
             <div className={styles.CategoriesGrid}>
               {categories && categories.length > 0 &&
                 categories.map((category) => (
-                  <HomeCard 
-                    clickable
-                    key={category.id}
-                    to={`/?category=${category.title}`}
-                    image={category.image}
-                    title={category.title}
-                  >
-                    <h3 className={styles.CategoryTitle}>
-                      {category.title}
-                    </h3>
-                    <p className={styles.CategoryText}>
-                      <span>{Number(category.entries).toLocaleString()}</span> {category.title}
-                    </p>
-                  </HomeCard>
+                  category.productCount > 0 &&
+                    <HomeCard 
+                      clickable
+                      key={category.id}
+                      to={`/?category=${category.title}`}
+                      image={category.imageUrl}
+                      title={category.title}
+                    >
+                      <h3 className={styles.CategoryTitle}>
+                        {category.title}
+                      </h3>
+                      <p className={styles.CategoryText}>
+                        { category.productCount && <span>{Number(category.productCount).toLocaleString()} </span> }
+                        { category.productCount ? category.title : category.description }
+                      </p>
+                    </HomeCard>
                 ))}
             </div>
       }

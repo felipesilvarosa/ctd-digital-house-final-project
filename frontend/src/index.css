@@ -50,6 +50,9 @@
 
   --col-loading-lighter: #ececec;
   --col-loading-darker: #e4e4e4;
+
+  --col-confirm: #84b41a;
+  --col-cancel: #d4203e;
 }
 
 *,

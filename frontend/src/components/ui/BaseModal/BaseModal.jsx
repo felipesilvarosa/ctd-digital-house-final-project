@@ -6,6 +6,7 @@ export const BaseModal = ({children, toggleModal}) => {
 
   const closeModal = () => {
     setTransition(true)
+    document.body.setAttribute("data-modalopen", "false")
     setTimeout(() => {
       toggleModal()
     }, 200)
