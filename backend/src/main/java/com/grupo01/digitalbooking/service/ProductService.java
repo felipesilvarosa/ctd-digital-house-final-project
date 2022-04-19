@@ -209,23 +209,4 @@ public class ProductService {
                 df.format(Double.valueOf((String)response.get("lon")))
         };
     }
-
-    @Transactional
-    public void updateAll() {
-
-        List<Product> products = repository.findAll();
-        int counter[] = {0};
-        products = products.stream().filter(
-                p->p.getPolicies().size()==0&&counter[0]++<10).collect(Collectors.toList());
-        products.forEach(p->{
-            List<Policy> policies = new ArrayList<>();
-            for(long i = 1L; i<=9;i++) {
-                Policy po = policyRepository.findById(i).get();
-                po.getProducts().add(p);
-                policies.add(po);
-            }
-            p.setPolicies(policies);
-        });
-        repository.saveAll(products);
-    }
 }
