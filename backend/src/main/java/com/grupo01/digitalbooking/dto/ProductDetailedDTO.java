@@ -84,7 +84,7 @@ public class ProductDetailedDTO {
         List<Map<String,String>> cancelingDescriptions = entity
                 .getPolicies()
                 .stream()
-                .filter(policy -> policy.getType().equals("rules"))
+                .filter(policy -> policy.getType().equals("canceling"))
                 .map(policy -> Map.of(
                         "icon",policy.getIcon(),
                         "description",policy.getDescription()))
@@ -99,7 +99,7 @@ public class ProductDetailedDTO {
                 "order",1,
                 "descriptions",safetyDescriptions));
         formatedJson.put("canceling",Map.of(
-                "title","Regras da casa",
+                "title","Políticas de cancelamento",
                 "order",2,
                 "descriptions",cancelingDescriptions));
 
