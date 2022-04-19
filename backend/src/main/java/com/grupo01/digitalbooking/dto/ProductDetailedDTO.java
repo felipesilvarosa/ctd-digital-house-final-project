@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class ProductDetailedDTO {
     private List<String> images;
     private Set<LocalDate> unavailable;
     private List<String> utilities;
-    private Map<String, PolicyDTO> policies;
+    private Map<String, Map<String,Object>> policies;
 
 
     public ProductDetailedDTO(Product entity){
@@ -49,21 +50,61 @@ public class ProductDetailedDTO {
         this.latitude = entity.getLatitude();
         this.longitude = entity.getLongitude();
         this.unavailable = entity.getUnavailableDates();
+        this.policies = formatPoliciesJSON(entity);
         this.destination = entity.getDestination().getCity()+", "+
                 entity.getDestination().getCountry();
         this.images = entity.getImages()
                 .stream()
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
-        this.policies = Map.of(
-                entity.getPolicies().get(0).getType(),new PolicyDTO(entity.getPolicies().get(0)),
-                entity.getPolicies().get(1).getType(),new PolicyDTO(entity.getPolicies().get(1)),
-                entity.getPolicies().get(2).getType(),new PolicyDTO(entity.getPolicies().get(2))
-        );
         this.utilities = entity.getUtilities()
                 .stream()
                 .map(Utility::getName)
                 .collect(Collectors.toList());
+    }
+
+    private Map<String, Map<String,Object>> formatPoliciesJSON(Product entity) {
+        Map<String,Map<String,Object>> formatedJson = new HashMap<>();
+        List<Map<String,String>> rulesDescriptions = entity
+                .getPolicies()
+                .stream()
+                .filter(policy -> policy.getType().equals("rules"))
+                .map(policy -> Map.of(
+                        "icon",policy.getIcon(),
+                        "description",policy.getDescription()))
+                .collect(Collectors.toList());
+        List<Map<String,String>> safetyDescriptions = entity
+                .getPolicies()
+                .stream()
+                .filter(policy -> policy.getType().equals("safety"))
+                .map(policy -> Map.of(
+                        "icon",policy.getIcon(),
+                        "description",policy.getDescription()))
+                .collect(Collectors.toList());
+        List<Map<String,String>> cancelingDescriptions = entity
+                .getPolicies()
+                .stream()
+                .filter(policy -> policy.getType().equals("rules"))
+                .map(policy -> Map.of(
+                        "icon",policy.getIcon(),
+                        "description",policy.getDescription()))
+                .collect(Collectors.toList());
+
+        formatedJson.put("rules",Map.of(
+                "title","Regras da casa",
+                "order",0,
+                "descriptions",rulesDescriptions));
+        formatedJson.put("safety",Map.of(
+                "title","Saúde e segurança",
+                "order",1,
+                "descriptions",safetyDescriptions));
+        formatedJson.put("canceling",Map.of(
+                "title","Regras da casa",
+                "order",2,
+                "descriptions",cancelingDescriptions));
+
+        return formatedJson;
+
     }
 
 

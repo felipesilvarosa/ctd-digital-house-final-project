@@ -3,10 +3,7 @@ package com.grupo01.digitalbooking.service;
 import com.grupo01.digitalbooking.domain.*;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
-import com.grupo01.digitalbooking.repository.CategoryRepository;
-import com.grupo01.digitalbooking.repository.DestinationRepository;
-import com.grupo01.digitalbooking.repository.ProductRepository;
-import com.grupo01.digitalbooking.repository.UtilityRepository;
+import com.grupo01.digitalbooking.repository.*;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +35,7 @@ public class ProductService {
     private final DestinationRepository destinationRepository;
     private final UtilityRepository utilityRepository;
     private final AwsS3OperationsService s3Service;
+    private final PolicyRepository policyRepository;
 
     @Transactional(readOnly = true)
     public List<ProductDetailedDTO> getProducts(){
@@ -123,13 +121,14 @@ public class ProductService {
         Product response = new Product(dto);
         response.setLatitude(coordinates[0]);
         response.setLongitude(coordinates[1]);
-        List<Policy> policies = new ArrayList<>();
-        dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
+        List<Policy> policies = policyRepository.findAllById(dto.getPoliciesIds());
+        policies.forEach(p->p.getProducts().add(response));
         response.setPolicies(policies);
         response.setCategory(category);
         response.setDestination(destination);
+        utilities.forEach(u -> u.getProducts().add(response));
         response.setUtilities(utilities);
-        response = repository.save(response);
+        response.setId(repository.save(response).getId());
         response.setImages(s3Service.uploadAndRegisterImages(images, response));
         return new ProductDetailedDTO(response);
     }
@@ -161,15 +160,16 @@ public class ProductService {
 
         String[] coordinates = getCoordinatesFromApi(dto.getAddress());
         Product response = new Product(dto);
-        List<Policy> policies = new ArrayList<>();
-        dto.getPolicies().forEach((k,v)-> policies.add(new Policy(k,v)));
+        List<Policy> policies = policyRepository.findAllById(dto.getPoliciesIds());
+        policies.forEach(p->p.getProducts().add(response));
         response.setLongitude(coordinates[0]);
         response.setLatitude(coordinates[1]);
         response.setPolicies(policies);
         response.setCategory(category);
         response.setDestination(destination);
+        utilities.forEach(u->u.getProducts().add(response));
         response.setUtilities(utilities);
-        response = repository.save(response);
+        response.setId(repository.save(response).getId());
         response.getImages().addAll(s3Service.uploadAndRegisterImages(images,response));
         return new ProductDetailedDTO(response);
     }
@@ -210,4 +210,22 @@ public class ProductService {
         };
     }
 
+    @Transactional
+    public void updateAll() {
+
+        List<Product> products = repository.findAll();
+        int counter[] = {0};
+        products = products.stream().filter(
+                p->p.getPolicies().size()==0&&counter[0]++<10).collect(Collectors.toList());
+        products.forEach(p->{
+            List<Policy> policies = new ArrayList<>();
+            for(long i = 1L; i<=9;i++) {
+                Policy po = policyRepository.findById(i).get();
+                po.getProducts().add(p);
+                policies.add(po);
+            }
+            p.setPolicies(policies);
+        });
+        repository.saveAll(products);
+    }
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +21,6 @@ public class NewProductDTO {
     private Integer rating;
     private Long categoryId;
     private List<Long> utilitiesIds;
-    private Map<String,PolicyDTO> policies;
+    private List<Long> policiesIds;
 
 }

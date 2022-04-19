@@ -2,7 +2,6 @@ package com.grupo01.digitalbooking.service;
 
 import com.grupo01.digitalbooking.domain.*;
 import com.grupo01.digitalbooking.dto.NewProductDTO;
-import com.grupo01.digitalbooking.dto.PolicyDTO;
 import com.grupo01.digitalbooking.dto.ProductDetailedDTO;
 import com.grupo01.digitalbooking.repository.*;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
@@ -57,15 +56,12 @@ class ProductServiceTest {
         Policy policy1 = new Policy();
         policy1.setId(1L);
         policy1.setType("A");
-        policy1.setPolicyDescriptions(List.of());
         Policy policy2 = new Policy();
         policy2.setId(2L);
         policy2.setType("B");
-        policy2.setPolicyDescriptions(List.of());
         Policy policy3 = new Policy();
         policy3.setId(3L);
         policy3.setType("C");
-        policy3.setPolicyDescriptions(List.of());
         this.existingId = 5L;
         this.nonExistingId = 0L;
         this.hotelCategoryId = 10L;
@@ -74,12 +70,6 @@ class ProductServiceTest {
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
         this.testInput.setUtilitiesIds(List.of());
-
-        this.testInput.setPolicies(Map.of(
-                policy1.getType(),new PolicyDTO(policy1),
-                policy2.getType(),new PolicyDTO(policy2),
-                policy3.getType(),new PolicyDTO(policy3)
-        ));
         List<Image> existingImages = new ArrayList<>();
         existingImages.add(new Image(existingId));
         List<Long> existingIdList = List.of(existingId);

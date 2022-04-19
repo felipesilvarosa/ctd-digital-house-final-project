@@ -33,6 +33,7 @@ public class Destination {
     public Destination(DestinationDTO dto){
         this.id = dto.getId();
         this.country = dto.getCountry();
+        this.city = dto.getCity();
     }
 
     public Destination(Long id) {
