@@ -1,11 +1,12 @@
 import { useEffect, useCallback } from "react"
 import { TheHeader, TheFooter } from "src/components"
 import toast, { Toaster } from "react-hot-toast"
-import { useCategories, useAuth } from "src/hooks"
+import { useCategories, useAuth, useProducts } from "src/hooks"
 
 export const TheScaffold = ({children}) => {
   const { setCategories } = useCategories()
   const { user, loginStatus, signupStatus, updateLoginStatus, updateSignupStatus } = useAuth()
+  const { setPolicies } = useProducts()
   
 
   const notifyAndReset = useCallback((message, type) => {
@@ -28,7 +29,8 @@ export const TheScaffold = ({children}) => {
   }, [user, loginStatus, signupStatus, notifyAndReset])
 
   useEffect(() => {
-    setCategories();
+    setCategories()
+    setPolicies()
     // eslint-disable-next-line
   }, []);
 

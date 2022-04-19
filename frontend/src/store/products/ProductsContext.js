@@ -34,10 +34,22 @@ export const ProductsProvider = ({children}) => {
     }
   }
 
+  const setPolicies = async () => {
+    try {
+      const response = await axios("/policies")
+      const policies = response.data
+      dispatch({type: "SET_POLICIES", payload: policies})
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
   const value = {
     products: state.products,
     product: state.product,
     loading: state.loading,
+    availablePolicies: state.availablePolicies,
+    setPolicies,
     setProducts,
     findProductById
   }

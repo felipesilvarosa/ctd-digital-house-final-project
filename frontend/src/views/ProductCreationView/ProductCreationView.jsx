@@ -11,13 +11,14 @@ import {
   BaseTag,
   BaseToggle
 } from "src/components"
-import { useCategories } from "src/hooks"
+import { useCategories, useProducts } from "src/hooks"
 import { availableUtilities } from "src/utils"
 import styles from "./ProductCreationView.module.scss"
 
 export const ProductCreationView = () => {
 
   const { categories } = useCategories()
+  const { availablePolicies } = useProducts()
   const [ selectedCategory, setSelectedCategory ] = useState()
 
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ export const ProductCreationView = () => {
   }
 
   useEffect(() => {
-    console.log(categories)
+    
     // eslint-disable-next-line
   }, [])
 
@@ -111,38 +112,73 @@ export const ProductCreationView = () => {
               </div>
             </section>
 
-            {/* <h2>Políticas do produto</h2>
-            <FlexWrapper>
-              <div className={styles.InputCluster}>
-                <h3>Regras da Casa</h3>
-                <p>Descrição</p>
-                <textarea name="" id="" cols="30" rows="10" placeholder="Escreva aqui"></textarea>
+            <section className={styles.MainBlock}>
+              <h2>Regras da Casa</h2>
+
+              <div className={styles.UtilitiesBlock}>
+                {
+                  availablePolicies
+                    .filter(policy => policy.type === "rules")
+                    .map(policy => {
+                      return <BaseTag key={policy.id} variant="outline">
+                        <BaseToggle id={policy.id}>
+                          <div className={styles.Utility}>
+                            <span className="material-icons">{policy.icon}</span>
+                            <p>{policy.description}</p>
+                          </div>
+                        </BaseToggle>
+                      </BaseTag>
+                    })
+                }
               </div>
-              <div className={styles.InputCluster}>
-                <h3>Saúde e Segurança</h3>
-                <p>Descrição</p>
-                <textarea name="" id="" cols="30" rows="10" placeholder="Escreva aqui"></textarea>
+            </section>
+
+            <section className={styles.MainBlock}>
+              <h2>Saúde e Segurança</h2>
+
+              <div className={styles.UtilitiesBlock}>
+                {
+                  availablePolicies
+                    .filter(policy => policy.type === "safety")
+                    .map(policy => {
+                      return <BaseTag key={policy.id} variant="outline">
+                        <BaseToggle id={policy.id}>
+                          <div className={styles.Utility}>
+                            <span className="material-icons">{policy.icon}</span>
+                            <p>{policy.description}</p>
+                          </div>
+                        </BaseToggle>
+                      </BaseTag>
+                    })
+                }
               </div>
-              <div className={styles.InputCluster}>
-                <h3>Política de cancelamento</h3>
-                <p>Descrição</p>
-                <textarea name="" id="" cols="30" rows="10" placeholder="Escreva aqui"></textarea>
+            </section>
+
+            <section className={styles.MainBlock}>
+              <h2>Políticas de Cancelamento</h2>
+
+              <div className={styles.UtilitiesBlock}>
+                {
+                  availablePolicies
+                    .filter(policy => policy.type === "canceling")
+                    .map(policy => {
+                      return <BaseTag key={policy.id} variant="outline">
+                        <BaseToggle id={policy.id}>
+                          <div className={styles.Utility}>
+                            <span className="material-icons">{policy.icon}</span>
+                            <p>{policy.description}</p>
+                          </div>
+                        </BaseToggle>
+                      </BaseTag>
+                    })
+                }
               </div>
-            </FlexWrapper>
+            </section>
 
-            <h2>Adicionar imagens</h2>
-            <div className={styles.InputCluster}>
-              <InputGroup id="firstName" inputType="text" label="Atributo" />
-              <InputGroup id="lastName" inputType="text" label="Icone" />
-              <button>+</button>
-            </div>
-
-
-            <FlexWrapper row wrap align="center" className={styles.ButtonLine}>
-              <BaseButton type="reset">Cancelar</BaseButton>
-              <BaseButton type="submit">Criar</BaseButton>
-            </FlexWrapper> */}
-
+            <section>
+              <h2>Fotos</h2>
+              <input type="file" />
+            </section>
           </Form>
         </Formik>
       </ResponsiveContainer>
