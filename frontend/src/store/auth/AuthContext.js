@@ -10,7 +10,7 @@ export const AuthProvider = ({children}) => {
 
   const [state, dispatch] = useReducer(authReducer, authState)
 
-  const registerUser = useCallback(async ({name, surname, email, password, passwordConfirmation}) => {
+  const registerUser = useCallback(async ({firstName, lastName, email, password, passwordConfirmation}) => {
     const errors = {}
 
     dispatch({
@@ -24,11 +24,11 @@ export const AuthProvider = ({children}) => {
     })
 
     try {
-      if(name.trim() === "") {
+      if(firstName.trim() === "") {
         errors.nome = "Campo obrigatório."
       }
 
-      if(surname.trim() === "") {
+      if(lastName.trim() === "") {
         errors.sobrenome = "Campo obrigatório."
       }
 
@@ -49,14 +49,12 @@ export const AuthProvider = ({children}) => {
         throw new Error("Credenciais inválidas.")
       }
       
-      const response = await axios.post("/api/users", { name, surname, email, password })
-      
+      const response = await axios.post("/users", { firstName, lastName, email, password })
       const modeledUser = {
-        ...response.data.data.attributes,
-        id: response.data.data.id,
-        fullName: `${response.data.data.attributes.name} ${response.data.data.attributes.surname}`
+        ...response.data,
+        fullName: `${response.data.firstName} ${response.data.lastName}`
       }
-      
+
       dispatch({
         type: "USER_LOGIN",
         payload: modeledUser
@@ -74,7 +72,7 @@ export const AuthProvider = ({children}) => {
 
     } catch (e) {
       if (e.response) {
-        errors.server = e.response.data.error
+        errors.server = e.response.data.message
       }
       dispatch({ type: "USER_SIGNUP_ERRORS", payload: errors })
       dispatch({ type: "USER_LOGOUT" })
@@ -112,12 +110,13 @@ export const AuthProvider = ({children}) => {
         throw new Error("Credenciais inválidas.")
       }
 
-      const response = await axios.post("/api/login", { email, password })
-
+      const response = await axios.post("/login", { email, password })
       const modeledUser = {
-        ...response.data.user,
-        fullName: `${response.data.user.name} ${response.data.user.surname}`
+        ...response.data,
+        fullName: `${response.data.firstName} ${response.data.lastName}`
       }
+
+      console.log(modeledUser)
 
       dispatch({
         type: "USER_LOGIN",

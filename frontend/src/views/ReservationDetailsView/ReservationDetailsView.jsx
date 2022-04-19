@@ -14,7 +14,7 @@ import {
   ProductDetailsPolicies,
 } from "src/components"
 import { useAuth, useProducts, useReservations, useWindowSize } from "src/hooks"
-import { makeNumberFromDate } from "src/utils";
+import { makeNumberFromDate, getCheckInTimeFromUtilities } from "src/utils";
 
 import styles from "./ReservationDetailsView.module.scss"
 import "react-date-range/dist/styles.css";
@@ -138,8 +138,8 @@ export const ReservationDetailsView = () => {
                       <h2>Selecione seu horário de chegada</h2>
                       <div className={styles.ReservationCard}>
                         <p className={styles.CheckIn}>
-                          <span className="material-icons">{ product.policies.rules.description[0].icon }</span>
-                          <span>{ product.policies.rules.description[0].description }</span>
+                          <span className="material-icons">{ getCheckInTimeFromUtilities(product.policies.rules).checkIn.icon }</span>
+                          <span>{ getCheckInTimeFromUtilities(product.policies.rules).checkIn.description }</span>
                         </p>
                         <select name="checkInTime">
                           {

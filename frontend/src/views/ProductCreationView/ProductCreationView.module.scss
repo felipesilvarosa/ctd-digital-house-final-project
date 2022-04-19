@@ -1,0 +1,59 @@
+.MainBlock {
+  margin-block: 5rem;
+
+  h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--col-main-highlight);
+  }
+}
+
+.Selected {
+  background-color: var(--col-main-highlight) !important;
+  color: var(--col-body);
+}
+
+.InputCluster {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @media (min-width: 530px){
+    flex-direction: row;
+
+    > * + * {
+      margin-left: 1rem;
+    }
+  }
+}
+
+.StreetCluster {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 1rem;
+}
+
+.Utility {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+
+  span {
+    display: block;
+  }
+
+  p {
+    margin-left: 0.5rem;
+  }
+}
+
+.UtilitiesBlock {
+  display: flex;
+  flex-flow: row wrap;
+
+  > div {
+    margin-block: 0.125rem;
+    margin-right: 0.25rem;
+  }
+}
