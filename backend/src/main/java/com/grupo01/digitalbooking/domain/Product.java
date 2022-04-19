@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.ALL;
 
 
 @Entity
@@ -44,13 +44,13 @@ public class Product {
     @JoinColumn(name = "destination_id")
     private Destination destination;
 
-    @OneToMany(mappedBy = "product", cascade = REMOVE)
+    @OneToMany(mappedBy = "product", cascade = ALL)
     private List<Image> images;
 
-    @ManyToMany(mappedBy = "products", cascade = REMOVE)
+    @ManyToMany(mappedBy = "products", cascade = ALL)
     private List<Utility> utilities;
 
-    @OneToMany(mappedBy = "product", cascade = REMOVE)
+    @ManyToMany(mappedBy = "products", cascade = ALL)
     private List<Policy> policies;
 
     @OneToMany(mappedBy = "product")

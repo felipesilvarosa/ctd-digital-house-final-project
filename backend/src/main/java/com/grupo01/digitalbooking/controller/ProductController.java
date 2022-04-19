@@ -83,4 +83,10 @@ public class ProductController {
         ids.forEach(service::deleteProduct);
         return ResponseEntity.ok(new DefaultResponseDTO(SUCCESS,Map.of(),"Produtos deletados"));
     }
+
+    @PutMapping("/updateAll")
+    public ResponseEntity<String> updateAll(){
+        service.updateAll();
+        return ResponseEntity.ok("Feito");
+    }
 }
