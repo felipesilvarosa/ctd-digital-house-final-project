@@ -86,7 +86,7 @@ public class ProductDetailedDTO {
                 .stream()
                 .filter(policy -> policy.getType().equals("canceling"))
                 .map(policy -> Map.of(
-                        "icon",policy.getIcon(),
+                        "icon",policy.getIcon()==null?"null":policy.getIcon(),
                         "description",policy.getDescription()))
                 .collect(Collectors.toList());
 
