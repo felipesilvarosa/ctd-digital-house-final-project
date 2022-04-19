@@ -16,7 +16,6 @@ public class PolicyDTO {
     private String description;
     private String icon;
 
-
     public PolicyDTO(Policy entity){
         this.id = entity.getId();
         this.type = entity.getType();
