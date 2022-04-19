@@ -1,6 +1,5 @@
 package com.grupo01.digitalbooking;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,16 +11,11 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-@Slf4j
 @SpringBootApplication
 public class DigitalbookingApplication {
 
 	public static void main(String[] args) {
-		try {
-			SpringApplication.run(DigitalbookingApplication.class, args);
-		}catch (Exception ex){
-			log.error("Something happened: {}:{} \nCause:{}",ex.getClass(),ex.getMessage(),ex.getCause());
-		}
+		SpringApplication.run(DigitalbookingApplication.class, args);
 	}
 
 	@Bean

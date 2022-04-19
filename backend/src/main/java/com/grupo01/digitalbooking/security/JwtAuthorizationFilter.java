@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +35,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         if(path.equals("/login")||path.equals("/login/refreshToken")){
-            filterChain.doFilter(request,response);
+            try {
+                filterChain.doFilter(request, response);
+            }catch (Exception ex){
+                log.error("Something happened: {}:{} \nCause: {}",ex.getClass(),ex.getMessage(),ex.getCause());
+            }
         } else{
             String token = request.getHeader(AUTHORIZATION);
             if(token != null){
