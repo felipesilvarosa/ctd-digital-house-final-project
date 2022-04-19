@@ -33,6 +33,8 @@ export * from "./ui/ProductDetailsAvailability/ProductDetailsAvailability"
 //ui
 export * from "./ui/BaseButton/BaseButton"
 export * from "./ui/BaseModal/BaseModal"
+export * from "./ui/BaseTag/BaseTag"
+export * from "./ui/BaseToggle/BaseToggle"
 export * from "./ui/UserAvatar/UserAvatar"
 export * from "./ui/InputGroup/InputGroup"
 export * from "./ui/BackButton/BackButton"

@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { pt } from "date-fns/locale";
 import { useFocusWithin } from "@react-aria/interactions";
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"
 import {
   BaseButton,
   FlexWrapper,
@@ -10,11 +12,9 @@ import {
 } from "src/components";
 import iconPin from "src/assets/icon-pin.png";
 import iconCal from "src/assets/icon-calendar.png";
-import axios from "axios";
-import { useWindowSize, useDestination } from "src/hooks";
+import { useWindowSize, useDestinations } from "src/hooks";
 
 import styles from "./InnerSearch.module.scss";
-import { useNavigate } from "react-router-dom";
 
 export const InnerSearch = ({ className }) => {
   const size = useWindowSize();
@@ -25,15 +25,11 @@ export const InnerSearch = ({ className }) => {
     endDate: new Date(),
     key: "selection",
   });
+  const { filteredDestinations, setDestinations, filterDestinations } = useDestinations()
   const [expandedCalendar, setExpandedCalendar] = useState(false);
   const [destinationFocus, toggleDestinationFocus] = useState(false);
   const [pinDropDown, setPinDropDown] = useState(false);
-  const [destinations, setDestinations] = useState([]);
-  const [filteredDestinations, setFilteredDestinations] =
-    useState(destinations);
   const [destinationSearch, setDestinationSearch] = useState("");
-  const { setDestination } = useDestination()
-
 
   const { focusWithinProps } = useFocusWithin({
     onFocusWithin: () => setExpandedCalendar(true),
@@ -45,44 +41,25 @@ export const InnerSearch = ({ className }) => {
     setRanges(range.selection);
   };
 
-  const filterDestination = (value) => {
-    setDestinationSearch(value);
-    setFilteredDestinations(() =>
-      destinations.filter(
-        (v) =>
-          v.city.toLowerCase().includes(value.toLowerCase()) ||
-          v.country.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-  };
-
-  useEffect(() => {
-    const getDestinations = async () => {
-      const destinationsResponse = await axios("/api/destinations");
-      const dataMap = destinationsResponse.data.data.map((d) => ({
-        id: d.id,
-        ...d.attributes,
-      }));
-      setDestinations(dataMap);
-      setFilteredDestinations(dataMap);
-    };
-
-    getDestinations();
-  }, []);
-
   useEffect(() => {
     setPinDropDown(destinationFocus);
   }, [destinationFocus, setPinDropDown]);
 
   useEffect(() => {
-    setDestination(destinationSearch);
+    filterDestinations(destinationSearch);
     //eslint-disable-next-line
   }, [destinationSearch])
 
+  useEffect(() => {
+    setDestinations()
+    //eslint-disable-next-line
+  }, [])
+
   const selectDestination = () => {
-    if(destinationSearch) {
-      navigate(`/?destination=${destinationSearch}`)
-    }
+    if(!destinationSearch || !ranges.startDate || !ranges.endDate) {
+      return toast.error("Para buscar, preencha o destino, a data de check-in e a data de check-out.")
+    } 
+    navigate(`/?destination=${destinationSearch}&checkIn=${ranges.startDate}&checkOut=${ranges.endDate}`)
   }
 
   return (
@@ -98,7 +75,7 @@ export const InnerSearch = ({ className }) => {
             type="text"
             value={destinationSearch}
             placeholder="Aonde vamos?"
-            onChange={(e) => filterDestination(e.target.value)}
+            onChange={(e) => setDestinationSearch(e.target.value)}
             autoComplete="off"
             id="destination"
             name="destination"

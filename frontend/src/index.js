@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import { makeServer } from './mirage-server';
+import './index.css';
+import './config/axios.config'
+// import { makeServer } from './mirage-server';
 
-makeServer({ environment: 'development' });
+// makeServer({ environment: 'development' });
 
 ReactDOM.render(
   <React.StrictMode>

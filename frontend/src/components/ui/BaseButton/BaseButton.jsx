@@ -31,6 +31,6 @@ export const BaseButton = ({children, variants, to, type, ...otherProps}) => {
   return (
     type === "link" ?
       <Link className={buttonStyles()} to={to ?? "/"} {...otherProps}>{children}</Link>
-    : <button className={buttonStyles()} {...otherProps}>{children}</button>
+    : <button className={buttonStyles()} type={type} {...otherProps}>{children}</button>
   )
 }

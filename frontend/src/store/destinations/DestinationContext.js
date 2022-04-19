@@ -8,22 +8,37 @@ export const DestinationProvider = ({children}) => {
 
   const [state, dispatch] = useReducer(destinationReducer, destinationState)
 
-  const setDestination = async () => {
-    dispatch({type: "SET_DESTINATION_LOADING", payload: true})
+  const setDestinations = async () => {
+    dispatch({type: "SET_DESTINATIONS_LOADING", payload: true})
     try {
-      const destination = await axios("/api/destinations")
-      dispatch({type: "SET_DESTINATION", payload: destination.data.data.map(destination => ({id: destination.id, ...destination.attributes}))})
+      const response = await axios("/destinations")
+      const destinations = response.data
+      dispatch({type: "SET_DESTINATIONS", payload: destinations})
+      dispatch({type: "SET_FILTERED_DESTINATIONS", payload: destinations})
     } catch(e) {
       console.error(e)
     } finally {
-      dispatch({type: "SET_DESTINATION_LOADING", payload: false})
+      dispatch({type: "SET_DESTINATIONS_LOADING", payload: false})
     }
   }
 
+  const filterDestinations = (query) => {
+    dispatch({ 
+      type: "SET_FILTERED_DESTINATIONS", 
+      payload: state.destinations.filter(
+        (v) =>
+          v.city.toLowerCase().includes(query.toLowerCase()) ||
+          v.country.toLowerCase().includes(query.toLowerCase())
+      )
+    })
+  }
+
   const value = {
-    destination: state.destination,
-    loading: state.destination,
-    setDestination
+    destinations: state.destinations,
+    filteredDestinations: state.filteredDestinations,
+    loading: state.loading,
+    setDestinations,
+    filterDestinations
   }
 
   return (

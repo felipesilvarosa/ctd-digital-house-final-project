@@ -1,17 +1,23 @@
 export const destinationState = {
-  destination: [],
+  destinations: [],
+  filteredDestinations: [],
   loading: false
 }
 
 export const destinationReducer = (state, action) => {
   const { payload, type } = action
   switch (type) {
-    case "SET_DESTINATION":
+    case "SET_DESTINATIONS":
       return {
         ...state,
-        destination: payload
+        destinations: payload
       }
-    case "SET_DESTINATION_LOADING":
+    case "SET_FILTERED_DESTINATIONS":
+      return {
+        ...state,
+        filteredDestinations: payload
+      }
+    case "SET_DESTINATIONS_LOADING":
       return {
         ...state,
         loading: payload
