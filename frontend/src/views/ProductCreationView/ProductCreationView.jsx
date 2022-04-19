@@ -1,9 +1,24 @@
 import { Form, Formik } from "formik"
-import {  useNavigate } from "react-router"
-import { BaseButton, FlexWrapper, InputGroup } from "src/components"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router"
+import { 
+  BaseButton, 
+  FlexWrapper, 
+  InputGroup, 
+  ResponsiveContainer,
+  SpacingShim,
+  BackButton,
+  BaseTag,
+  BaseToggle
+} from "src/components"
+import { useCategories } from "src/hooks"
+import { availableUtilities } from "src/utils"
 import styles from "./ProductCreationView.module.scss"
 
 export const ProductCreationView = () => {
+
+  const { categories } = useCategories()
+  const [ selectedCategory, setSelectedCategory ] = useState()
 
   const navigate = useNavigate()
 
@@ -17,64 +32,98 @@ export const ProductCreationView = () => {
     navigate("/")
   }
 
+  useEffect(() => {
+    console.log(categories)
+    // eslint-disable-next-line
+  }, [])
+
   return(
     <>
-      <div className={styles.create} data-testid="create-view">
-        <h1>Criar Produto</h1>
+      <SpacingShim height="5rem" />
+      <ResponsiveContainer data-testid="create-view">
+        <BackButton to="/">Voltar</BackButton>
+        <h1>Cadastrar Produto</h1>
         <Formik 
-        initialValues={{
-          title: '', 
-          description: '', 
-          category: '', 
-          destination: '', 
-          address: '', 
-          latitude: '',
-          longitude: '',
-          images: [],
-          utilities: [],
-          policies: {}
+          initialValues={{
+            title: '', 
+            description: '', 
+            category: '', 
+            addressStreet: '',
+            addressNumber: '',
+            addressComplement: '',
+            addressCity: '',
+            addressState: '',
+            addressCountry: '',
+            images: [],
+            utilities: [],
+            policies: {}
           }} 
           onSubmit={handleSubmit} onReset={handleReset} >
-          <Form noValidate className={styles.form}>
+          <Form noValidate className={styles.Form}>
 
-            <div className={styles.inputGroups}>
-              <InputGroup  id="title" inputType="text" label="Título" />
-              <InputGroup  id="category" inputType="text" label="Categoria" />
-            </div>
+            <section className={styles.MainBlock}>
+              <h2>O que você quer cadastrar?</h2>
+              {
+                categories.map(category => <BaseTag key={category.id} className={selectedCategory === category.id && styles.Selected} onClick={() => setSelectedCategory(category.id)}>{category.title}</BaseTag>)
+              }
+            </section>
 
-            <div className={styles.inputGroups}>
-              <InputGroup  id="address" inputType="text" label="Endreço" />
-              <InputGroup  id="destination" inputType="text" label="Cidade" />
-            </div>
+            <section className={styles.MainBlock}>
+              <h2>Detalhes</h2> 
+              <div className={styles.InputCluster}>
+                <InputGroup id="title" inputType="text" label="Título" />
+              </div>
 
-            <div className={styles.inputGroups}>
-              <InputGroup  id="latitude" inputType="text" label="Latitude" />
-              <InputGroup  id="longitude" inputType="text" label="Longitude" />
-            </div>
+              <div className={styles.StreetCluster}>
+                <InputGroup id="addressStreet" inputType="text" label="Rua" />
+                <InputGroup id="addressNumber" inputType="text" label="Número" />
+              </div>
 
-            <InputGroup  id="description" inputType="textarea" label="Descrição" />
+              <div className={styles.InputCluster}>
+                <InputGroup id="addressComplement" inputType="text" label="Complemento" />
+              </div>
 
-            <h2>Adicionar Atributos</h2>
+              <div className={styles.InputCluster}>
+                <InputGroup id="addressCity" inputType="text" label="Cidade" />
+                <InputGroup id="addressState" inputType="text" label="Estado" />
+                <InputGroup id="addressCountry" inputType="text" label="País" />
+              </div>
 
-            <div className={styles.inputGroups}>
-              <InputGroup  inputType="text" label="Atributo" />
-              <InputGroup  id="icon" inputType="text" label="Icone" />
-              <BaseButton >+</BaseButton>
-            </div>
+              <InputGroup id="description" inputType="textarea" label="Descrição" />
+            </section>
 
-            <h2>Políticas do produto</h2>
+            <section className={styles.MainBlock}>
+              <h2>Utilidades</h2>
+
+              <div className={styles.UtilitiesBlock}>
+                {
+                  Object.entries(availableUtilities).map(utility => {
+                    return <BaseTag key={utility[1]} variant="outline">
+                      <BaseToggle id={utility[0]}>
+                        <div className={styles.Utility}>
+                          <span className="material-icons">{utility[1]}</span>
+                          <p>{utility[0]}</p>
+                        </div>
+                      </BaseToggle>
+                    </BaseTag>
+                  })
+                }
+              </div>
+            </section>
+
+            {/* <h2>Políticas do produto</h2>
             <FlexWrapper>
-              <div className={styles.inputGroups}>
+              <div className={styles.InputCluster}>
                 <h3>Regras da Casa</h3>
                 <p>Descrição</p>
                 <textarea name="" id="" cols="30" rows="10" placeholder="Escreva aqui"></textarea>
               </div>
-              <div className={styles.inputGroups}>
+              <div className={styles.InputCluster}>
                 <h3>Saúde e Segurança</h3>
                 <p>Descrição</p>
                 <textarea name="" id="" cols="30" rows="10" placeholder="Escreva aqui"></textarea>
               </div>
-              <div className={styles.inputGroups}>
+              <div className={styles.InputCluster}>
                 <h3>Política de cancelamento</h3>
                 <p>Descrição</p>
                 <textarea name="" id="" cols="30" rows="10" placeholder="Escreva aqui"></textarea>
@@ -82,9 +131,9 @@ export const ProductCreationView = () => {
             </FlexWrapper>
 
             <h2>Adicionar imagens</h2>
-            <div className={styles.inputGroups}>
-              <InputGroup  id="firstName" inputType="text" label="Atributo" />
-              <InputGroup  id="lastName" inputType="text" label="Icone" />
+            <div className={styles.InputCluster}>
+              <InputGroup id="firstName" inputType="text" label="Atributo" />
+              <InputGroup id="lastName" inputType="text" label="Icone" />
               <button>+</button>
             </div>
 
@@ -92,11 +141,11 @@ export const ProductCreationView = () => {
             <FlexWrapper row wrap align="center" className={styles.ButtonLine}>
               <BaseButton type="reset">Cancelar</BaseButton>
               <BaseButton type="submit">Criar</BaseButton>
-            </FlexWrapper>
+            </FlexWrapper> */}
 
           </Form>
         </Formik>
-      </div>
+      </ResponsiveContainer>
     </>
   )
 }

@@ -57,7 +57,7 @@ export const HomeRecomendations = ({category, destination}) => {
                         <RatingBlock rating={product.rating} />
                       </div>
                       
-                      <p className={styles.Location}>{product.location}</p>
+                      <p className={styles.Location}>{product.destination}</p>
                       <div className={styles.Utilities}>
                         { product.utilities.map(utility => <span key={`${product.id} ${utility}`} className="material-icons" data-tooltip={utility}>{ getUtilityMaterialIconString(utility) }</span>)}
                       </div>

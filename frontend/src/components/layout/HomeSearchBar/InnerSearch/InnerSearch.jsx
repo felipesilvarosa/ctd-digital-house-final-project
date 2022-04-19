@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { pt } from "date-fns/locale";
 import { useFocusWithin } from "@react-aria/interactions";
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"
 import {
   BaseButton,
   FlexWrapper,
@@ -13,7 +15,6 @@ import iconCal from "src/assets/icon-calendar.png";
 import { useWindowSize, useDestinations } from "src/hooks";
 
 import styles from "./InnerSearch.module.scss";
-import { useNavigate } from "react-router-dom";
 
 export const InnerSearch = ({ className }) => {
   const size = useWindowSize();
@@ -55,9 +56,10 @@ export const InnerSearch = ({ className }) => {
   }, [])
 
   const selectDestination = () => {
-    if(destinationSearch) {
-      navigate(`/?destination=${destinationSearch}`)
-    }
+    if(!destinationSearch || !ranges.startDate || !ranges.endDate) {
+      return toast.error("Para buscar, preencha o destino, a data de check-in e a data de check-out.")
+    } 
+    navigate(`/?destination=${destinationSearch}&checkIn=${ranges.startDate}&checkOut=${ranges.endDate}`)
   }
 
   return (

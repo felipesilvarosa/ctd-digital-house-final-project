@@ -15,7 +15,7 @@ function App() {
             <Route path="/signup" element={<SignupView />} />
             <Route path="/products/:id" element={<ProductDetailsView />} />
             <Route path="/reserve/:id" element={<ProtectedView><ReservationDetailsView /></ProtectedView>} />
-            <Route path="/admin" element={<ProductCreationView />} />
+            <Route path="/new-product" element={<ProductCreationView />} />
           </Routes>
         </TheScaffold>
       </GlobalProvider>
