@@ -27,8 +27,8 @@ public class Utility {
             joinColumns = {@JoinColumn(name = "utility_id")},
             inverseJoinColumns = {@JoinColumn(name = "product_id")})
     private List<Product> products;
-    public Utility(Long id) {
-        this.id = id;
+    public Utility(String name) {
+        this.name = name;
     }
 
 }
