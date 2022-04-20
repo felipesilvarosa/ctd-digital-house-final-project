@@ -1,7 +1,14 @@
 .MainBlock {
   margin-block: 5rem;
 
-  h2 {
+  > p {
+    margin-block: 1rem;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    max-width: 50ch;
+  }
+
+  > h2 {
     margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--col-main-highlight);
@@ -56,4 +63,9 @@
     margin-block: 0.125rem;
     margin-right: 0.25rem;
   }
+}
+
+.ImageTags {
+  padding: 0.25rem;
+  pointer-events: none;
 }

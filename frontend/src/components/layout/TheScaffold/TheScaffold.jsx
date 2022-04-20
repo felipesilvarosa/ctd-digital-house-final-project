@@ -5,7 +5,7 @@ import { useCategories, useAuth, useProducts } from "src/hooks"
 
 export const TheScaffold = ({children}) => {
   const { setCategories } = useCategories()
-  const { user, loginStatus, signupStatus, updateLoginStatus, updateSignupStatus } = useAuth()
+  const { user, loginStatus, signupStatus, updateLoginStatus, updateSignupStatus, validateUser } = useAuth()
   const { setPolicies } = useProducts()
   
 
@@ -31,6 +31,7 @@ export const TheScaffold = ({children}) => {
   useEffect(() => {
     setCategories()
     setPolicies()
+    validateUser()
     // eslint-disable-next-line
   }, []);
 
