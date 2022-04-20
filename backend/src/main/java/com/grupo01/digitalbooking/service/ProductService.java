@@ -56,7 +56,7 @@ public class ProductService {
 
         if(searchCriteria.get("destinationId")==null&&searchCriteria.get("categoryId")==null&&
                 searchCriteria.get("startDate")==null&&searchCriteria.get("endDate")==null){
-            throw new BadRequestException("Nenhum critério de busca aceitável");
+            return getProducts();
         }
         if(searchCriteria.get("startDate")!=null&&searchCriteria.get("endDate")==null)
             throw new BadRequestException("Data inicial sem data final");
