@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import Swal from "sweetalert2"
 import toast from "react-hot-toast"
 import { 
   BaseButton,
@@ -17,6 +18,7 @@ import { availableUtilities } from "src/utils"
 import styles from "./ProductCreationView.module.scss"
 
 export const ProductCreationView = () => {
+  const navigate = useNavigate()
   const { categories } = useCategories()
   const { availablePolicies, createNewProduct } = useProducts()
   const [ selectedCategory, setSelectedCategory ] = useState()
@@ -90,7 +92,21 @@ export const ProductCreationView = () => {
     formData.append("dtoJSON", JSON.stringify(dataToSubmit))
     formData.append("images", document.querySelector("#files").files[0])
 
-    await createNewProduct(formData)
+    try {
+      await createNewProduct(formData)
+      Swal.fire(
+        'Imóvel cadastrado!',
+        'Você cadastrou um produto com sucesso.',
+        "success"
+      )
+      navigate("/")
+    } catch (e) {
+      Swal.fire(
+        'Aconteceu um erro...',
+        "O seu cadastro não foi bem sucedido.",
+        "error"
+      )
+    }
   }
 
   useEffect(() => {
