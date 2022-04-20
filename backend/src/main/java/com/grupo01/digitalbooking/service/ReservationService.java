@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -54,7 +55,9 @@ public class ReservationService {
         if(checkoutDateTime.isBefore(checkinDateTime))
             throw new BadRequestException("Horário e data de checkout não podem ser antes da data e horário de checkin");
 
-        return new ReservationDTO(reservationRepository.save(new Reservation(dto)));
+        Reservation savedReservation = reservationRepository.save(new Reservation(dto));
+        Optional<Reservation> reservation = reservationRepository.findById(savedReservation.getId());
+        return new ReservationDTO(reservation.get());
     }
 
     public void deleteReservation(Long id) {
