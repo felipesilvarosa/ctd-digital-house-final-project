@@ -117,10 +117,10 @@ public class AuthenticationService implements UserDetailsService {
                 .sign(algorithm);
 
         Cookie accessTokenCookie = new Cookie("access_token",access_token);
-        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setHttpOnly(false);
         accessTokenCookie.setSecure(true);
         Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setSecure(true);
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
