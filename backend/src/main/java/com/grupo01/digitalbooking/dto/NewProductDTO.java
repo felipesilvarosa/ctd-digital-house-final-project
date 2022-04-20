@@ -20,7 +20,7 @@ public class NewProductDTO {
     private Integer stars;
     private Integer rating;
     private Long categoryId;
-    private List<Long> utilitiesIds;
+    private List<String> utilitiesNames;
     private List<Long> policiesIds;
 
 }

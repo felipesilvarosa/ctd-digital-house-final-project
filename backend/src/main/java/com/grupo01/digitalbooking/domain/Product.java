@@ -64,7 +64,7 @@ public class Product {
         this.stars = dto.getStars();
         this.rating = dto.getRating();
         this.category = new Category(dto.getCategoryId());
-        this.utilities = dto.getUtilitiesIds().stream().map(Utility::new).collect(Collectors.toList());
+        this.utilities = dto.getUtilitiesNames().stream().map(Utility::new).collect(Collectors.toList());
 
     }
 

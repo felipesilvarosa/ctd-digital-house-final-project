@@ -113,8 +113,8 @@ public class ProductService {
                 addressDetails[addressDetails.length-1].trim()).orElseThrow(
                 ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
 
-        List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
-        if(utilities.size()<dto.getUtilitiesIds().size())
+        List<Utility> utilities = utilityRepository.findAllByNameIgnoreCase(dto.getUtilitiesNames());
+        if(utilities.size()<dto.getUtilitiesNames().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
         String[] coordinates = getCoordinatesFromApi(dto.getAddress());
@@ -154,8 +154,8 @@ public class ProductService {
                 addressDetails[addressDetails.length-1].trim()).orElseThrow(
                 ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
 
-        List<Utility> utilities = utilityRepository.findAllById(dto.getUtilitiesIds());
-        if(utilities.size()<dto.getUtilitiesIds().size())
+        List<Utility> utilities = utilityRepository.findAllByNameIgnoreCase(dto.getUtilitiesNames());
+        if(utilities.size()<dto.getUtilitiesNames().size())
             throw new NotFoundException("Utilidades não foram encontradas para algumas ids informadas");
 
         String[] coordinates = getCoordinatesFromApi(dto.getAddress());

@@ -69,7 +69,7 @@ class ProductServiceTest {
         this.testInput = new NewProductDTO();
         this.testInput.setId(existingId);
         this.testInput.setCategoryId(existingId);
-        this.testInput.setUtilitiesIds(List.of());
+        this.testInput.setUtilitiesNames(List.of());
         List<Image> existingImages = new ArrayList<>();
         existingImages.add(new Image(existingId));
         List<Long> existingIdList = List.of(existingId);
@@ -167,7 +167,7 @@ class ProductServiceTest {
         //substitute for address validation
         assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
         //undo invalid address
-        testInput.setUtilitiesIds(nonExistingIdList);
+        testInput.setUtilitiesNames(List.of());
         assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
 
 
@@ -221,7 +221,7 @@ class ProductServiceTest {
         //substitute for address validation
         assertThrows(NotFoundException.class,()->service.createProduct(testInput,testImagesInput));
         //undo invalid address
-        testInput.setUtilitiesIds(nonExistingIdList);
+        testInput.setUtilitiesNames(List.of());
         assertThrows(NotFoundException.class,()->service.editProduct(testInput,testImagesInput));
     }
 
