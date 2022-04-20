@@ -118,10 +118,10 @@ public class AuthenticationService implements UserDetailsService {
 
         Cookie accessTokenCookie = new Cookie("access_token",access_token);
         accessTokenCookie.setHttpOnly(false);
-        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setSecure(false);
         Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
         refreshTokenCookie.setHttpOnly(false);
-        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(false);
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
 
