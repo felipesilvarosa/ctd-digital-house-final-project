@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -79,9 +80,20 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-    public User findAuthenticatedUser() {
+    public User findAuthenticatedUser(HttpServletRequest request,
+                                      HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
+        log.info("Cookies: {}",request.getCookies());
+        if(request.getCookies()!=null){
+            for(Cookie cookie: request.getCookies()){
+                log.info("Cookie: {}={}",cookie.getName(),cookie.getValue());
+            }
+        }
+        log.info("Current User Name: {}",currentUserName);
+        log.info("Credentials: {}",authentication.getCredentials());
+        log.info("Principal: {}",authentication.getPrincipal());
+
         return userRepository.findByEmail(currentUserName).orElseThrow(() ->
                 new NotFoundException("Usuário não encontrado"));
     }
@@ -105,17 +117,24 @@ public class AuthenticationService implements UserDetailsService {
                 .sign(algorithm);
 
         Cookie accessTokenCookie = new Cookie("access_token",access_token);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setHttpOnly(false);
+        accessTokenCookie.setSecure(false);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
+        accessTokenCookie.setMaxAge(24*60*60);
         Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setHttpOnly(false);
+        refreshTokenCookie.setSecure(false);
+        accessTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(24*60*60);
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
 
-    public UserDTO validateUser() {
+    public UserDTO validateUser(HttpServletRequest request,
+                                HttpServletResponse response) {
 
-        return new UserDTO(findAuthenticatedUser());
+        return new UserDTO(findAuthenticatedUser(request,response));
 
     }
 }

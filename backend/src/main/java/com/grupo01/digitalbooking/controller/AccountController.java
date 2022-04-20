@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -39,8 +40,9 @@ public class AccountController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<UserDTO> validateUser(){
-        UserDTO result = authenticationService.validateUser();
+    public ResponseEntity<UserDTO> validateUser(HttpServletRequest request,
+                                                HttpServletResponse response){
+        UserDTO result = authenticationService.validateUser(request,response);
         return new ResponseEntity<>(result, OK);
     }
 
