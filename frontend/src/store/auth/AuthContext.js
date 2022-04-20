@@ -116,8 +116,6 @@ export const AuthProvider = ({children}) => {
         fullName: `${response.data.firstName} ${response.data.lastName}`
       }
 
-      console.log(modeledUser)
-
       dispatch({
         type: "USER_LOGIN",
         payload: modeledUser
@@ -168,6 +166,28 @@ export const AuthProvider = ({children}) => {
     dispatch({type: "USER_SIGNUP_STATUS_UPDATE", payload: status})
   }, [dispatch])
 
+  const validateUser = useCallback(async () => {
+    try {
+      const response = await axios.get("/users/validate")
+      const user = response.data
+      console.log(user)
+
+      if (user) {
+        const modeledUser = {
+          ...user,
+          fullName: `${user.firstName} ${user.lastName}`
+        }
+  
+        dispatch({
+          type: "USER_LOGIN",
+          payload: modeledUser
+        })
+      }
+    } catch(e) {
+      console.error(e)
+    }
+  })
+
   const value = {
     ...state,
     registerUser,
@@ -176,7 +196,8 @@ export const AuthProvider = ({children}) => {
     clearLoginErrors,
     clearSignupErrors,
     updateLoginStatus,
-    updateSignupStatus
+    updateSignupStatus,
+    validateUser
   }
 
   return (
