@@ -1,10 +1,11 @@
 import { Form, Formik } from "formik"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import toast from "react-hot-toast"
 import { 
-  BaseButton, 
-  FlexWrapper, 
-  InputGroup, 
+  BaseButton,
+  InputGroup,
+  InputFileUpload, 
   ResponsiveContainer,
   SpacingShim,
   BackButton,
@@ -20,23 +21,60 @@ export const ProductCreationView = () => {
   const { categories } = useCategories()
   const { availablePolicies } = useProducts()
   const [ selectedCategory, setSelectedCategory ] = useState()
+  const [ images, setImages ] = useState([])
+  const [ formattedFormData, setFormattedFormData ] = useState({
+    name: "", 
+    description: "", 
+    categoryId: selectedCategory,
+    rating: 10,
+    address: "",
+    stars: null,
+    policiesIds: [],
+    utilitiesIds: []
+  })
+
+  const addImage = (image) => {
+    setImages(curr => [...curr, image])
+  }
+
+  const handleToggle = (type, id, value) => {
+    if (value) {
+      setFormattedFormData(curr => ({
+        ...curr,
+        [type]: [ ...curr[type], id]
+      }))
+    } else {
+      setFormattedFormData(curr => ({
+        ...curr,
+        [type]: curr[type].filter(entry => entry !== id)
+      }))
+    }
+  }
 
   const navigate = useNavigate()
 
-  const handleSubmit = async () =>{
+  const handleSubmit = async (values) =>{
+    const address = [
+      values.addressNumber, 
+      values.addressStreet, 
+      values.addressCity, 
+      values.addressState, 
+      values.addressCountry
+    ].filter(value => value !== "").join(", ")
 
-    // await funçãoDeCadastrarProduto()
-  }
-
-  const handleReset = () =>{
-
-    navigate("/")
+    setFormattedFormData({
+      ...formattedFormData,
+      name: values.title,
+      description: values.description,
+      categoryId: selectedCategory,
+      address: address,
+    })
   }
 
   useEffect(() => {
-    
+    console.log(formattedFormData)
     // eslint-disable-next-line
-  }, [])
+  }, [formattedFormData])
 
   return(
     <>
@@ -55,11 +93,8 @@ export const ProductCreationView = () => {
             addressCity: '',
             addressState: '',
             addressCountry: '',
-            images: [],
-            utilities: [],
-            policies: {}
           }} 
-          onSubmit={handleSubmit} onReset={handleReset} >
+          onSubmit={(values) => handleSubmit(values)}>
           <Form noValidate className={styles.Form}>
 
             <section className={styles.MainBlock}>
@@ -100,7 +135,7 @@ export const ProductCreationView = () => {
                 {
                   Object.entries(availableUtilities).map(utility => {
                     return <BaseTag key={utility[1]} variant="outline">
-                      <BaseToggle id={utility[0]}>
+                      <BaseToggle id={utility[0]} onChange={e => handleToggle("utilitiesIds", utility[0], e.target.checked)}>
                         <div className={styles.Utility}>
                           <span className="material-icons">{utility[1]}</span>
                           <p>{utility[0]}</p>
@@ -121,7 +156,7 @@ export const ProductCreationView = () => {
                     .filter(policy => policy.type === "rules")
                     .map(policy => {
                       return <BaseTag key={policy.id} variant="outline">
-                        <BaseToggle id={policy.id}>
+                        <BaseToggle id={policy.id} onChange={e => handleToggle("policiesIds", policy.id, e.target.checked)}>
                           <div className={styles.Utility}>
                             <span className="material-icons">{policy.icon}</span>
                             <p>{policy.description}</p>
@@ -142,7 +177,7 @@ export const ProductCreationView = () => {
                     .filter(policy => policy.type === "safety")
                     .map(policy => {
                       return <BaseTag key={policy.id} variant="outline">
-                        <BaseToggle id={policy.id}>
+                        <BaseToggle id={policy.id} onChange={e => handleToggle("policiesIds", policy.id, e.target.checked)}>
                           <div className={styles.Utility}>
                             <span className="material-icons">{policy.icon}</span>
                             <p>{policy.description}</p>
@@ -163,7 +198,7 @@ export const ProductCreationView = () => {
                     .filter(policy => policy.type === "canceling")
                     .map(policy => {
                       return <BaseTag key={policy.id} variant="outline">
-                        <BaseToggle id={policy.id}>
+                        <BaseToggle id={policy.id} onChange={e => handleToggle("policiesIds", policy.id, e.target.checked)}>
                           <div className={styles.Utility}>
                             <span className="material-icons">{policy.icon}</span>
                             <p>{policy.description}</p>
@@ -175,9 +210,24 @@ export const ProductCreationView = () => {
               </div>
             </section>
 
-            <section>
+            <section className={styles.MainBlock}>
               <h2>Fotos</h2>
-              <input type="file" />
+              <InputFileUpload 
+                fileType="image"
+                onUploadFail={toast.error}
+                onUploadSuccess={addImage}
+              />
+              <div className={styles.ImageTags}>
+                {
+                  images.length > 0 && images.map(image => <BaseTag key={image.name}>{image.name}</BaseTag>)
+                }
+              </div>
+            </section>
+
+            <section className={styles.MainBlock}>
+              <h2>Concluir cadastro</h2>
+              <p>Após terminar de incluir os dados necessários, clique no botão abaixo para concluir o cadastro do produto.</p>
+              <BaseButton type="submit">enviar</BaseButton>
             </section>
           </Form>
         </Formik>

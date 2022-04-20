@@ -1,0 +1,27 @@
+.FileUpload {
+  > input {
+    display: block;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  > label {
+    display: flex;
+    position: relative;
+    border: 1px dashed var(--col-main-medium-contrast);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    align-items: center;
+    max-width: max-content;
+
+    > button {
+      pointer-events: none;
+    }
+
+    > *:last-child {
+      margin-inline: 1rem;
+    }
+  }
+}
