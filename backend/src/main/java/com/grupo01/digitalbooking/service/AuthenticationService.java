@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -82,6 +83,10 @@ public class AuthenticationService implements UserDetailsService {
     public User findAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
+        log.info("Current User Name: {}",currentUserName);
+        log.info("Credentials: {}",authentication.getCredentials());
+        log.info("Principal: {}",((Principal)authentication.getPrincipal()).getName());
+
         return userRepository.findByEmail(currentUserName).orElseThrow(() ->
                 new NotFoundException("Usuário não encontrado"));
     }
