@@ -104,9 +104,9 @@ public class ProductService {
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
             new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
 
-        if((!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)||
-                (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
-            throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
+//        if((!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)||
+//                (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
+//            throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
         String[] addressDetails = dto.getAddress().split(",");
         Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
@@ -145,9 +145,9 @@ public class ProductService {
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
                 new NotFoundException("Nenhuma categoria com id informada foi encontrada"));
 
-        if((!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)||
-                (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
-            throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
+//        if((!category.getTitle().equals("Hotéis")&&dto.getStars()!=null)||
+//                (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
+//            throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
         String[] addressDetails = dto.getAddress().split(",");
         Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
