@@ -12,7 +12,7 @@ public interface ProductRepository extends JpaRepository<Product,Long>,CustomPro
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
     List<Product> findByCategory(@Param("categoryId") Long categoryId);
 
-    @Query("SELECT p FROM Product p WHERE p.category.id = :cityId")
-    List<Product> findByCity(@Param("cityId") Long cityId);
+    @Query("SELECT p FROM Product p WHERE p.destination.id = :destinationId")
+    List<Product> findByDestination(@Param("destinationId") Long cityId);
 
 }
