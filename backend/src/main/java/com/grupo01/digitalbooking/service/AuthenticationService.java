@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -79,7 +80,8 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-    public User findAuthenticatedUser() {
+    public User findAuthenticatedUser(HttpServletRequest request,
+                                      HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
         log.info("Current User Name: {}",currentUserName);
@@ -117,9 +119,10 @@ public class AuthenticationService implements UserDetailsService {
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
 
-    public UserDTO validateUser() {
+    public UserDTO validateUser(HttpServletRequest request,
+                                HttpServletResponse response) {
 
-        return new UserDTO(findAuthenticatedUser());
+        return new UserDTO(findAuthenticatedUser(request,response));
 
     }
 }
