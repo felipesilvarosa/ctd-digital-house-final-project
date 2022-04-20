@@ -90,9 +90,7 @@ public class ProductService {
                     .stream().noneMatch(searchDates::contains))
                     .collect(Collectors.toList());
         }
-        if (response.isEmpty())throw new NotFoundException("Nenhum produto com estes critérios foi encontrado");
         return response.stream().map(ProductDetailedDTO::new).collect(Collectors.toList());
-
     }
 
     @Transactional
