@@ -13,6 +13,7 @@ export const MenuDesktop = ({menuItems}) => {
       {
         user ? (
           <div className={styles.UserInfo}>
+            <Link to="/cadastrar" className={styles.RegisterLink}>Cadastrar Imóvel</Link>
             <div className={styles.Greet}>
               <div className={styles.Avatar}>{ makeInitials(user.fullName) }</div>
               <p>Olá,</p>

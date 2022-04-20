@@ -44,6 +44,42 @@ export const ProductsProvider = ({children}) => {
     }
   }
 
+  const createNewProduct = async (formData) => {
+    try {
+      await axios.post("/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+      const response = await axios("/products")
+      const products = response.data
+      dispatch({type: "SET_PRODUCTS", payload: products})
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  const searchProducts = async (searchParams) => {
+    dispatch({type: "SET_PRODUCTS_LOADING", payload: true})
+
+    let queryString = Object.entries(searchParams)
+      .filter(param => param[1] !== "null" && param[1] !== null && param[1] !== "undefined")
+      .map(param => `${param[0]}=${param[1]}`)
+      .join("&")
+    queryString = `?${queryString}`
+
+    try {
+      const response = await axios.get("/products/search" + queryString)
+      const products = response.data
+      console.log(products)
+      dispatch({type: "SET_PRODUCTS", payload: products})
+    } catch(e) {
+      console.error(e)
+    } finally {
+      dispatch({type: "SET_PRODUCTS_LOADING", payload: false})
+    }
+  }
+
   const value = {
     products: state.products,
     product: state.product,
@@ -51,7 +87,9 @@ export const ProductsProvider = ({children}) => {
     availablePolicies: state.availablePolicies,
     setPolicies,
     setProducts,
-    findProductById
+    findProductById,
+    createNewProduct,
+    searchProducts
   }
 
   return (

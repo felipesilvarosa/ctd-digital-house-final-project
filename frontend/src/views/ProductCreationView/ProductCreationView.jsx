@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import Swal from "sweetalert2"
 import toast from "react-hot-toast"
 import { 
   BaseButton,
@@ -17,24 +18,20 @@ import { availableUtilities } from "src/utils"
 import styles from "./ProductCreationView.module.scss"
 
 export const ProductCreationView = () => {
-
+  const navigate = useNavigate()
   const { categories } = useCategories()
-  const { availablePolicies } = useProducts()
+  const { availablePolicies, createNewProduct } = useProducts()
   const [ selectedCategory, setSelectedCategory ] = useState()
-  const [ images, setImages ] = useState([])
+  const [ images, setImages ] = useState()
   const [ formattedFormData, setFormattedFormData ] = useState({
-    name: "", 
-    description: "", 
-    categoryId: selectedCategory,
-    rating: 10,
-    address: "",
-    stars: null,
     policiesIds: [],
-    utilitiesIds: []
+    utilitiesNames: [],
+    categoryId: null
   })
+  const [ errors, setErrors ] = useState({})
 
-  const addImage = (image) => {
-    setImages(curr => [...curr, image])
+  const addImage = (file) => {
+    setImages(file)
   }
 
   const handleToggle = (type, id, value) => {
@@ -51,9 +48,31 @@ export const ProductCreationView = () => {
     }
   }
 
-  const navigate = useNavigate()
-
   const handleSubmit = async (values) =>{
+
+    const mandatoryFields = [ 
+      "title", "description", "addressNumber", 
+      "addressStreet", "addressCity", "addressState", "addressCountry"
+    ]
+    
+    const scopedErrors = {}
+
+    for (let field of mandatoryFields) {
+      if (values[field].trim() === "") {
+        scopedErrors[field] = "Campo obrigatório"
+      }
+    }
+
+    if(!selectedCategory) {
+      scopedErrors.category = "Escolha uma categoria"
+    }
+
+    setErrors(scopedErrors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
+
     const address = [
       values.addressNumber, 
       values.addressStreet, 
@@ -62,19 +81,44 @@ export const ProductCreationView = () => {
       values.addressCountry
     ].filter(value => value !== "").join(", ")
 
-    setFormattedFormData({
+    const dataToSubmit = {
       ...formattedFormData,
       name: values.title,
       description: values.description,
-      categoryId: selectedCategory,
       address: address,
-    })
+    }
+
+    const formData = new FormData()
+    formData.append("dtoJSON", JSON.stringify(dataToSubmit))
+    formData.append("images", document.querySelector("#files").files[0])
+
+    try {
+      await createNewProduct(formData)
+      Swal.fire(
+        'Imóvel cadastrado!',
+        'Você cadastrou um produto com sucesso.',
+        "success"
+      )
+      navigate("/")
+    } catch (e) {
+      Swal.fire(
+        'Aconteceu um erro...',
+        "O seu cadastro não foi bem sucedido.",
+        "error"
+      )
+    }
   }
 
   useEffect(() => {
-    console.log(formattedFormData)
+    if(Object.keys(errors).length > 0) {
+      window.scrollTo(0, 0)
+    }
+  }, [errors])
+
+  useEffect(() => {
+    setFormattedFormData({...formattedFormData, categoryId: selectedCategory})
     // eslint-disable-next-line
-  }, [formattedFormData])
+  }, [selectedCategory])
 
   return(
     <>
@@ -102,17 +146,18 @@ export const ProductCreationView = () => {
               {
                 categories.map(category => <BaseTag key={category.id} className={selectedCategory === category.id && styles.Selected} onClick={() => setSelectedCategory(category.id)}>{category.title}</BaseTag>)
               }
+              { errors.category && <p className={styles.Error}>{errors.category}</p> }
             </section>
 
             <section className={styles.MainBlock}>
               <h2>Detalhes</h2> 
               <div className={styles.InputCluster}>
-                <InputGroup id="title" inputType="text" label="Título" />
+                <InputGroup id="title" inputType="text" label="Título" error={errors.title} />
               </div>
 
               <div className={styles.StreetCluster}>
-                <InputGroup id="addressStreet" inputType="text" label="Rua" />
-                <InputGroup id="addressNumber" inputType="text" label="Número" />
+                <InputGroup id="addressStreet" inputType="text" label="Rua" error={errors.addressStreet} />
+                <InputGroup id="addressNumber" inputType="text" label="Número" error={errors.addressNumber} />
               </div>
 
               <div className={styles.InputCluster}>
@@ -120,12 +165,12 @@ export const ProductCreationView = () => {
               </div>
 
               <div className={styles.InputCluster}>
-                <InputGroup id="addressCity" inputType="text" label="Cidade" />
-                <InputGroup id="addressState" inputType="text" label="Estado" />
-                <InputGroup id="addressCountry" inputType="text" label="País" />
+                <InputGroup id="addressCity" inputType="text" label="Cidade" error={errors.addressCity} />
+                <InputGroup id="addressState" inputType="text" label="Estado" error={errors.addressState} />
+                <InputGroup id="addressCountry" inputType="text" label="País" error={errors.addressCountry} />
               </div>
 
-              <InputGroup id="description" inputType="textarea" label="Descrição" />
+              <InputGroup id="description" inputType="textarea" label="Descrição" error={errors.description} />
             </section>
 
             <section className={styles.MainBlock}>
@@ -135,7 +180,7 @@ export const ProductCreationView = () => {
                 {
                   Object.entries(availableUtilities).map(utility => {
                     return <BaseTag key={utility[1]} variant="outline">
-                      <BaseToggle id={utility[0]} onChange={e => handleToggle("utilitiesIds", utility[0], e.target.checked)}>
+                      <BaseToggle id={utility[0]} onChange={e => handleToggle("utilitiesNames", utility[0], e.target.checked)}>
                         <div className={styles.Utility}>
                           <span className="material-icons">{utility[1]}</span>
                           <p>{utility[0]}</p>
@@ -216,12 +261,13 @@ export const ProductCreationView = () => {
                 fileType="image"
                 onUploadFail={toast.error}
                 onUploadSuccess={addImage}
+                id="files"
               />
-              <div className={styles.ImageTags}>
+              {/* <div className={styles.ImageTags}>
                 {
-                  images.length > 0 && images.map(image => <BaseTag key={image.name}>{image.name}</BaseTag>)
+                  images.length > 0 && Object.entries(images).map(image => <BaseTag key={image[1].name}>{image[1].name}</BaseTag>)
                 }
-              </div>
+              </div> */}
             </section>
 
             <section className={styles.MainBlock}>

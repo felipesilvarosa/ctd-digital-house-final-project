@@ -66,6 +66,14 @@
 }
 
 .ImageTags {
-  padding: 0.25rem;
   pointer-events: none;
+  padding-top: 0.125rem;
+
+  > div {
+    margin: 0.125rem 0.25rem 0.125rem 0;
+  }
+}
+
+.Error {
+  color: var(--col-cancel);
 }
