@@ -66,7 +66,7 @@ public class ProductService {
         String query = "SELECT p from Product p WHERE ";
 
         if(searchCriteria.get("destinationId")!=null)
-            query+= "p.location.id = " + searchCriteria.get("destinationId") + " AND ";
+            query+= "p.destination.id = " + searchCriteria.get("destinationId") + " AND ";
         if(searchCriteria.get("categoryId")!=null)
             query+= "p.category.id = " + searchCriteria.get("categoryId") + " AND ";
         if(query.endsWith(" AND "))
