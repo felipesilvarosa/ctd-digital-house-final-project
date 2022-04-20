@@ -186,7 +186,7 @@ export const AuthProvider = ({children}) => {
     } catch(e) {
       console.error(e)
     }
-  })
+  }, [dispatch])
 
   const value = {
     ...state,

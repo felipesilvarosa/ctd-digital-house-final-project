@@ -8,8 +8,8 @@ export const HomeView = () => {
     <>
       <SpacingShim height="4.25rem" />
       <HomeSearchBar />
-      { !query.get("category") && <HomeCategories /> }
-      <HomeRecomendations category={query.get("category")} />
+      { !query.get("categoryId") && <HomeCategories /> }
+      <HomeRecomendations categoryId={query.get("categoryId")} />
     </>
   )
 }

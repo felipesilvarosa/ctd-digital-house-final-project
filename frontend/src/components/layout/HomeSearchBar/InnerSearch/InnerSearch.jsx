@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { pt } from "date-fns/locale";
 import { useFocusWithin } from "@react-aria/interactions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast"
 import {
   BaseButton,
@@ -10,15 +10,17 @@ import {
   DestinationButton,
   CalendarWrapper,
 } from "src/components";
+import { useWindowSize, useDestinations, useProducts } from "src/hooks";
+import { getNumberWithTrailingZero } from "src/utils"
 import iconPin from "src/assets/icon-pin.png";
 import iconCal from "src/assets/icon-calendar.png";
-import { useWindowSize, useDestinations } from "src/hooks";
 
 import styles from "./InnerSearch.module.scss";
 
 export const InnerSearch = ({ className }) => {
   const size = useWindowSize();
   const navigate  = useNavigate();
+  const [ query ] = useSearchParams()
 
   const [ranges, setRanges] = useState({
     startDate: new Date(),
@@ -26,10 +28,11 @@ export const InnerSearch = ({ className }) => {
     key: "selection",
   });
   const { filteredDestinations, setDestinations, filterDestinations } = useDestinations()
+  const { searchProducts } = useProducts()
   const [expandedCalendar, setExpandedCalendar] = useState(false);
   const [destinationFocus, toggleDestinationFocus] = useState(false);
   const [pinDropDown, setPinDropDown] = useState(false);
-  const [destinationSearch, setDestinationSearch] = useState("");
+  const [destinationSearch, setDestinationSearch] = useState({string: ""});
 
   const { focusWithinProps } = useFocusWithin({
     onFocusWithin: () => setExpandedCalendar(true),
@@ -46,7 +49,7 @@ export const InnerSearch = ({ className }) => {
   }, [destinationFocus, setPinDropDown]);
 
   useEffect(() => {
-    filterDestinations(destinationSearch);
+    filterDestinations(destinationSearch.string);
     //eslint-disable-next-line
   }, [destinationSearch])
 
@@ -56,10 +59,21 @@ export const InnerSearch = ({ className }) => {
   }, [])
 
   const selectDestination = () => {
-    if(!destinationSearch || !ranges.startDate || !ranges.endDate) {
+    if(!destinationSearch.string || !ranges.startDate || !ranges.endDate) {
       return toast.error("Para buscar, preencha o destino, a data de check-in e a data de check-out.")
     } 
-    navigate(`/?destination=${destinationSearch}&checkIn=${ranges.startDate}&checkOut=${ranges.endDate}`)
+
+    const startDateString = `${ranges.startDate.getFullYear()}-${getNumberWithTrailingZero(ranges.startDate.getMonth()+1)}-${getNumberWithTrailingZero(ranges.startDate.getDate())}`
+    const endDateString = `${ranges.endDate.getFullYear()}-${getNumberWithTrailingZero(ranges.endDate.getMonth()+1)}-${getNumberWithTrailingZero(ranges.endDate.getDate())}`
+
+    const queryStringParams = {
+      destinationId: destinationSearch.id,
+      startDate: startDateString,
+      endDate: endDateString,
+      categoryId: query.get("categoryId")
+    }
+
+    navigate("/?" + Object.entries(queryStringParams).filter(param => param[1] !== null && param[1] !== "null").map(param => `${param[0]}=${param[1]}`).join("&"))
   }
 
   return (
@@ -73,9 +87,9 @@ export const InnerSearch = ({ className }) => {
           <img src={iconPin} alt="pin de local" />
           <input
             type="text"
-            value={destinationSearch}
+            value={destinationSearch.string}
             placeholder="Aonde vamos?"
-            onChange={(e) => setDestinationSearch(e.target.value)}
+            onChange={(e) => setDestinationSearch(curr => ({...curr, string: e.target.value}))}
             autoComplete="off"
             id="destination"
             name="destination"
@@ -98,7 +112,10 @@ export const InnerSearch = ({ className }) => {
                 city={dest.city}
                 country={dest.country}
                 onMouseDown={() =>
-                  setDestinationSearch(`${dest.city}, ${dest.country}`)
+                  setDestinationSearch({
+                    id: dest.id,
+                    string: `${dest.city}, ${dest.country}`
+                  })
                 }
               />
             </li>

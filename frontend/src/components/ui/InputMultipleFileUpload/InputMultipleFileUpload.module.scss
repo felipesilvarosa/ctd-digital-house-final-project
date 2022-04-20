@@ -1,0 +1,16 @@
+.FileUpload {
+  > input {
+    display: block;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  > label {
+    cursor: pointer;
+
+    > button {
+      pointer-events: none;
+    }
+  }
+}
