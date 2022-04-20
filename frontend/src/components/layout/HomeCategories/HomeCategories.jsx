@@ -1,9 +1,17 @@
+import { useState, useEffect } from "react"
 import { CardsGridLoader, HomeCard, HomeSection } from "src/components";
 import { useCategories } from "src/hooks";
 import styles from "./HomeCategories.module.scss";
 
 export const HomeCategories = () => {
   const { categories, loading } = useCategories()
+
+  const [ queryString, setQueryString ] = useState("")
+
+  useEffect(() => {
+    setQueryString(window.location.search)
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <HomeSection>
@@ -20,7 +28,7 @@ export const HomeCategories = () => {
                     <HomeCard 
                       clickable
                       key={category.id}
-                      to={`/?category=${category.title}`}
+                      to={queryString ? `/${queryString}&categoryId=${category.id}` : `/?categoryId=${category.id}`}
                       image={category.imageUrl}
                       title={category.title}
                     >

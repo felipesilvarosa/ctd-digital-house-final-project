@@ -89,13 +89,20 @@ export const MenuMobile = ({menuItems}) => {
                       <p className={styles.FullName}>{user.fullName}</p>
                     </div>
                   :
-                    <h3>Menu</h3>
+                    <>
+                      <h3>Menu</h3>
+                    </>
                 }
               </div>
               <div className={styles.Body}>
                 {
                   user ?
-                    <p className={styles.Logout}>Deseja <button onClick={handleLogout}>encerrar a sessão</button>?</p>
+                    <>
+                      <div className={styles.MenuLinks}>
+                        <Link to="/cadastrar">Cadastrar Imóvel</Link>
+                      </div>
+                      <p className={styles.Logout}>Deseja <button onClick={handleLogout}>encerrar a sessão</button>?</p>
+                    </>
                   :
                     <nav>
                       <ul>
