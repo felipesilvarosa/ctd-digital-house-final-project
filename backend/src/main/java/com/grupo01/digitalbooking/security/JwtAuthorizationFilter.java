@@ -34,11 +34,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
-        log.info("AuthorizationFileter 37");
-        if(true){
-            filterChain.doFilter(request, response);
-            return;
-        }
         if(path.equals("/login")||path.equals("/login/refreshToken")){
             try {
                 filterChain.doFilter(request, response);
@@ -70,7 +65,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(token);
                 String username = decodedJWT.getSubject();
-                String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+                String[] roles = decodedJWT.getClaim("authorities").asArray(String.class);
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 stream(roles).forEach(SimpleGrantedAuthority::new);
                 SecurityContextHolder

@@ -53,7 +53,7 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
                                             Authentication authResult) throws IOException {
 
         List<Cookie> jwtCookies = authenticationService.createJwtCookies(
-                authResult.getPrincipal().toString(),
+                ((User)authResult.getPrincipal()).getUsername(),
                 authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         jwtCookies.forEach(response::addCookie);
         User userEntity = (User) authenticationService.loadUserByUsername(((User)authResult.getPrincipal()).getUsername());

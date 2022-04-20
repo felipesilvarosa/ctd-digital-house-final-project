@@ -68,7 +68,7 @@ public class AuthenticationService implements UserDetailsService {
             User user = (User) loadUserByUsername(username);
             return JWT.create()
                     .withSubject(user.getEmail())
-                    .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                    .withClaim("authorities",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                     .withIssuer("digitalbooking")
                     .withIssuedAt(new Date())
                     .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
@@ -105,7 +105,7 @@ public class AuthenticationService implements UserDetailsService {
                 .withClaim("authorities",authorities)
                 .withIssuer("digitalbooking")
                 .withIssuedAt(java.sql.Date.from(Instant.now()))
-                .withExpiresAt(java.sql.Date.valueOf(LocalDateTime.now().plusMinutes(30).toLocalDate()))
+                .withExpiresAt(java.sql.Date.valueOf(LocalDateTime.now().plusDays(1).toLocalDate()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create()
@@ -125,9 +125,9 @@ public class AuthenticationService implements UserDetailsService {
         Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
         refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setSecure(false);
-        accessTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(24*60*60);
+        refreshTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(24*60*60);
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
 
