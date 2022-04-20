@@ -84,6 +84,12 @@ public class AuthenticationService implements UserDetailsService {
                                       HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
+        log.info("Cookies: {}",request.getCookies());
+        if(request.getCookies()!=null){
+            for(Cookie cookie: request.getCookies()){
+                log.info("Cookie: {}={}",cookie.getName(),cookie.getValue());
+            }
+        }
         log.info("Current User Name: {}",currentUserName);
         log.info("Credentials: {}",authentication.getCredentials());
         log.info("Principal: {}",authentication.getPrincipal());
