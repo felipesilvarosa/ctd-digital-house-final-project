@@ -12,6 +12,7 @@ import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -98,7 +99,7 @@ public class AuthenticationService implements UserDetailsService {
                 new NotFoundException("Usuário não encontrado"));
     }
 
-    public List<Cookie> createJwtCookies(String subject, List<String> authorities){
+    public List<ResponseCookie> createJwtCookies(String subject, List<String> authorities){
         Algorithm algorithm = Algorithm.HMAC256(secret);
         String access_token = JWT.create()
                 .withSubject(subject)
@@ -116,18 +117,22 @@ public class AuthenticationService implements UserDetailsService {
                 .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusWeeks(1)))
                 .sign(algorithm);
 
-        Cookie accessTokenCookie = new Cookie("access_token",access_token);
-        accessTokenCookie.setHttpOnly(false);
-        accessTokenCookie.setSecure(false);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
-        accessTokenCookie.setMaxAge(24*60*60);
-        Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
-        refreshTokenCookie.setHttpOnly(false);
-        refreshTokenCookie.setSecure(false);
-        refreshTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(24*60*60);
+        ResponseCookie accessTokenCookie = ResponseCookie.from("access_token",access_token)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .domain("ctdprojetos.com.br")
+                .maxAge(24*60*60)
+                .sameSite("None")
+                .build();
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token",refresh_token)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .domain("ctdprojetos.com.br")
+                .maxAge(24*60*60)
+                .sameSite("None")
+                .build();
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
 

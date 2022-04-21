@@ -1,33 +1,26 @@
 package com.grupo01.digitalbooking.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grupo01.digitalbooking.domain.User;
-import com.grupo01.digitalbooking.dto.UserDTO;
-import com.grupo01.digitalbooking.service.AuthenticationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
+@RequiredArgsConstructor
 public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final AuthenticationService authenticationService;
-
-    public JwtCredentialsAuthenticationFilter(AuthenticationManager authenticationManager,AuthenticationService authenticationService) {
-        this.authenticationManager = authenticationManager;
-        this.authenticationService = authenticationService;
-    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -50,16 +43,11 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException {
+                                            Authentication authResult) throws IOException, ServletException {
 
-        List<Cookie> jwtCookies = authenticationService.createJwtCookies(
-                ((User)authResult.getPrincipal()).getUsername(),
-                authResult.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-        jwtCookies.forEach(response::addCookie);
-        User userEntity = (User) authenticationService.loadUserByUsername(((User)authResult.getPrincipal()).getUsername());
-        UserDTO responseData = new UserDTO(userEntity);
 
-        new ObjectMapper().writeValue(response.getOutputStream(),responseData);
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        chain.doFilter(request,response);
 
     }
 
