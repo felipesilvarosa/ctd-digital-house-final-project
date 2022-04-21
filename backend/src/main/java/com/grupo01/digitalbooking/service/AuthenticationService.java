@@ -120,12 +120,12 @@ public class AuthenticationService implements UserDetailsService {
         accessTokenCookie.setHttpOnly(false);
         accessTokenCookie.setSecure(false);
         accessTokenCookie.setPath("/");
-        accessTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
+//        accessTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
         accessTokenCookie.setMaxAge(24*60*60);
         Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
         refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setSecure(false);
-        refreshTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
+//        refreshTokenCookie.setDomain("digitalbooking-t2g1.ctdprojetos.com.br");
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge(24*60*60);
         return List.of(accessTokenCookie,refreshTokenCookie);
