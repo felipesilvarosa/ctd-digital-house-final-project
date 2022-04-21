@@ -62,6 +62,11 @@ public class AccountController {
             List<ResponseCookie> jwtCookies =
                     authenticationService.createJwtCookies(user.getUsername(),
                     user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+            log.info("Cookies size: {}",jwtCookies.size());
+            log.info("Cookies 0 name: {}",jwtCookies.get(0).getName());
+            log.info("Cookies 0 value: {}",jwtCookies.get(0).getValue());
+            log.info("Cookies 1 name: {}",jwtCookies.get(1).getName());
+            log.info("Cookies 1 value: {}",jwtCookies.get(1).getValue());
             UserDTO responseData = new UserDTO(user);
             ResponseEntity<UserDTO> response = ResponseEntity.ok(responseData);
             jwtCookies.forEach(responseCookie -> response.getHeaders().add(SET_COOKIE,responseCookie.toString()));
