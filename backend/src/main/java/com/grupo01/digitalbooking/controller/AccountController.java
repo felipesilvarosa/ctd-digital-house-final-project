@@ -57,17 +57,19 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login() throws IOException {
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = (User) authenticationService.loadUserByUsername(username);
-            List<ResponseCookie> jwtCookies =
-                    authenticationService.createJwtCookies(user.getUsername(),
-                    user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-            UserDTO responseData = new UserDTO(user);
-            ResponseEntity<UserDTO> response = ResponseEntity.status(OK)
-                            .header(SET_COOKIE,jwtCookies.get(0).toString())
-                            .header(SET_COOKIE,jwtCookies.get(1).toString())
-                            .body(responseData);
-            return response;
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = (User) authenticationService.loadUserByUsername(username);
+        List<ResponseCookie> jwtCookies =
+                authenticationService.createJwtCookies(user.getUsername(),
+                user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        UserDTO responseData = new UserDTO(user);
+
+        return ResponseEntity.status(OK)
+                .header(SET_COOKIE,jwtCookies.get(0).toString())
+                .header(SET_COOKIE,jwtCookies.get(1).toString())
+                .body(responseData);
+
     }
 
 }
