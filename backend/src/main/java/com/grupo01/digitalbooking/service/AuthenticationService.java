@@ -119,14 +119,14 @@ public class AuthenticationService implements UserDetailsService {
 
         ResponseCookie accessTokenCookie = ResponseCookie.from("access_token",access_token)
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .path("/")
                 .domain("ctdprojetos.com.br")
                 .maxAge(24*60*60)
                 .build();
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token",refresh_token)
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .path("/")
                 .domain("ctdprojetos.com.br")
                 .maxAge(24*60*60)
