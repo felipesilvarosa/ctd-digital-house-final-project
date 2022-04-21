@@ -12,6 +12,7 @@ import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -68,7 +69,7 @@ public class AuthenticationService implements UserDetailsService {
             User user = (User) loadUserByUsername(username);
             return JWT.create()
                     .withSubject(user.getEmail())
-                    .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                    .withClaim("authorities",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                     .withIssuer("digitalbooking")
                     .withIssuedAt(new Date())
                     .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
@@ -80,25 +81,32 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-    public User findAuthenticatedUser() {
+    public User findAuthenticatedUser(HttpServletRequest request,
+                                      HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
+        log.info("Cookies: {}",request.getCookies());
+        if(request.getCookies()!=null){
+            for(Cookie cookie: request.getCookies()){
+                log.info("Cookie: {}={}",cookie.getName(),cookie.getValue());
+            }
+        }
         log.info("Current User Name: {}",currentUserName);
         log.info("Credentials: {}",authentication.getCredentials());
-        log.info("Principal: {}",((Principal)authentication.getPrincipal()).getName());
+        log.info("Principal: {}",authentication.getPrincipal());
 
         return userRepository.findByEmail(currentUserName).orElseThrow(() ->
                 new NotFoundException("Usuário não encontrado"));
     }
 
-    public List<Cookie> createJwtCookies(String subject, List<String> authorities){
+    public List<ResponseCookie> createJwtCookies(String subject, List<String> authorities){
         Algorithm algorithm = Algorithm.HMAC256(secret);
         String access_token = JWT.create()
                 .withSubject(subject)
                 .withClaim("authorities",authorities)
                 .withIssuer("digitalbooking")
                 .withIssuedAt(java.sql.Date.from(Instant.now()))
-                .withExpiresAt(java.sql.Date.valueOf(LocalDateTime.now().plusMinutes(30).toLocalDate()))
+                .withExpiresAt(java.sql.Date.valueOf(LocalDateTime.now().plusDays(1).toLocalDate()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create()
@@ -109,18 +117,27 @@ public class AuthenticationService implements UserDetailsService {
                 .withExpiresAt(java.sql.Date.valueOf(LocalDate.now().plusWeeks(1)))
                 .sign(algorithm);
 
-        Cookie accessTokenCookie = new Cookie("access_token",access_token);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
-        Cookie refreshTokenCookie = new Cookie("refresh_token",refresh_token);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
+        ResponseCookie accessTokenCookie = ResponseCookie.from("access_token",access_token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .domain("ctdprojetos.com.br")
+                .maxAge(24*60*60)
+                .build();
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token",refresh_token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .domain("ctdprojetos.com.br")
+                .maxAge(24*60*60)
+                .build();
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
 
-    public UserDTO validateUser() {
+    public UserDTO validateUser(HttpServletRequest request,
+                                HttpServletResponse response) {
 
-        return new UserDTO(findAuthenticatedUser());
+        return new UserDTO(findAuthenticatedUser(request,response));
 
     }
 }
