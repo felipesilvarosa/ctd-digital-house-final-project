@@ -35,12 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         if(path.equals("/login")||path.equals("/refreshToken")){
-            try {
-                log.info("We here? JwtAuthFilter 39");
                 filterChain.doFilter(request, response);
-            }catch (Exception ex){
-                log.error("Something happened: {}:{} \nCause: {}",ex.getClass(),ex.getMessage(),ex.getCause());
-            }
         } else{
             Cookie[] requestCookies = request.getCookies();
             if(requestCookies==null){
