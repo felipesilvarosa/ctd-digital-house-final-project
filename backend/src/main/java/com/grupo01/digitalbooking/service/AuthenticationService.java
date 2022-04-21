@@ -123,7 +123,6 @@ public class AuthenticationService implements UserDetailsService {
                 .path("/")
                 .domain("ctdprojetos.com.br")
                 .maxAge(24*60*60)
-                .sameSite("None")
                 .build();
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token",refresh_token)
                 .httpOnly(true)
@@ -131,7 +130,6 @@ public class AuthenticationService implements UserDetailsService {
                 .path("/")
                 .domain("ctdprojetos.com.br")
                 .maxAge(24*60*60)
-                .sameSite("None")
                 .build();
         return List.of(accessTokenCookie,refreshTokenCookie);
     }
