@@ -88,7 +88,9 @@ Nossa equipe conta com 6 integrantes, que foram divididos para as diversas taref
 ---
 >#### Matheus Dalmas Affonso
 >
->...
+>Olá, meu nome é Matheus. Sou um engenheiro de software focado no desenvolvimento front end, e eu desejo em ver, um dia, uma internet completamente responsiva e acessível. 
+>Atualmente eu trabalho majoritariamente com Vue 3, porém trabalhei anteriormente com PHP, Java, Node.js, MySQL, MongoDB, PostgreSQL, React, jQuery, Cypress, Jest e diversas outras tecnologias, tanto no front end quanto no back end. Eu acredito que a entrega de resultados é mais importante que se preocupar com quais tecnologias usar ou focar.
+>Prazem em conhecer você.
 >
 > | Tecnologia | Conhecimento |
 > |------------|-----------|
