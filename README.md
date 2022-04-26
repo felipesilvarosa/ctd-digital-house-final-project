@@ -32,7 +32,7 @@ Nossa equipe conta com 6 integrantes, que foram divididos para as diversas taref
 >    * [LinkedIn](https://www.linkedin.com/in/adryanaportugal/)
 >    * [Github](https://github.com/AdryanaP) 
 ---
->#### Felipe Souza
+>#### Felipe Rosa
 >
 >Sou um desenvolvedor que está sempre buscando novos desafios e oportunidades de aprendizagem. Depois de vivenciar inúmeras experiências profissionais, me sinto extremamente motivado e feliz dentro da programação! Aprendi muito nos últimos anos, principalmente dentro da cozinha de alta gastronomia: o trabalho sob pressão era constante, ágil, com pessoas de opiniões diferentes e muito trabalho em equipe. Sou encantado pela mente humana e pela psicologia, amo aprender e resolver problemas e conflitos. Curioso por natureza, curto compartilhar e ensinar, afinal, é a melhor forma de aprender mais. Conhecimento profissional nas tecnologias: Java, Spring, Angular, Angular Material, TypeScript, Git, HTML, SCSS, PostgreSQL. Tambem com conhecimento em; JavaScript, Bootstrap, MySQL, Docker, AWS, React e estou MUITO aberto a novas stacks e oportunidades de aprendizado!
 >Neste projeto fui um dos responsáveis pelo BackEnd, Testing/QA e Banco de dados.
