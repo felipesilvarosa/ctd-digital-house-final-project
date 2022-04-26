@@ -1,4 +1,3 @@
-
 # Digital Booking - Projeto Integrador
 
 
@@ -37,7 +36,7 @@ Nossa equipe conta com 6 integrantes, que foram divididos para as diversas taref
 > | Front end | :large_blue_circle: :large_blue_circle: :white_circle: |
 > | Back end | :large_blue_circle: :large_blue_circle: :large_blue_circle: |
 > | Infraestrutura | :large_blue_circle: :white_circle: :white_circle: |
-> | Testing / QA | :large_blue_circle: :large_blue_circle: :white_circle: |
+> | Testing / QA | :large_blue_circle: :large_blue_circle: :large_blue_circle: |
 > | Banco de dados | :large_blue_circle: :large_blue_circle: :large_blue_circle: |
 
 
