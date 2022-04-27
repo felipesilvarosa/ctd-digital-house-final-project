@@ -69,7 +69,7 @@ export const ProductCreationView = () => {
 
     setErrors(scopedErrors)
 
-    if (Object.keys(errors).length > 0) {
+    if (Object.keys(scopedErrors).length > 0) {
       return
     }
 
