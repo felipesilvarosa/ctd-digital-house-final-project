@@ -30,20 +30,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().cors().and()
+                .cors().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JwtAuthorizationFilter(secret), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new JwtCredentialsAuthenticationFilter(authenticationManager()))
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
-                .and()
-                .logout()
-                .addLogoutHandler(new CustomLogoutHandler())
+                .authorizeRequests().antMatchers("/**").permitAll()
+                .anyRequest().authenticated().and()
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).and()
+                .logout().addLogoutHandler(new CustomLogoutHandler())
                 .invalidateHttpSession(true);
     }
 

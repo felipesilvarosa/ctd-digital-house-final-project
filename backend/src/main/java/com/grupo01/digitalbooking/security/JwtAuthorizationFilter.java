@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grupo01.digitalbooking.dto.DefaultResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,15 +35,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
-        if(path.equals("/login")||path.equals("/refreshToken")){
+        String method = request.getMethod();
+        if(path.equals("/login")||path.equals("/refreshToken")|| path.equals("/users")||
+            (method.equals(HttpMethod.GET.name())&&!path.equals("/users/validate"))){
                 filterChain.doFilter(request, response);
         } else{
             Cookie[] requestCookies = request.getCookies();
             if(requestCookies==null){
-                log.error("Error logging in: no cookie");
-                response.setStatus(403);
-                new ObjectMapper().writeValue(response.getOutputStream(),
-                        new DefaultResponseDTO(FAILED,"Nenhum cookie encontrado"));
+                filterChain.doFilter(request,response); //TODO remove this line
+//                log.error("Error logging in: no cookie");
+//                response.setStatus(403);
+//                new ObjectMapper().writeValue(response.getOutputStream(),
+//                        new DefaultResponseDTO(FAILED,"Nenhum cookie encontrado"));
                 return;
             }
             String token = null;
