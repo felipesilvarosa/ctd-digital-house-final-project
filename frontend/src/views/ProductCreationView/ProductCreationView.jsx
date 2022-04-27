@@ -6,7 +6,7 @@ import toast from "react-hot-toast"
 import { 
   BaseButton,
   InputGroup,
-  InputFileUpload, 
+  InputMultipleFileUpload, 
   ResponsiveContainer,
   SpacingShim,
   BackButton,
@@ -22,7 +22,7 @@ export const ProductCreationView = () => {
   const { categories } = useCategories()
   const { availablePolicies, createNewProduct } = useProducts()
   const [ selectedCategory, setSelectedCategory ] = useState()
-  const [ images, setImages ] = useState()
+  const [ images, setImages ] = useState([])
   const [ formattedFormData, setFormattedFormData ] = useState({
     policiesIds: [],
     utilitiesNames: [],
@@ -30,8 +30,8 @@ export const ProductCreationView = () => {
   })
   const [ errors, setErrors ] = useState({})
 
-  const addImage = (file) => {
-    setImages(file)
+  const addImages = (files) => {
+    setImages(files)
   }
 
   const handleToggle = (type, id, value) => {
@@ -90,7 +90,7 @@ export const ProductCreationView = () => {
 
     const formData = new FormData()
     formData.append("dtoJSON", JSON.stringify(dataToSubmit))
-    formData.append("images", document.querySelector("#files").files[0])
+    formData.append("images", [ ...document.querySelector("#files").files ])
 
     try {
       await createNewProduct(formData)
@@ -257,17 +257,17 @@ export const ProductCreationView = () => {
 
             <section className={styles.MainBlock}>
               <h2>Fotos</h2>
-              <InputFileUpload 
+              <InputMultipleFileUpload 
                 fileType="image"
                 onUploadFail={toast.error}
-                onUploadSuccess={addImage}
+                onUploadSuccess={addImages}
                 id="files"
               />
-              {/* <div className={styles.ImageTags}>
+              <div className={styles.ImageTags}>
                 {
                   images.length > 0 && Object.entries(images).map(image => <BaseTag key={image[1].name}>{image[1].name}</BaseTag>)
                 }
-              </div> */}
+              </div>
             </section>
 
             <section className={styles.MainBlock}>

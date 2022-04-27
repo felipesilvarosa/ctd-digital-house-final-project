@@ -71,12 +71,29 @@ export const ProductsProvider = ({children}) => {
     try {
       const response = await axios.get("/products/search" + queryString)
       const products = response.data
-      console.log(products)
       dispatch({type: "SET_PRODUCTS", payload: products})
     } catch(e) {
       console.error(e)
     } finally {
       dispatch({type: "SET_PRODUCTS_LOADING", payload: false})
+    }
+  }
+
+  const makeReservation = async (data) => {
+    dispatch({type: "SET_MAKE_RESERVATION_LOADING", payload: true})
+    try {
+      await axios.post("/reservations", {
+        checkinDate: data.checkIn,
+        checkinTime: "7:00:00.000",
+        checkoutDate: data.checkOut,
+        checkoutTime: "11:00:00.000",
+        clientId: data.client,
+        productId: data.product
+      })
+    } catch(e) {
+      console.error(e.message)
+    } finally {
+      dispatch({type: "SET_MAKE_RESERVATION_LOADING", payload: false})
     }
   }
 
@@ -89,7 +106,8 @@ export const ProductsProvider = ({children}) => {
     setProducts,
     findProductById,
     createNewProduct,
-    searchProducts
+    searchProducts,
+    makeReservation
   }
 
   return (

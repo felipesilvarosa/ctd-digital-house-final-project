@@ -5,5 +5,5 @@ const csrfToken = document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*=\s*([^;]
 axios.defaults.baseURL = "http://digitalbooking-t2g1.ctdprojetos.com.br:8080"
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-axios.defaults.headers.common['X-XSRF-TOKEN'] = csrfToken
-axios.defaults.withCredentials = true
+// axios.defaults.headers.common['X-XSRF-TOKEN'] = csrfToken
+// axios.defaults.withCredentials = true
