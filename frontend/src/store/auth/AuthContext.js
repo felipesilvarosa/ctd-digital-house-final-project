@@ -145,9 +145,14 @@ export const AuthProvider = ({children}) => {
     }
   }, [dispatch])
 
-  const userLogout = useCallback(() => {
-    dispatch({ type: "USER_LOGOUT" })
-    dispatch({ type: "USER_LOGIN_STATUS_UPDATE", payload: "logout"})
+  const userLogout = useCallback(async () => {
+    try {
+      await axios.post("/logout", {})
+      dispatch({ type: "USER_LOGOUT" })
+      dispatch({ type: "USER_LOGIN_STATUS_UPDATE", payload: "logout"})
+    } catch(e) {
+      console.log(e.message)
+    }
   }, [dispatch])
 
   const clearLoginErrors = useCallback(() => {
