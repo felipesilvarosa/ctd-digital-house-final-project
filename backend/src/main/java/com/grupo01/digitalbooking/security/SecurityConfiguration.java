@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -30,20 +31,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().cors().and()
                 .addFilterBefore(new JwtAuthorizationFilter(secret), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new JwtCredentialsAuthenticationFilter(authenticationManager()))
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
-                .and()
-                .logout()
-                .addLogoutHandler(new CustomLogoutHandler())
+                .authorizeRequests().antMatchers("/**").permitAll()
+                .anyRequest().authenticated().and()
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()).and()
+                .logout().addLogoutHandler(new CustomLogoutHandler())
                 .invalidateHttpSession(true);
     }
 
