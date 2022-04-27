@@ -188,7 +188,7 @@ public class ProductService {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
-        Map<String,Object> response = Objects.requireNonNull(client
+        List<Map<String, Object>> response = Objects.requireNonNull(client
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/search")
@@ -198,13 +198,16 @@ public class ProductService {
                         .build())
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
-                }).block()).get(0);
-
+                }).block());
+        if(response.isEmpty()){
+            String[] country = address.split(",");
+            return getCoordinatesFromApi(country[country.length-1]);
+        }
         DecimalFormat df = new DecimalFormat("#.#######");
         df.setRoundingMode(FLOOR);
         return new String[]{
-                df.format(Double.valueOf((String)response.get("lat"))),
-                df.format(Double.valueOf((String)response.get("lon")))
+                df.format(Double.valueOf((String)response.get(0).get("lat"))),
+                df.format(Double.valueOf((String)response.get(0).get("lon")))
         };
     }
 }
