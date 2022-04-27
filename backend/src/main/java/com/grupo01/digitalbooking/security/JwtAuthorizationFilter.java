@@ -36,7 +36,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         String method = request.getMethod();
-        if(path.equals("/login")||path.equals("/refreshToken")||method.equals(HttpMethod.GET.name())){
+        if(path.equals("/login")||path.equals("/refreshToken")|| path.equals("/users")||
+            (method.equals(HttpMethod.GET.name())&&!path.equals("/users/validate"))){
                 filterChain.doFilter(request, response);
         } else{
             Cookie[] requestCookies = request.getCookies();
