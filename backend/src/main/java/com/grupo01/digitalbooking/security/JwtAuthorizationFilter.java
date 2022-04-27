@@ -42,6 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         } else{
             Cookie[] requestCookies = request.getCookies();
             if(requestCookies==null){
+                filterChain.doFilter(request,response); //TODO remove this line
                 log.error("Error logging in: no cookie");
                 response.setStatus(403);
                 new ObjectMapper().writeValue(response.getOutputStream(),
