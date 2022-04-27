@@ -96,12 +96,14 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO createProduct(NewProductDTO dto,MultipartFile[]images){
 
-        if(images==null){
+        List<MultipartFile> imagesList = Arrays.asList(images);
+
+        if(imagesList==null){
             log.info("Images null");
         }else{
             log.info("Images not null");
         }
-        if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
+        if (dto.getCategoryId()==null || dto.getAddress()==null||imagesList==null||imagesList.isEmpty())
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
@@ -139,10 +141,12 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO editProduct(NewProductDTO dto, MultipartFile[] images){
 
+        List<MultipartFile> imagesList = Arrays.asList(images);
+
         repository.findById(dto.getId()).orElseThrow(()->
             new NotFoundException("Nenhum produto com id informada foi encontrado"));
 
-        if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
+        if (dto.getCategoryId()==null || dto.getAddress()==null||imagesList==null||imagesList.isEmpty())
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
