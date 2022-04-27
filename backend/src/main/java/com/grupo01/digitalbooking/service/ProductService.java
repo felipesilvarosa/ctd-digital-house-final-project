@@ -94,7 +94,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDetailedDTO createProduct(NewProductDTO dto,MultipartFile[]images){
+    public ProductDetailedDTO createProduct(NewProductDTO dto,MultipartFile... images){
 
         List<MultipartFile> imagesList = Arrays.asList(images);
 
