@@ -98,12 +98,7 @@ public class ProductService {
 
         List<MultipartFile> imagesList = Arrays.asList(images);
 
-        if(imagesList==null){
-            log.info("Images null");
-        }else{
-            log.info("Images not null");
-        }
-        if (dto.getCategoryId()==null || dto.getAddress()==null||imagesList==null||imagesList.isEmpty())
+        if (dto.getCategoryId() == null || dto.getAddress() == null || imagesList.isEmpty())
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(()->
@@ -156,7 +151,7 @@ public class ProductService {
                 (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
             throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
-        String[] addressDetails = dto.getAddress().split(",");
+        String[] addressDetails = dto.getAddress().split("\\|");
         Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
                 addressDetails[addressDetails.length-1].trim()).orElseThrow(
                 ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
