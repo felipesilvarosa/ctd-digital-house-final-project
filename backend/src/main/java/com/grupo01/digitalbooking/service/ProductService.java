@@ -108,7 +108,7 @@ public class ProductService {
                 (category.getTitle().equals("Hotéis")&&dto.getStars()==null))
             throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
-        String[] addressDetails = dto.getAddress().split(",");
+        String[] addressDetails = dto.getAddress().split("\\|");
         Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
                 addressDetails[addressDetails.length-1].trim()).orElseThrow(
                 ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
@@ -204,7 +204,7 @@ public class ProductService {
                 .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
                 }).block());
         if(response.isEmpty()){
-            String[] country = address.split(",");
+            String[] country = address.split("\\|");
             return getCoordinatesFromApi(country[country.length-1]);
         }
         DecimalFormat df = new DecimalFormat("#.#######");
