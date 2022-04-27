@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,9 +39,10 @@ public class AwsS3OperationsService {
     }
 
     @Transactional
-    public List<Image> uploadAndRegisterImages(List<MultipartFile> images, Product product) {
+    public List<Image> uploadAndRegisterImages(MultipartFile[] images, Product product) {
         List<Image> response = new ArrayList<>();
-        images.forEach(image-> {
+        List<MultipartFile> imagesList = Arrays.asList(images);
+        imagesList.forEach(image-> {
             try {
                 String imageTitle = image.getOriginalFilename();
                 PutObjectRequest request = PutObjectRequest
