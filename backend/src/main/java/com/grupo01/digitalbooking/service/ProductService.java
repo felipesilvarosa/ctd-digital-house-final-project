@@ -96,6 +96,11 @@ public class ProductService {
     @Transactional
     public ProductDetailedDTO createProduct(NewProductDTO dto,List<MultipartFile>images){
 
+        if(images==null){
+            log.info("Images null");
+        }else{
+            log.info("Images not null");
+        }
         if (dto.getCategoryId()==null || dto.getAddress()==null||images==null||images.isEmpty())
             throw new BadRequestException("Não pode fazer cadastro sem categoria, imagens, ou endereço");
 
