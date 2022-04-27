@@ -94,7 +94,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDetailedDTO createProduct(NewProductDTO dto,List<MultipartFile>images){
+    public ProductDetailedDTO createProduct(NewProductDTO dto,MultipartFile[]images){
 
         if(images==null){
             log.info("Images null");
@@ -137,7 +137,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDetailedDTO editProduct(NewProductDTO dto, List<MultipartFile> images){
+    public ProductDetailedDTO editProduct(NewProductDTO dto, MultipartFile[] images){
 
         repository.findById(dto.getId()).orElseThrow(()->
             new NotFoundException("Nenhum produto com id informada foi encontrado"));
