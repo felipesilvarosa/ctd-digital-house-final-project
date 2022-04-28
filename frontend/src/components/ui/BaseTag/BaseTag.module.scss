@@ -13,4 +13,9 @@
 .OutlineTag {
   background: transparent;
   border-color: var(--col-main-low-contrast);
+
+  &:focus-within {
+    border-color: var(--col-main-highlight);
+    box-shadow: 0 0 0 1px var(--col-shadow-light);
+  }
 }

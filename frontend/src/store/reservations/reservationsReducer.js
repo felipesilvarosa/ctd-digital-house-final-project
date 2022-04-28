@@ -1,6 +1,7 @@
 export const reservationsState = {
   reservation: {},
-  loading: false
+  loading: false,
+  loadingMakeReservation: false
 }
 
 export const reservationsReducer = (state, action) => {
@@ -15,6 +16,11 @@ export const reservationsReducer = (state, action) => {
       return {
         ...state,
         loading: payload
+      }
+    case "SET_MAKE_RESERVATION_LOADING":
+      return {
+        ...state,
+        loadingMakeReservation: payload
       }
     case "CLEAR_RESERVATION":
       return {

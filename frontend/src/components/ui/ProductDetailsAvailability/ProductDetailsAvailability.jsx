@@ -14,7 +14,7 @@ export const ProductDetailsAvailability = ({product}) => {
   const { user } = useAuth()
 
   const unavailableDates = product?.unavailable?.map(date => {
-    const chunks = date.split("/")
+    const chunks = date.split("-")
     return new Date(chunks[0], chunks[1]-1, chunks[2])
   })
 

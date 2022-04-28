@@ -11,16 +11,17 @@ import {
   SpacingShim,
   BackButton,
   BaseTag,
-  BaseToggle
+  BaseToggle,
+  OverlayLoader
 } from "src/components"
 import { useCategories, useProducts } from "src/hooks"
-import { availableUtilities } from "src/utils"
+import { availableUtilities, generateRandomId } from "src/utils"
 import styles from "./ProductCreationView.module.scss"
 
 export const ProductCreationView = () => {
   const navigate = useNavigate()
   const { categories } = useCategories()
-  const { availablePolicies, createNewProduct } = useProducts()
+  const { availablePolicies, createNewProduct, loadingCreateProduct } = useProducts()
   const [ selectedCategory, setSelectedCategory ] = useState()
   const [ images, setImages ] = useState([])
   const [ formattedFormData, setFormattedFormData ] = useState({
@@ -79,7 +80,7 @@ export const ProductCreationView = () => {
       values.addressCity, 
       values.addressState, 
       values.addressCountry
-    ].filter(value => value !== "").join(", ")
+    ].filter(value => value !== "").join("|")
 
     const dataToSubmit = {
       ...formattedFormData,
@@ -90,7 +91,10 @@ export const ProductCreationView = () => {
 
     const formData = new FormData()
     formData.append("dtoJSON", JSON.stringify(dataToSubmit))
-    formData.append("images", [ ...document.querySelector("#files").files ])
+    const files = document.querySelector("#files").files
+    for (let i = 0; i < files.length; i++) {
+      formData.append(`files`, files.item(i), generateRandomId())
+    }
 
     try {
       await createNewProduct(formData)
@@ -278,6 +282,9 @@ export const ProductCreationView = () => {
           </Form>
         </Formik>
       </ResponsiveContainer>
+      {
+        loadingCreateProduct && <OverlayLoader />
+      }
     </>
   )
 }
