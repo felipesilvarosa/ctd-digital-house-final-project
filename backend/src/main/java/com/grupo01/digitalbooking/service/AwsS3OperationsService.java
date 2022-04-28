@@ -60,7 +60,7 @@ public class AwsS3OperationsService {
                 e.printStackTrace();
             }
         });
-G
+
         return repository.saveAll(response);
 
     }
