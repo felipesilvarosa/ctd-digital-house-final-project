@@ -159,7 +159,7 @@ public class ProductService {
                 addressDetails[addressDetails.length-3].trim(),
                 addressDetails[addressDetails.length-1].trim());
         Destination destination = null;
-        if(destinationOptional.isEmpty()) destination = registerNewDestination(addressDetails);g
+        if(destinationOptional.isEmpty()) destination = registerNewDestination(addressDetails);
 
         List<Utility> utilities = utilityRepository.findAllByNameIgnoreCase(dto.getUtilitiesNames());
         if(utilities.size()<dto.getUtilitiesNames().size())
