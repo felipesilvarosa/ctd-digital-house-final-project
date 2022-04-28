@@ -62,19 +62,19 @@ public class ProductController {
 
     @ApiOperation("Cria um novo produto")
     @PostMapping
-    public ResponseEntity<ProductDetailedDTO> createProduct(String dtoJSON,MultipartFile[] images) throws JsonProcessingException {
+    public ResponseEntity<ProductDetailedDTO> createProduct(String dtoJSON, @RequestParam("files") MultipartFile... files) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         NewProductDTO dto = mapper.readValue(dtoJSON,NewProductDTO.class);
-        ProductDetailedDTO response = service.createProduct(dto,images);
+        ProductDetailedDTO response = service.createProduct(dto,files);
         return new ResponseEntity<>(response, CREATED);
     }
 
     @ApiOperation("Atualiza um produto")
     @PutMapping
-    public ResponseEntity<ProductDetailedDTO> editProduct(String dtoJSON,MultipartFile[] images) throws JsonProcessingException {
+    public ResponseEntity<ProductDetailedDTO> editProduct(String dtoJSON,@RequestParam("files")MultipartFile... files) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         NewProductDTO dto = mapper.readValue(dtoJSON,NewProductDTO.class);
-        ProductDetailedDTO response = service.editProduct(dto,images);
+        ProductDetailedDTO response = service.editProduct(dto,files);
         return new ResponseEntity<>(response, OK);
     }
 
