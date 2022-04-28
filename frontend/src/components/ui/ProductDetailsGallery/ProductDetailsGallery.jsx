@@ -36,7 +36,7 @@ export const ProductDetailsGallery = ({images}) => {
       }
 
       <div className={styles.GalleryWrapper}>
-        <div className={styles.GalleryDesktop}>{ mappedImages?.slice(0,5) }</div>
+        <div className={styles.GalleryDesktop} data-images={`${mappedImages?.slice(0,5).length}`}>{ mappedImages?.slice(0,5) }</div>
         <BaseButton onClick={toggleModal}>Ver mais</BaseButton>
       </div>
     </>

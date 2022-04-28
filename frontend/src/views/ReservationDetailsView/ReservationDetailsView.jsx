@@ -12,6 +12,7 @@ import {
   BaseButton,
   StarsMeter,
   ProductDetailsPolicies,
+  OverlayLoader,
 } from "src/components"
 import { useAuth, useProducts, useReservations, useWindowSize } from "src/hooks"
 import { makeNumberFromDate, getCheckInTimeFromUtilities } from "src/utils";
@@ -42,7 +43,7 @@ export const ReservationDetailsView = () => {
   const size = useWindowSize()
   const { user } = useAuth()
   const { findProductById, product, loading: loadingProduct } = useProducts()
-  const { setReservation, clearReservation, reservation, loading: loadingReservation } = useReservations()
+  const { setReservation, clearReservation, reservation, loading: loadingReservation, loadingMakeReservation, makeReservation } = useReservations()
 
   const unavailableDates = product?.unavailable?.map(date => {
     const chunks = date.split("/")
@@ -72,14 +73,28 @@ export const ReservationDetailsView = () => {
     setReservation({ user, product, checkIn: range.selection.startDate, checkOut: range.selection.endDate })
   }
 
-  const handleSubmit = () => {
-    Swal.fire(
-      'Reserva feita com sucesso!',
-      'Você reservou sua hospedagem com sucesso.',
-      "success"
-    )
-    clearReservation()
-    navigate("/")
+  const handleSubmit = async () => {
+    try {
+      await makeReservation({
+        checkIn: reservation.checkIn,
+        checkOut: reservation.checkOut,
+        clientId: reservation.user.id,
+        productId: reservation.product.id
+      })
+      Swal.fire(
+        'Reserva feita com sucesso!',
+        'Você reservou sua hospedagem com sucesso.',
+        "success"
+      )
+      clearReservation()
+      navigate("/")
+    } catch (e) {
+      Swal.fire(
+        "Ocorreu um erro :(",
+        "Tente novamente mais tarde.",
+        "error"
+      )
+    }
   }
 
   useEffect(() => {
@@ -184,6 +199,9 @@ export const ReservationDetailsView = () => {
         </ResponsiveContainer>
         { product?.policies && <ProductDetailsPolicies policies={product.policies} className={styles.Policies} title="O que você precisa saber" />}
       </div>
+      {
+        loadingMakeReservation && <OverlayLoader />
+      }
     </>
   )
 }

@@ -50,4 +50,5 @@ export * from "./ui/FlashMessage/FlashMessage"
 
 //ui/Loaders
 export * from "./ui/Loaders/CardsGridLoader/CardsGridLoader"
+export * from "./ui/Loaders/OverlayLoader/OverlayLoader"
 export * from "./ui/Loaders/BaseLoader"

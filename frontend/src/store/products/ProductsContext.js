@@ -45,17 +45,16 @@ export const ProductsProvider = ({children}) => {
   }
 
   const createNewProduct = async (formData) => {
+    dispatch({type: "SET_CREATE_PRODUCT_LOADING", payload: true})
     try {
-      await axios.post("/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      })
+      await axios.post("/products", formData)
       const response = await axios("/products")
       const products = response.data
       dispatch({type: "SET_PRODUCTS", payload: products})
     } catch(e) {
       console.error(e)
+    } finally {
+      dispatch({type: "SET_CREATE_PRODUCT_LOADING", payload: false})
     }
   }
 
@@ -79,35 +78,17 @@ export const ProductsProvider = ({children}) => {
     }
   }
 
-  const makeReservation = async (data) => {
-    dispatch({type: "SET_MAKE_RESERVATION_LOADING", payload: true})
-    try {
-      await axios.post("/reservations", {
-        checkinDate: data.checkIn,
-        checkinTime: "7:00:00.000",
-        checkoutDate: data.checkOut,
-        checkoutTime: "11:00:00.000",
-        clientId: data.client,
-        productId: data.product
-      })
-    } catch(e) {
-      console.error(e.message)
-    } finally {
-      dispatch({type: "SET_MAKE_RESERVATION_LOADING", payload: false})
-    }
-  }
-
   const value = {
     products: state.products,
     product: state.product,
     loading: state.loading,
     availablePolicies: state.availablePolicies,
+    loadingCreateProduct: state.loadingCreateProduct,
     setPolicies,
     setProducts,
     findProductById,
     createNewProduct,
-    searchProducts,
-    makeReservation
+    searchProducts
   }
 
   return (
