@@ -3,7 +3,8 @@ export const productsState = {
   product: {},
   availablePolicies: [],
   loading: false,
-  loadingMakeReservation: false
+  loadingMakeReservation: false,
+  loadingCreateProduct: false
 }
 
 export const productsReducer = (state, action) => {
@@ -29,10 +30,10 @@ export const productsReducer = (state, action) => {
         ...state,
         loading: payload
       }
-    case "SET_MAKE_RESERVATION_LOADING":
+    case "SET_CREATE_PRODUCT_LOADING":
       return {
         ...state,
-        loadingMakeReservation: payload
+        loadingCreateProduct: payload
       }
     default:
       throw new Error("Caso não previsto no reducer.")
