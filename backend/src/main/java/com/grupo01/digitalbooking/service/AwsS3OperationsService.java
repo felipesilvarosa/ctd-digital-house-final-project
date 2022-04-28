@@ -53,15 +53,14 @@ public class AwsS3OperationsService {
                         .build();
                 s3.putObject(request, RequestBody.fromBytes(image.getBytes()));
                 String url = awsDomain+folder+imageTitle;
-                Image entity = repository.findByTitle(imageTitle)
-                        .orElse(new Image(null,imageTitle,url,product));
+                Image entity = new Image(null,imageTitle,url,product);
                 response.add(entity);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
+G
         return repository.saveAll(response);
 
     }
