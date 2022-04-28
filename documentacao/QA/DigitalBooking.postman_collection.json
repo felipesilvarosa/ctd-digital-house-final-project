@@ -1,0 +1,1576 @@
+{
+	"info": {
+		"_postman_id": "e9230b6b-034e-4dd7-a83b-3ecbbbbb2aaf",
+		"name": "DigitalBooking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Criar Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"O status da resposta deve ser 201\", function(){\r",
+									"     pm.response.to.have.status(201)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto usuario\", function(){\r",
+									"\r",
+									"  const jsonData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.role).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.firstName).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.lastName).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.email).to.be.a(\"string\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Felipe\",\r\n    \"lastName\": \"Teste\",\r\n    \"email\": \"teste12@gmail.com\",\r\n    \"role\": \"USER\",\r\n    \"password\": \"FeLi30*#139\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar usuario senha invalida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"O status da resposta deve ser 400\", function(){\r",
+									"     pm.response.to.have.status(400)\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"A mensagem da resposta deve ser de senha invalida\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"Senha inválida. A senha deve ter:  um mínimo de 8 caracteres, 1 caractere caixa baixa, 1 caractere caixa alta, 1 número e 1 caractere especial\")\r",
+									"    pm.expect(responseJson.status).to.eql(\"FAILED\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Felipe\",\r\n    \"lastName\": \"Pestinho\",\r\n    \"email\": \"felapesaaaarosa@gmail.com\",\r\n    \"role\": \"USER\",\r\n    \"password\": \"Fes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar usuario com email já existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"O status da resposta deve ser 400\", function(){\r",
+									"     pm.response.to.have.status(400)\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"A mensagem da resposta deve ser 'E-mail já está em uso'\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"E-mail já está em uso\");\r",
+									"    pm.expect(responseJson.status).to.eql(\"FAILED\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Felipe\",\r\n    \"lastName\": \"Pestinho\",\r\n    \"email\": \"felapesrosa@gmail.com\",\r\n    \"role\": \"USER\",\r\n    \"password\": \"FeLi30*#139\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Busca lista de categorias",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser um array de categorias\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an(\"array\")\r",
+									"    pm.expect(responseJson).to.be.not.empty\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca Categoria inexistente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 404\", function(){\r",
+									"     pm.response.to.have.status(404)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A mensagem da resposta deve ser 'Categoria não encontrada'\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"Categoria não encontrada\");\r",
+									"    pm.expect(responseJson.status).to.eql(\"FAILED\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/99",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"99"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edita categoria",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 201\", function(){\r",
+									"     pm.response.to.have.status(201)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 19,\r\n\t\"title\" : \"Aewaew\",\r\n\t\"description\": \"Lorem 2\",\r\n\t\"imageUrl\": \"Testezinho\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/edit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edita categoria inexistente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 404\", function(){\r",
+									"     pm.response.to.have.status(404)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A mensagem da resposta deve ser 'Categoria não encontrada'\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"Categoria não encontrada\");\r",
+									"    pm.expect(responseJson.status).to.eql(\"FAILED\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 191111,\r\n\t\"title\" : \"Aewaew\",\r\n\t\"description\": \"Lorem 2\",\r\n\t\"imageUrl\": \"Testezinho\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/edit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleta uma categoria",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 202\", function(){\r",
+									"     pm.response.to.have.status(202)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/delete/21",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"delete",
+								"21"
+							],
+							"query": [
+								{
+									"key": "X-XSRF-TOKEN",
+									"value": "6a55edc6-292d-459e-88c7-b0527890fc2b",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca Categoria por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto categoria\", function(){\r",
+									"\r",
+									"  const jsonData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.productCount).to.a(\"number\");\r",
+									"  pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.description).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.imageUrl).to.be.a(\"string\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Categoria",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 201\", function(){\r",
+									"     pm.response.to.have.status(201)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto categoria\", function(){\r",
+									"\r",
+									"  const jsonData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.productCount).to.be.null\r",
+									"  pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.description).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.imageUrl).to.be.a(\"string\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"title\" : \"Teste outra vez 1222\",\r\n\t\"description\": \"Lorem 2\",\r\n\t\"imageUrl\": \"aqui vai a url\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/new",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Categoria já existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 409\", function(){\r",
+									"     pm.response.to.have.status(409)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"     pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter conter mensagem de erro\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.be.a(\"string\")\r",
+									"    pm.expect(responseJson.status).to.eql(\"FAILED\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"title\" : \"Teste outra vez 1\",\r\n\t\"description\": \"Lorem 2\",\r\n\t\"imageUrl\": \"aqui vai a url\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/new",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"new"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Destinations",
+			"item": [
+				{
+					"name": "Buscar destinos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter um array de destinos\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"      \"type\": \"array\",\r",
+									"      \"additionalItems\": true,\r",
+									"      \"items\": {\r",
+									"          \"anyOf\":[\r",
+									"             { \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"id\": {\"type\": \"number\"},\r",
+									"                    \"city\": {\"type\": \"string\"},\r",
+									"                    \"country\": {\"type\": \"string\"},\r",
+									"                },\r",
+									"                \"required\":[\"id\",\"city\",\"country\"]\r",
+									"             }\r",
+									"          ]\r",
+									"      }\r",
+									"  }\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/destinations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"destinations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Cidade",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve contes status 201\", function () {\r",
+									"     pm.response.to.be.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter object de destino\", function(){\r",
+									"    const schema = {\r",
+									"        \"type\" : \"object\",\r",
+									"        \"properties\" : {\r",
+									"                    \"id\": {\"type\": \"number\"},\r",
+									"                    \"city\": {\"type\": \"string\"},\r",
+									"                    \"country\": {\"type\": \"string\"},\r",
+									"            },\r",
+									"                \"required\":[\"id\",\"city\",\"country\"]\r",
+									"    }\r",
+									"\r",
+									"    pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"country\": \"Brasil\",\r\n    \"city\": \"Ué Teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/destinations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"destinations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleta uma cidade",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/destinations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"destinations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policies",
+			"item": [
+				{
+					"name": "Busca politicas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto produto\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"      \"type\": \"array\",\r",
+									"      \"additionalItems\": true,\r",
+									"      \"items\": {\r",
+									"          \"anyOf\":[\r",
+									"             { \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"id\": {\"type\": \"number\"},\r",
+									"                    \"type\": {\"type\": \"string\"},\r",
+									"                    \"title\": {\"type\": \"string\"},\r",
+									"                    \"description\": {\"type\": \"string\"},\r",
+									"                    \"icon\": {\"type\": [\"string\",\"null\"]},\r",
+									"                },\r",
+									"                \"required\":[\"id\", \"type\", \"title\", \"description\", \"icon\" ]\r",
+									"             }\r",
+									"          ]\r",
+									"      }\r",
+									"  }\r",
+									"\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/policies",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"policies"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Busca todos os produtos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\", function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve ser um array de produtos\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an(\"array\")\r",
+									"    pm.expect(responseJson).to.be.not.empty\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca produto por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto produto\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\":{\r",
+									"        \"id\": {\"type\": \"number\"},\r",
+									"        \"title\": {\"type\": \"string\"},\r",
+									"        \"description\": {\"type\": \"string\"},\r",
+									"        \"category\": {\"type\": \"string\"},\r",
+									"        \"destination\": {\"type\": \"string\"},\r",
+									"        \"address\": {\"type\": \"string\"},\r",
+									"        \"stars\": {\"type\": [\"number\", \"null\"]},\r",
+									"        \"rating\": {\"type\": \"number\"},\r",
+									"        \"latitude\": {\"type\": \"string\"},\r",
+									"        \"longitude\": {\"type\": \"string\"},\r",
+									"        \"images\": {\"type\": \"array\"},\r",
+									"        \"unavailable\": {\"type\": \"array\"},\r",
+									"        \"utilities\": {\"type\": \"array\"},\r",
+									"        \"policies\":  {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\":{\r",
+									"                \"safety\": {\"type\": \"object\"},\r",
+									"                \"canceling\": {\"type\": \"object\"},\r",
+									"                \"rules\": {\"type\": \"object\"},\r",
+									"            }\r",
+									"\r",
+									"        }\r",
+									"      },\r",
+									"       \"required\":[\"id\",\"title\",\"description\",\"category\",\"destination\",\"address\",\"stars\",\"rating\",\"latitude\",\"longitude\",\"images\",\"unavailable\",\"utilities\",\"policies\" ]\r",
+									"  }\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/products/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca produto por id não existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.notFound;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A mensagem da resposta deve ser 'E-mail já está em uso'\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"Nenhum produto com esta id foi encontrado\");\r",
+									"    pm.expect(responseJson.status).to.eql(\"FAILED\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/products/90",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"90"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca por parametros",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter um array de produtos com base na busca\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"      \"type\": \"array\",\r",
+									"      \"additionalItems\": true,\r",
+									"      \"items\": {\r",
+									"          \"anyOf\":[\r",
+									"             { \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"id\": {\"type\": \"number\"},\r",
+									"                    \"title\": {\"type\": \"string\"},\r",
+									"                    \"description\": {\"type\": \"string\"},\r",
+									"                    \"category\": {\"type\": \"string\"},\r",
+									"                    \"destination\": {\"type\": \"string\"},\r",
+									"                    \"address\": {\"type\": \"string\"},\r",
+									"                    \"stars\": {\"type\": [\"number\", \"null\"]},\r",
+									"                    \"rating\": {\"type\": \"number\"},\r",
+									"                    \"latitude\": {\"type\": \"string\"},\r",
+									"                    \"longitude\": {\"type\": \"string\"},\r",
+									"                    \"images\": {\"type\": \"array\"},\r",
+									"                    \"unavailable\": {\"type\": \"array\"},\r",
+									"                    \"utilities\": {\"type\": \"array\"},\r",
+									"                    \"policies\":  {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\":{\r",
+									"                            \"safety\": {\"type\": \"object\"},\r",
+									"                            \"canceling\": {\"type\": \"object\"},\r",
+									"                            \"rules\": {\"type\": \"object\"},\r",
+									"                        }\r",
+									"                    }\r",
+									"                },\r",
+									"                \"required\":[\"id\",\"title\",\"description\",\"category\",\"destination\",\"address\",\"stars\",\"rating\",\"latitude\",\"longitude\",\"images\",\"unavailable\",\"utilities\",\"policies\" ]\r",
+									"             }\r",
+									"          ]\r",
+									"      }\r",
+									"  }\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/products/search?categoryId=1&cityId=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "categoryId",
+									"value": "1"
+								},
+								{
+									"key": "startDate",
+									"value": "null",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "null",
+									"disabled": true
+								},
+								{
+									"key": "cityId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleta produtos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 200\", function(){\r",
+									"     pm.response.to.have.status(200)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A mensagem deve ser de produto deletado\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message).to.eql(\"Produtos deletados\")\r",
+									"    pm.expect(responseJson.status).to.eql(\"SUCCESS\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/delete?ids=98",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "98"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cria produto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "dtoJSON",
+									"value": "{\n  \"name\":\"Teste postman Felipe\",\n  \"description\":\"Teste postman Felipe Lorem\",\n  \"stars\":null,\n  \"address\":\"123, Avenida Alberto Bins, Porto Alegre, Rio Grande do Sul, Brasil\",\n  \"rating\":10,\n  \"categoryId\":1,\n  \"utilitiesNames\":[\"Espaço Gourmet\", \"Quadra de Tênis\", \"Lavanderia\" ],\n  \"policiesIds\":[1,2,3,4,5,6,7,8,9]\n}",
+									"type": "default"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": [
+										"/C:/Users/felip/Downloads/interior-generico-09.png",
+										"/C:/Users/felip/Downloads/interior-generico-10.png",
+										"/C:/Users/felip/Downloads/interior-generico-11.png"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Busca todas as reservas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto produto\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"      \"type\": \"array\",\r",
+									"      \"additionalItems\": true,\r",
+									"      \"items\": {\r",
+									"          \"anyOf\":[\r",
+									"             { \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"clientName\": {\"type\": \"string\"},\r",
+									"                    \"reservationInfo\":  {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\":{\r",
+									"                            \"productId\": {\"type\": \"number\"},\r",
+									"                            \"name\": {\"type\": \"string\"},\r",
+									"                            \"destination\": {\"type\": \"string\"},\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"checkinDateTime\": {\"type\": \"string\"},\r",
+									"                    \"checkoutDateTime\": {\"type\": \"string\"}\r",
+									"                },\r",
+									"                \"required\":[\"clientName\", \"reservationInfo\", \"checkinDateTime\", \"checkoutDateTime\" ]\r",
+									"             }\r",
+									"          ]\r",
+									"      }\r",
+									"  }\r",
+									"\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reservations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleta reserva",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"O status da resposta deve ser 202\", function(){\r",
+									"     pm.response.to.have.status(202)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"checkinDate\": \"2022-05-10\",\r\n  \"checkinTime\": \"12:59:11.332\",\r\n  \"checkoutDate\": \"2022-05-15\",\r\n  \"checkoutTime\": \"12:59:11.332\",\r\n  \"clientId\": 17,\r\n  \"productId\": 25,\r\n  \"id\": 6\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reservations/8",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reservations",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar reserva",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve contes status 201\", function () {\r",
+									"     pm.response.to.be.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto produto\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"              \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"clientName\": {\"type\": \"string\"},\r",
+									"                    \"reservationInfo\":  {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\":{\r",
+									"                            \"productId\": {\"type\": \"number\"},\r",
+									"                            \"name\": {\"type\": \"string\"},\r",
+									"                            \"destination\": {\"type\": \"string\"},\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"checkinDateTime\": {\"type\": \"string\"},\r",
+									"                    \"checkoutDateTime\": {\"type\": \"string\"}\r",
+									"                },\r",
+									"                \"required\":[\"clientName\", \"reservationInfo\", \"checkinDateTime\", \"checkoutDateTime\" ]\r",
+									"     }\r",
+									"  \r",
+									"\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"checkinDate\": \"2022-05-10\",\r\n  \"checkinTime\": \"12:59:11.332\",\r\n  \"checkoutDate\": \"2022-05-15\",\r\n  \"checkoutTime\": \"12:59:11.332\",\r\n  \"clientId\": 17,\r\n  \"productId\": 7\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reservations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca reserva por clientes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve ser ok\", function () {\r",
+									"     pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto produto\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"      \"type\": \"array\",\r",
+									"      \"additionalItems\": true,\r",
+									"      \"items\": {\r",
+									"          \"anyOf\":[\r",
+									"             { \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"clientName\": {\"type\": \"string\"},\r",
+									"                    \"reservationInfo\":  {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\":{\r",
+									"                            \"productId\": {\"type\": \"number\"},\r",
+									"                            \"name\": {\"type\": \"string\"},\r",
+									"                            \"destination\": {\"type\": \"string\"},\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"checkinDateTime\": {\"type\": \"string\"},\r",
+									"                    \"checkoutDateTime\": {\"type\": \"string\"}\r",
+									"                },\r",
+									"                \"required\":[\"clientName\", \"reservationInfo\", \"checkinDateTime\", \"checkoutDateTime\" ]\r",
+									"             }\r",
+									"          ]\r",
+									"      }\r",
+									"  }\r",
+									"\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reservations/client/17",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reservations",
+								"client",
+								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edita reserva Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"A resposta deve contes status 201\", function () {\r",
+									"     pm.response.to.be.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A resposta deve conter corpo\"), function(){\r",
+									"    pm.response.to.be.withBody;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve ser json\"), function(){\r",
+									"     pm.response.to.be.json;\r",
+									"}\r",
+									"\r",
+									"pm.test(\"A resposta deve conter objeto produto\", function(){\r",
+									"\r",
+									"  const schema = {\r",
+									"              \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"clientName\": {\"type\": \"string\"},\r",
+									"                    \"reservationInfo\":  {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\":{\r",
+									"                            \"productId\": {\"type\": \"number\"},\r",
+									"                            \"name\": {\"type\": \"string\"},\r",
+									"                            \"destination\": {\"type\": \"string\"},\r",
+									"                        }\r",
+									"                    },\r",
+									"                    \"checkinDateTime\": {\"type\": \"string\"},\r",
+									"                    \"checkoutDateTime\": {\"type\": \"string\"}\r",
+									"                },\r",
+									"                \"required\":[\"clientName\", \"reservationInfo\", \"checkinDateTime\", \"checkoutDateTime\" ]\r",
+									"     }\r",
+									"  \r",
+									"\r",
+									"\r",
+									"  pm.response.to.have.jsonSchema(schema)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"checkinDate\": \"2022-05-10\",\r\n  \"checkinTime\": \"12:59:11.332\",\r\n  \"checkoutDate\": \"2022-05-15\",\r\n  \"checkoutTime\": \"12:59:11.332\",\r\n  \"clientId\": 17,\r\n  \"productId\": 25,\r\n  \"id\": 6\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reservations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
