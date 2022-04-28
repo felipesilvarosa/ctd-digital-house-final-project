@@ -109,9 +109,11 @@ public class ProductService {
             throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
         String[] addressDetails = dto.getAddress().split("\\|");
-        Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
-                addressDetails[addressDetails.length-1].trim()).orElseThrow(
-                ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
+        Optional<Destination> destinationOptional = destinationRepository.findByCityAndCountry(
+                addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim());
+        Destination destination = null;
+        if(destinationOptional.isEmpty()) destination = registerNewDestination(addressDetails);
 
         List<Utility> utilities = utilityRepository.findAllByNameIgnoreCase(dto.getUtilitiesNames());
         if(utilities.size()<dto.getUtilitiesNames().size())
@@ -133,6 +135,7 @@ public class ProductService {
         return new ProductDetailedDTO(response);
     }
 
+
     @Transactional
     public ProductDetailedDTO editProduct(NewProductDTO dto, MultipartFile[] images){
 
@@ -152,9 +155,11 @@ public class ProductService {
             throw new BadRequestException("Somente hotéis podem e devem possuir estrelas");
 
         String[] addressDetails = dto.getAddress().split("\\|");
-        Destination destination = destinationRepository.findByCityAndCountry(addressDetails[addressDetails.length-3].trim(),
-                addressDetails[addressDetails.length-1].trim()).orElseThrow(
-                ()-> new NotFoundException("Nenhum destino foi encontrado com base no endereço informado"));
+        Optional<Destination> destinationOptional = destinationRepository.findByCityAndCountry(
+                addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim());
+        Destination destination = null;
+        if(destinationOptional.isEmpty()) destination = registerNewDestination(addressDetails);g
 
         List<Utility> utilities = utilityRepository.findAllByNameIgnoreCase(dto.getUtilitiesNames());
         if(utilities.size()<dto.getUtilitiesNames().size())
@@ -187,22 +192,8 @@ public class ProductService {
 
     private String[] getCoordinatesFromApi(String address) {
 
-        WebClient client = builder()
-                .baseUrl("https://nominatim.openstreetmap.org")
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+        List<Map<String,Object>> response = getInfoFromAPI(address);
 
-        List<Map<String, Object>> response = Objects.requireNonNull(client
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/search")
-                        .queryParam("q", address)
-                        .queryParam("format", "json")
-                        .queryParam("limit", 1)
-                        .build())
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
-                }).block());
         if(response.isEmpty()){
             String[] country = address.split("\\|");
             return getCoordinatesFromApi(country[country.length-1]);
@@ -213,5 +204,40 @@ public class ProductService {
                 df.format(Double.valueOf((String)response.get(0).get("lat"))),
                 df.format(Double.valueOf((String)response.get(0).get("lon")))
         };
+    }
+
+    private Destination registerNewDestination(String[] addressDetails) {
+        String address = addressDetails[addressDetails.length-3].trim()+","+
+                         addressDetails[addressDetails.length-1].trim();
+        List<Map<String,Object>> response = getInfoFromAPI(address);
+        if(response.isEmpty()) throw new BadRequestException("Nenhum destino foi encontrado com base no endereço informado");
+        String[] coords = getCoordinatesFromApi(address);
+        return destinationRepository.save(new Destination(
+                null,
+                addressDetails[addressDetails.length-3].trim(),
+                addressDetails[addressDetails.length-1].trim(),
+                coords[0],
+                coords[1],
+                null));
+
+    }
+
+    private List<Map<String,Object>> getInfoFromAPI(String address){
+        WebClient client = builder()
+                .baseUrl("https://nominatim.openstreetmap.org")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        return Objects.requireNonNull(client
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search")
+                        .queryParam("q", address)
+                        .queryParam("format", "json")
+                        .queryParam("limit", 1)
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {
+                }).block());
     }
 }
