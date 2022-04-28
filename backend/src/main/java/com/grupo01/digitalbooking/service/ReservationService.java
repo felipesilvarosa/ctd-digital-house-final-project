@@ -2,18 +2,23 @@ package com.grupo01.digitalbooking.service;
 
 
 import com.grupo01.digitalbooking.domain.Client;
+import com.grupo01.digitalbooking.domain.Product;
 import com.grupo01.digitalbooking.domain.Reservation;
 import com.grupo01.digitalbooking.dto.NewReservationDTO;
 import com.grupo01.digitalbooking.dto.ReservationDTO;
 import com.grupo01.digitalbooking.repository.ClientRepository;
+import com.grupo01.digitalbooking.repository.ProductRepository;
 import com.grupo01.digitalbooking.repository.ReservationRepository;
+import com.grupo01.digitalbooking.repository.UserRepository;
 import com.grupo01.digitalbooking.service.exceptions.BadRequestException;
 import com.grupo01.digitalbooking.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -23,19 +28,23 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
+    @Transactional(readOnly = true)
     public List<ReservationDTO> getReservations() {
         return reservationRepository.findAll().
                 stream()
                 .map(ReservationDTO::new)
                 .collect(Collectors.toList());
     }
-
+    @Transactional(readOnly = true)
     public ReservationDTO getReservationById(Long id) {
         return new ReservationDTO(reservationRepository.findById(id)
                 .orElseThrow(()-> new NotFoundException("Nenhuma reserva com este id foi encontrada")));
     }
 
+    @Transactional(readOnly = true)
     public List<ReservationDTO> getReservationsByClient(Long id) {
         Client client = clientRepository.findById(id).orElseThrow(()-> new NotFoundException("Nenhum cliente com este id foi encontrado"));
         List<Reservation> response =  reservationRepository.findAllByClient(client);
@@ -45,6 +54,7 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ReservationDTO createReservation(NewReservationDTO dto) {
         if(dto.getClientId()==null) throw new BadRequestException("Não pode criar uma reserva sem cliente");
         if(dto.getProductId()==null) throw new BadRequestException("Não pode criar uma reserva sem produto");
@@ -53,8 +63,19 @@ public class ReservationService {
         LocalDateTime checkoutDateTime = LocalDateTime.of(dto.getCheckoutDate(),dto.getCheckoutTime());
         if(checkoutDateTime.isBefore(checkinDateTime))
             throw new BadRequestException("Horário e data de checkout não podem ser antes da data e horário de checkin");
-
-        return new ReservationDTO(reservationRepository.save(new Reservation(dto)));
+        Optional<Client> clientOptional = clientRepository.findById(dto.getClientId());
+        Client client;
+        if(clientOptional.isEmpty()) {
+            client = new Client(userRepository.findById(dto.getClientId()).orElseThrow(
+                    ()->new BadRequestException("Usuário com esta ID não foi encontrado")));
+            client = clientRepository.save(client);
+        } else client = clientOptional.get();
+        Product product = productRepository.getById(dto.getProductId());
+        dto.setClientId(client.getId());
+        Reservation response = reservationRepository.save(new Reservation(dto));
+        response.setProduct(product);
+        response.setClient(client);
+        return new ReservationDTO(response);
     }
 
     public void deleteReservation(Long id) {

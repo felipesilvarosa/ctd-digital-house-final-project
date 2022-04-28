@@ -25,4 +25,16 @@ public class Client extends User{
         super(id);
     }
 
+    public Client(User parent) {
+        this.setId(parent.getId());
+        this.setAccountNonExpired(parent.isAccountNonExpired());
+        this.setEnabled(parent.isEnabled());
+        this.setPassword(getPassword());
+        this.setAccountNonLocked(parent.isAccountNonLocked());
+        this.setCredentialsNonExpired(parent.isCredentialsNonExpired());
+        this.setRole(parent.getRole());
+        this.setEmail(parent.getEmail());
+        this.setFirstName(parent.getFirstName());
+        this.setLastName(parent.getLastName());
+    }
 }
