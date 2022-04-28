@@ -11,10 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "tb_users")
 @Getter
 @Setter
@@ -30,6 +30,8 @@ public class User implements UserDetails {
     private String password;
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+    @OneToMany(mappedBy = "client")
+    private List<Reservation> reservations;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;

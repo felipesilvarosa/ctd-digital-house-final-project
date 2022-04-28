@@ -21,7 +21,8 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Client client;
+    @JoinColumn(name = "client_id")
+    private User client;
     @ManyToOne
     private Product product;
     private LocalDateTime checkinDateTime;
@@ -29,7 +30,7 @@ public class Reservation {
 
     public Reservation(NewReservationDTO dto){
         this.id = dto.getId();
-        this.client = new Client(dto.getClientId());
+        this.client = new User(dto.getClientId());
         this.product = new Product(dto.getProductId());
         this.checkinDateTime = LocalDateTime.of(dto.getCheckinDate(),dto.getCheckinTime());
         this.checkoutDateTime = LocalDateTime.of(dto.getCheckoutDate(),dto.getCheckoutTime());
