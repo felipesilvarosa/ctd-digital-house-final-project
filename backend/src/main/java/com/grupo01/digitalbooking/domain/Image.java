@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.REFRESH;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -25,7 +26,7 @@ public class Image {
     private String url;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = REFRESH)
     @JoinColumn(name = "product_id")
     private Product product;
 
