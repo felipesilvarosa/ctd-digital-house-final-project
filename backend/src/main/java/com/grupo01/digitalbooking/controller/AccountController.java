@@ -42,10 +42,14 @@ public class AccountController {
     @PostMapping("/users")
     public ResponseEntity<UserDTO> createNewUser(@RequestBody NewUserDTO newUser){
         UserDTO result = signupService.createNewUser(newUser);
-        List<ResponseCookie> cookies = authenticationService.createJwtCookies(result.getEmail(),List.of(result.getRole()));
-        ResponseEntity<UserDTO> response = ResponseEntity.ok(result);
-        cookies.forEach(cookie->response.getHeaders().add(SET_COOKIE,cookie.toString()));
-        return response;
+        List<ResponseCookie> jwtCookies =
+                authenticationService.createJwtCookies(result.getEmail(),
+                        List.of(result.getRole()));
+        return ResponseEntity.status(OK)
+                .header(SET_COOKIE,jwtCookies.get(0).toString())
+                .header(SET_COOKIE,jwtCookies.get(1).toString())
+                .body(result);
+
     }
 
     @GetMapping("users/validate")
