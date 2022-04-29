@@ -8,11 +8,12 @@ export const ProtectedView = ({children, type}) => {
   const location = useLocation()
 
   useEffect(() => {
-    if (
-      (type === "USER" && (!user || !user.id)) ||
-      (type === "ADMIN" && (!user || user.role !== "ADMIN"))
-    ) {
+    if (type === "USER" && (!user || !user.id)) {
       navigate(`/login?continue=${location.pathname}`)
+    }
+
+    if (type === "ADMIN" && (!user || user.role !== "ADMIN")) {
+      navigate("/404")
     }
   }, [user, navigate, location.pathname])
   
