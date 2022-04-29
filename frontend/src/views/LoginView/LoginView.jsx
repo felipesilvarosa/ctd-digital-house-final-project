@@ -30,24 +30,24 @@ export const LoginView = () => {
 
   return (
     <>
-    <div className={style.login} data-testid="login-view">
-      <Formik initialValues={{email: '', password: ''}} onSubmit={handleSubmit}>
-        <Form noValidate data-testid="form" className={style.form}>
-          <h2>Iniciar sessão</h2>
+      <div className={style.login} data-testid="login-view">
+        <Formik initialValues={{email: '', password: ''}} onSubmit={handleSubmit}>
+          <Form noValidate data-testid="form" className={style.form}>
+            <h2>Iniciar sessão</h2>
 
-          { loginErrors.server && <FlashMessage type="error">{loginErrors.server}</FlashMessage> }
+            { loginErrors.server && <FlashMessage type="error">{loginErrors.server}</FlashMessage> }
 
-          <InputGroup id="email" inputType="email" label="Email" loading={loading} error={loginErrors.email} />
-          <InputGroup id="password" inputType="password" label="Senha" showPassword loading={loading} error={loginErrors.senha} />
-          
-          <FlexWrapper row wrap align="center" className={style.ButtonLine}>
-            <BaseButton type="submit">Login</BaseButton>
-            <Link to="/signup" className={style.link}>Ainda não sou cliente ➜</Link>
-          </FlexWrapper>
-          
-        </Form>
-      </Formik>
-    </div>
+            <InputGroup id="email" inputType="email" label="Email" loading={loading} error={loginErrors.email} />
+            <InputGroup id="password" inputType="password" label="Senha" showPassword loading={loading} error={loginErrors.senha} />
+            
+            <FlexWrapper row wrap align="center" className={style.ButtonLine}>
+              <BaseButton type="submit">Login</BaseButton>
+              <Link to="/signup" className={style.link}>Ainda não sou cliente ➜</Link>
+            </FlexWrapper>
+            
+          </Form>
+        </Formik>
+      </div>
     </>
   )
 }
