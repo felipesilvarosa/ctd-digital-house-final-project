@@ -10,7 +10,7 @@ import {
   DestinationButton,
   CalendarWrapper,
 } from "src/components";
-import { useWindowSize, useDestinations, useProducts } from "src/hooks";
+import { useWindowSize, useDestinations } from "src/hooks";
 import { getNumberWithTrailingZero } from "src/utils"
 import iconPin from "src/assets/icon-pin.png";
 import iconCal from "src/assets/icon-calendar.png";
@@ -28,7 +28,6 @@ export const InnerSearch = ({ className }) => {
     key: "selection",
   });
   const { filteredDestinations, setDestinations, filterDestinations } = useDestinations()
-  const { searchProducts } = useProducts()
   const [expandedCalendar, setExpandedCalendar] = useState(false);
   const [destinationFocus, toggleDestinationFocus] = useState(false);
   const [pinDropDown, setPinDropDown] = useState(false);
@@ -74,6 +73,11 @@ export const InnerSearch = ({ className }) => {
     }
 
     navigate("/?" + Object.entries(queryStringParams).filter(param => param[1] !== null && param[1] !== "null").map(param => `${param[0]}=${param[1]}`).join("&"))
+
+    const titleEl = document.querySelector("#categories-title")
+    if (titleEl) {
+      window.scroll(0, titleEl.getBoundingClientRect().y - 100);
+    }
   }
 
   return (

@@ -44,7 +44,7 @@ export const HomeRecomendations = ({categoryId, destination}) => {
 
   return (
     <HomeSection className={styles.Section}>
-      <h2 className={styles.Title}>{ categoryName ? <span>{categoryName} <Link to="/">(Ver todas as categorias)</Link></span> : "Recomendações" }</h2>
+      <h2 className={styles.Title} id="categories-title">{ categoryName ? <span>{categoryName} <Link to="/">(Ver todas as categorias)</Link></span> : "Recomendações" }</h2>
       {
         loading
           ?
