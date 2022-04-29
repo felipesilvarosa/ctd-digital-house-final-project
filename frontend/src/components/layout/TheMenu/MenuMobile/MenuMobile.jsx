@@ -99,7 +99,7 @@ export const MenuMobile = ({menuItems}) => {
                   user ?
                     <>
                       <div className={styles.MenuLinks}>
-                        <Link to="/cadastrar">Cadastrar Imóvel</Link>
+                        { user.role === "ADMIN" && <Link to="/cadastrar">Cadastrar Imóvel</Link> }
                       </div>
                       <p className={styles.Logout}>Deseja <button onClick={handleLogout}>encerrar a sessão</button>?</p>
                     </>
