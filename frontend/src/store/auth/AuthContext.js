@@ -175,7 +175,6 @@ export const AuthProvider = ({children}) => {
     try {
       const response = await axios.get("/users/validate")
       const user = response.data
-      console.log(user)
 
       if (user) {
         const modeledUser = {

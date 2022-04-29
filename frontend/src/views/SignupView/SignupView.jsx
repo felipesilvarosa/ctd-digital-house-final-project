@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { Form, Formik } from "formik"
 import { useAuth } from "src/hooks";
-import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "src/components"
+import { InputGroup, BaseButton, FlexWrapper, FlashMessage, SpacingShim } from "src/components"
 import style from "./SignupView.module.scss"
 
 export const SignupView = () => {
@@ -29,6 +29,7 @@ export const SignupView = () => {
 
   return(
     <>
+      <SpacingShim height="4.25rem" />
       <div className={style.signup} data-testid="signup-view">
         <Formik initialValues={{firstName: '', lastName: '', email: '', password: '', passwordConfirmation: ''}} onSubmit={handleSubmit}>
           <Form noValidate className={style.form}>
