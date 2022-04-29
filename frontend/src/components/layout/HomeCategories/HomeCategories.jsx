@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react"
+import { useSearchParams } from "react-router-dom";
 import { CardsGridLoader, HomeCard, HomeSection } from "src/components";
 import { useCategories } from "src/hooks";
 import styles from "./HomeCategories.module.scss";
 
 export const HomeCategories = () => {
   const { categories, loading } = useCategories()
+  const [params] = useSearchParams()
 
   const [ queryString, setQueryString ] = useState("")
 
   useEffect(() => {
-    setQueryString(window.location.search)
-    // eslint-disable-next-line
-  }, [])
+    let q = "?"
+    for (let entry of params.entries()) {
+      q += `${entry[0]}=${entry[1]}&`
+    }
+    q = q.replace(/&$/, "")
+    setQueryString(q)
+  }, [params])
 
   return (
     <HomeSection>
