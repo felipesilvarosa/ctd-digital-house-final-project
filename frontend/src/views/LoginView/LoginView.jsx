@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 
-import { InputGroup, BaseButton, FlexWrapper, FlashMessage, SpacingShim } from "src/components";
+import { InputGroup, BaseButton, FlexWrapper, FlashMessage } from "src/components";
 import { useAuth } from "src/hooks"
 import style from "./LoginView.module.scss"
 
@@ -30,7 +30,6 @@ export const LoginView = () => {
 
   return (
     <>
-      <SpacingShim height="4.25rem" />
       <div className={style.login} data-testid="login-view">
         <Formik initialValues={{email: '', password: ''}} onSubmit={handleSubmit}>
           <Form noValidate data-testid="form" className={style.form}>
